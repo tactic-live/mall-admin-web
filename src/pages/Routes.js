@@ -9,9 +9,8 @@ function Routes({ authKey }) {
     <div>
       <Router>
         <Switch>
-          <Redirect path="/" exact to="/login" />
           <Route path="/login" exact component={loadable(() => import('./Login'))} />
-          <PrivateRoute path="/main" exact component={loadable(() => import('./Main'))} />
+          <PrivateRoute path="/:subPath/:subPath2?" component={loadable(() => import('./Main'))} />
         </Switch>
       </Router>
     </div>

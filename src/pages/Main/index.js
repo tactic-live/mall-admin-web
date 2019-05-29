@@ -1,48 +1,44 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Icon } from 'antd';
+import { Route, Switch } from 'react-router-dom';
+import loadable from '@loadable/component';
+import MenuComp from './MenuComp';
+import ShortInfo from './ShortInfo';
 import './styles.less';
 
 const { Header, Sider, Content } = Layout;
 
-const Main = () => {
-  const [collapsed, setCollapsed] = useState(false)
+
+const Main = ({ history, match }) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const { subPath, subPath2 } = match.params;
+  function onSelect({ item, key, keyPath, selectedKeys, domEvent }) {
+    history.push(`/${key}`);
+  }
+  const defaultSelectedKeys = [
+    subPath, `${subPath}/${subPath2}`];
   return (
     <Layout className="main">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">
-            <Icon type="user" />
-            <span>nav 1</span>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Icon type="video-camera" />
-            <span>nav 2</span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Icon type="upload" />
-            <span>nav 3</span>
-          </Menu.Item>
-        </Menu>
+        <MenuComp onSelect={onSelect}
+          defaultSelectedKeys={defaultSelectedKeys} />
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: 0 }}>
+        <Header className="header">
           <Icon
             className="trigger"
             type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={() => { setCollapsed(!collapsed) }}
           />
+          <ShortInfo className="trigger"/>
         </Header>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            background: '#fff',
-            minHeight: 280,
-          }}
-        >
-          Content
-          </Content>
+        <Content className="content">
+          <Switch>
+            <Route path="/home" exact component={loadable(() => import('../Home'))} />
+            <Route path="/" component={loadable(() => import('../404'))} />
+          </Switch>
+        </Content>
       </Layout>
     </Layout>
   );

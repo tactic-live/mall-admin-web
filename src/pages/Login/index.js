@@ -18,7 +18,7 @@ class Login extends React.Component {
   login = () => {
     const { history, authKey = 'isLogin' } = this.props;
     setCookie(authKey, '1');
-    history.push('/main');
+    history.push('/home');
   }
   onSubmit = (e) => {
     e.preventDefault();
