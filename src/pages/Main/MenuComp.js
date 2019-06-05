@@ -50,15 +50,14 @@ function MenuComp({ defaultSelectedKeys = [], onSelect }) {
     { key: 'pms/goods', title: '商品列表', icon: 'web-icon-goods-list' },
   ];
   menus.push(createMenu('pms', '商品', 'web-icon-goods', goodsMenuList));
-  let i = 1;
-  for (i = 1; i < 10; i++) {
-    menus.push(
-      <Menu.Item key={`${i}`}>
-        <IconFont type="web-icon-goods-add" />
-        <span>nav {i}</span>
-      </Menu.Item>
-    )
-  }
+  const orderMenuList = [
+    { key: 'oms/order', title: '订单列表', icon: 'web-icon-goods-list' },
+    { key: 'oms/orderSetting', title: '订单设置', icon: 'web-icon-order-setting' },
+    { key: 'oms/returnApply', title: '退货申请处理', icon: 'web-icon-order-return' },
+    { key: 'oms/returnReason', title: '退货原因设置', icon: 'web-icon-order-return-reason' },
+  ];
+  menus.push(createMenu('oms', '订单', 'web-icon-order', orderMenuList));
+  menus.push(createMenu('sms', '营销', 'web-icon-sms'));
   menus.push(
     <SubMenu
       key="management"
