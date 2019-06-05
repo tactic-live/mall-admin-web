@@ -31,11 +31,12 @@ const Main = ({ history, match }) => {
             type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={() => { setCollapsed(!collapsed) }}
           />
-          <ShortInfo className="trigger"/>
+          <ShortInfo className="trigger" />
         </Header>
         <Content className="content">
           <Switch>
             <Route path="/home" exact component={loadable(() => import('../Home'))} />
+            <Route path="/pms" component={loadable(() => import('../pms'))} />
             <Route path="/" component={loadable(() => import('../404'))} />
           </Switch>
         </Content>

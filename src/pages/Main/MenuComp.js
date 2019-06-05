@@ -1,7 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Icon } from 'antd';
-
 const { SubMenu } = Menu;
+
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1228518_mn80nxg2o7f.js',
+});
+
+function createMenu(key, title, icon, subMenuList = []) {
+  if (subMenuList && subMenuList.length > 0) {
+    console.log(subMenuList)
+    return (
+      <SubMenu
+        key={key}
+        title={
+          <span>
+            <IconFont type={icon} />
+            <span>{title}</span>
+          </span>
+        }
+      >
+        {subMenuList.map((subMenuItem) => {
+          const { key, title, icon } = subMenuItem;
+          return createMenu(key, title, icon)
+
+        })}
+      </SubMenu>
+    );
+  }
+  return (
+    <Menu.Item key={key}>
+      <IconFont type={icon} />
+      <span>{title}</span>
+    </Menu.Item>
+  );
+}
 
 function MenuComp({ defaultSelectedKeys = [], onSelect }) {
   const defaultOpenKeys = defaultSelectedKeys;
@@ -12,17 +44,17 @@ function MenuComp({ defaultSelectedKeys = [], onSelect }) {
     // setOpenKeys(defaultOpenKeys);
   }, [defaultSelectedKeys])
   const menus = [];
-  menus.push(
-    <Menu.Item key="home">
-      <Icon type="home" />
-      <span>首页</span>
-    </Menu.Item>
-  );
+  menus.push(createMenu('home', '首页', 'web-icon-home'));
+  const goodsMenuList = [
+    { key: 'pms/addGoods', title: '增加商品', icon: 'web-icon-goods-add' },
+    { key: 'pms/goods', title: '商品列表', icon: 'web-icon-goods-list' },
+  ];
+  menus.push(createMenu('pms', '商品', 'web-icon-goods', goodsMenuList));
   let i = 1;
   for (i = 1; i < 10; i++) {
     menus.push(
       <Menu.Item key={`${i}`}>
-        <Icon type="user" />
+        <IconFont type="web-icon-goods-add" />
         <span>nav {i}</span>
       </Menu.Item>
     )

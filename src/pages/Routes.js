@@ -10,6 +10,7 @@ function Routes({ authKey }) {
       <Router>
         <Switch>
           <Route path="/login" exact component={loadable(() => import('./Login'))} />
+          <Redirect path="/" exact to="/home" />
           <PrivateRoute path="/:subPath/:subPath2?" component={loadable(() => import('./Main'))} />
         </Switch>
       </Router>
