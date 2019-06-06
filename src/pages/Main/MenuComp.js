@@ -8,7 +8,6 @@ const IconFont = Icon.createFromIconfontCN({
 
 function createMenu(key, title, icon, subMenuList = []) {
   if (subMenuList && subMenuList.length > 0) {
-    console.log(subMenuList)
     return (
       <SubMenu
         key={key}
@@ -46,8 +45,8 @@ function MenuComp({ defaultSelectedKeys = [], onSelect }) {
   const menus = [];
   menus.push(createMenu('home', '首页', 'web-icon-home'));
   const goodsMenuList = [
-    { key: 'pms/addGoods', title: '增加商品', icon: 'web-icon-goods-add' },
     { key: 'pms/goods', title: '商品列表', icon: 'web-icon-goods-list' },
+    { key: 'pms/addGoods', title: '增加商品', icon: 'web-icon-goods-add' },
   ];
   menus.push(createMenu('pms', '商品', 'web-icon-goods', goodsMenuList));
   const orderMenuList = [

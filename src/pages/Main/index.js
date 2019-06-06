@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Icon } from 'antd';
 import { Route, Switch } from 'react-router-dom';
 import loadable from '@loadable/component';
+import ErrorBoundary from '../../components/error-boundary';
 import MenuComp from './MenuComp';
 import ShortInfo from './ShortInfo';
 import './styles.less';
@@ -34,11 +35,13 @@ const Main = ({ history, match }) => {
           <ShortInfo className="trigger" />
         </Header>
         <Content className="content">
-          <Switch>
-            <Route path="/home" exact component={loadable(() => import('../Home'))} />
-            <Route path="/pms" component={loadable(() => import('../pms'))} />
-            <Route path="/" component={loadable(() => import('../404'))} />
-          </Switch>
+          <ErrorBoundary>
+            <Switch>
+              <Route path="/home" exact component={loadable(() => import('../Home'))} />
+              <Route path="/pms" component={loadable(() => import('../pms'))} />
+              <Route path="/" component={loadable(() => import('../404'))} />
+            </Switch>
+          </ErrorBoundary>
         </Content>
       </Layout>
     </Layout>
