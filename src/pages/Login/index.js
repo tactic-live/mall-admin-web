@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Input } from 'antd';
-import { get as getCookie, set as setCookie } from 'js-cookie';
+import { set as setCookie } from 'js-cookie';
 import styles from './style.module.less'
 
 const formItemLayout = {
@@ -20,6 +20,7 @@ class Login extends React.Component {
     setCookie(authKey, '1');
     history.push('/home');
   }
+
   onSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {

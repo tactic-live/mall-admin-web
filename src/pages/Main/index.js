@@ -3,12 +3,12 @@ import { Layout, Icon } from 'antd';
 import { Route, Switch } from 'react-router-dom';
 import loadable from '@loadable/component';
 import ErrorBoundary from '../../components/error-boundary';
+import BreadcrumbComp from './BreadcrumbComp';
 import MenuComp from './MenuComp';
 import ShortInfo from './ShortInfo';
 import './styles.less';
 
 const { Header, Sider, Content } = Layout;
-
 
 const Main = ({ history, match }) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,6 +32,9 @@ const Main = ({ history, match }) => {
             type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={() => { setCollapsed(!collapsed) }}
           />
+          <i className="breadcrumb">
+            <BreadcrumbComp />
+          </i>
           <ShortInfo className="trigger" />
         </Header>
         <Content className="content">
