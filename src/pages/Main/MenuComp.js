@@ -34,7 +34,7 @@ function createMenu(key, title, icon, subMenuList = []) {
   );
 }
 
-function MenuComp({ defaultSelectedKeys = [], onSelect }) {
+function MenuComp({ defaultSelectedKeys = [], onSelect, ...rest }) {
   const defaultOpenKeys = defaultSelectedKeys;
   const [selectedKeys, setSelectedKeys] = useState(defaultSelectedKeys);
   // const [openKeys, setOpenKeys] = useState(defaultOpenKeys);
@@ -79,14 +79,16 @@ function MenuComp({ defaultSelectedKeys = [], onSelect }) {
   );
 
   return (
-    <Menu theme="dark" mode="inline"
+    <Menu theme="dark"
       defaultSelectedKeys={defaultSelectedKeys}
       selectedKeys={selectedKeys}
       defaultOpenKeys={defaultOpenKeys}
       // openKeys={openKeys}
       onSelect={({ item, key, keyPath, selectedKeys, domEvent }) => {
         onSelect && onSelect({ item, key, keyPath, selectedKeys, domEvent });
-      }}>
+      }}
+      {...rest}
+    >
       {menus}
     </Menu>
   )

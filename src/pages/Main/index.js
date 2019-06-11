@@ -20,10 +20,12 @@ const Main = ({ history, match }) => {
     subPath, `${subPath}/${subPath2}`];
   return (
     <Layout className="main">
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} collapsible collapsed={collapsed}
+        style={{
+          overflow: 'auto'
+        }}>
         <div className="logo" />
-        <MenuComp onSelect={onSelect}
-          defaultSelectedKeys={defaultSelectedKeys} />
+        <MenuComp onSelect={onSelect} defaultSelectedKeys={defaultSelectedKeys} mode="inline"/>
       </Sider>
       <Layout>
         <Header className="header">
