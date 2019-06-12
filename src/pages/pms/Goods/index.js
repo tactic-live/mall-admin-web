@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import QueryString from 'query-string';
 import ConditionForm from '@/components/search-condition';
 import { PagableTable } from '@/components/search-result';
-import { Button } from 'antd';
+import { Button, Switch } from 'antd';
 
-import GoodsModel from '@/models/GoodsModel';
+import ProductModel from '@/models/ProductModel';
 
 import './index.less';
+import SkuStockEditModal from './SkuStockEditModal';
+
 
 const fields = [
   {
@@ -47,148 +49,219 @@ const fields = [
   },
 ];
 
-const columns = [
-  {
-    title: '编号',
-    dataIndex: 'productSn',
-    key: 'productSn',
-    width: 80
-  },
-  {
-    title: '商品图片',
-    dataIndex: 'pic',
-    key: 'pic',
-    render: text => <img src={text} alt="" width="50px" />,
-    width: 100
-  },
-  {
-    title: '商品名称',
-    dataIndex: 'name',
-    key: 'name'
-  },
-  {
-    title: '价格/货号',
-    dataIndex: 'price',
-    key: 'price',
-    width: 100
-  },
-  {
-    title: '标签',
-    dataIndex: 'tag',
-    key: 'tag',
-    render: text => (
-      <div>
-        上架：
+class Goods extends React.PureComponent {
 
-        新品：
-
-        推荐：
-
-      </div>
-    ),
-    width: 80
-  },
-  {
-    title: '排序',
-    dataIndex: 'sort',
-    key: 'sort',
-    render: text => <a href="javascript:;">{text}</a>,
-    width: 80
-  },
-  {
-    title: 'SKU库存',
-    dataIndex: 'stock',
-    key: 'stock',
-    render: text => <a href="javascript:;">{text}</a>,
-    width: 100
-  },
-  {
-    title: '销量',
-    dataIndex: 'sale',
-    key: 'sale',
-    width: 80
-  },
-  {
-    title: '审核状态',
-    dataIndex: 'verifyStatus',
-    key: 'verifyStatus',
-    render: text => (text === 0 ? '未审核' : '已审核'),
-    width: 100
-  },
-  {
-    title: '操作',
-    dataIndex: 'actions',
-    key: 'actions',
-    render: text => (
-      <div>
-        <Button type="primary" size="small" ghost>编辑</Button>
-
-        <Button type="danger" size="small" ghost>删除</Button>
-      </div>
-    ),
-    width: 80
+  state = {
+    curCond: null,
+    curPageCond: null,
+    showEditModal: false,
+    result: null,
+    editModalPid: ''
   }
-]
 
-function Goods({ location, history, match }) {
-  const defaultValues = QueryString.parse(location.search);
-  const { current, pageSize, ...rest } = defaultValues;
-  const [curCond, setCurCond] = useState({ current, pageSize });
-  const [curPageCond, setCurPageCond] = useState(rest);
+  columns = [
+    {
+      title: '编号',
+      dataIndex: 'productSn',
+      key: 'productSn',
+      width: 80
+    },
+    {
+      title: '商品图片',
+      dataIndex: 'pic',
+      key: 'pic',
+      render: text => <img src={text} alt="" width="50px" />,
+      width: 100
+    },
+    {
+      title: '商品名称',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: '价格/货号',
+      dataIndex: 'price',
+      key: 'price',
+      width: 100
+    },
+    {
+      title: '标签',
+      dataIndex: 'tag',
+      key: 'tag',
+      render: (text, record) => (
+        <div>
+          <div>
+            上架：<Switch defaultChecked={!!record.publishStatus} />
+          </div>
+          <div>
+            新品：<Switch defaultChecked={!!record.newStatus} />
+          </div>
+          <div>
+            推荐：<Switch defaultChecked={!!record.recommandStatus} />
+          </div>
+        </div>
+      ),
+      width: 200
+    },
+    {
+      title: '排序',
+      dataIndex: 'sort',
+      key: 'sort',
+      render: text => <a href="javascript:;">{text}</a>,
+      width: 80
+    },
+    {
+      title: 'SKU库存',
+      dataIndex: 'id',
+      key: 'stock',
+      render: text => (
+        <Button type="primary" shape="circle" icon="edit" onClick={() => this.toggleEditModal(text)} />
+      ),
+      width: 100
+    },
+    {
+      title: '销量',
+      dataIndex: 'sale',
+      key: 'sale',
+      width: 80
+    },
+    {
+      title: '审核状态',
+      dataIndex: 'verifyStatus',
+      key: 'verifyStatus',
+      render: text => (text === 0 ? '未审核' : '已审核'),
+      width: 100
+    },
+    {
+      title: '操作',
+      dataIndex: 'actions',
+      key: 'actions',
+      render: text => (
+        <div>
+          <Button type="primary" size="small" ghost>编辑</Button>
 
-  // 搜索
-  const onSearch = (searchCond) => {
+          <Button type="danger" size="small" ghost>删除</Button>
+        </div>
+      ),
+      width: 80
+    }
+  ]
+
+  componentWillMount() {
+    const { location } = this.props;
+    const defaultValues = QueryString.parse(location.search);
+    const { current, pageSize, ...rest } = defaultValues;
+    this.setState({
+      curPageCond: rest,
+      curCond: { current, pageSize }
+    });
+  }
+
+  toggleEditModal = (pid) => {
+    this.setState({
+      showEditModal: !this.state.showEditModal,
+      editModalPid: pid
+    })
+  }
+  /**
+   * 搜索
+   */
+  onSearch = (searchCond) => {
+    const { history, match } = this.props;
+    const { curPageCond } = this.state;
     const condition = {
       ...curPageCond,
       ...searchCond
     };
-    setCurCond(searchCond);
+    this.setState({
+      curCond: searchCond
+    });
     history.push({
       path: match.path,
       search: `?${QueryString.stringify(condition)}`
     });
   }
-  // 换页
-  const onChangePage = (pageCond) => {
-    setCurPageCond(pageCond)
-    onSearch({
+
+  /**
+   * 翻页
+   */
+  onChangePage = (pageCond) => {
+    const { curCond } = this.state;
+    this.setState({
+      curPageCond: pageCond
+    })
+    this.onSearch({
       ...curCond,
       ...pageCond
     });
   }
 
-  const [result, setResult] = useState(null);
-
-  useEffect(() => {
+  componentDidMount() {
+    const { location } = this.props;
+    const defaultValues = QueryString.parse(location.search);
     const { current, goodsName, ...rest } = defaultValues;
-    new GoodsModel().fetchGoodsByCondition({
-      pageNum: current, pageSize: 5,
+    new ProductModel().fetchGoodsByCondition({
+      pageNum: current,
+      pageSize: 5,
       keyword: goodsName,
       ...rest
     })
       .then(result => {
         if (result) {
           result.list = result.list.map(data => ({ key: data.id, ...data }))
-          setResult(result);
+          this.setState({
+            result
+          });
         }
       });
-  }, []);
-  const pagination = {
-    ...defaultValues
   }
-  if (defaultValues.pageNum !== null && defaultValues.pageNum !== undefined) {
-    pagination.current = defaultValues.pageNum;
+
+  render() {
+    const { location } = this.props;
+    const defaultValues = QueryString.parse(location.search);
+    const { editModalPid, result, showEditModal } = this.state;
+    // 搜索
+    // const onSearch = (searchCond) => {
+    //   const condition = {
+    //     ...curPageCond,
+    //     ...searchCond
+    //   };
+    //   setCurCond(searchCond);
+    //   history.push({
+    //     path: match.path,
+    //     search: `?${QueryString.stringify(condition)}`
+    //   });
+    // }
+    // 换页
+    // const onChangePage = (pageCond) => {
+    //   setCurPageCond(pageCond)
+    //   onSearch({
+    //     ...curCond,
+    //     ...pageCond
+    //   });
+    // }
+
+    const pagination = {
+      ...defaultValues
+    }
+    if (defaultValues.pageNum !== null && defaultValues.pageNum !== undefined) {
+      pagination.current = defaultValues.pageNum;
+    }
+
+    const showEditModalElem = showEditModal ? <SkuStockEditModal pid={editModalPid} afterClose={this.toggleEditModal} visible={showEditModal} /> : null;
+
+    return (
+      <div className="product">
+        <ConditionForm
+          className="productConditionForm"
+          onSearch={this.onSearch} fields={fields} defaultValues={defaultValues} />
+        <PagableTable
+          className="productSearchResult"
+          data={result} columns={this.columns} pagination={pagination} onChangePage={this.onChangePage} />
+        {showEditModalElem}
+      </div>
+    );
   }
-  return (
-    <div className="product">
-      <ConditionForm
-        className="productConditionForm"
-        onSearch={onSearch} fields={fields} defaultValues={defaultValues} />
-      <PagableTable
-        className="productSearchResult"
-        data={result} columns={columns} pagination={pagination} onChangePage={onChangePage} />
-    </div>
-  );
 }
 
 export default Goods;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Input, Row, Col, Icon, Radio, Select, DatePicker, Tooltip } from 'antd';
 import classnames from 'classnames';
 import moment, { isMoment } from 'moment';
-import InputClose from '../input-close';
+
 import './index.less';
 
 const { RangePicker } = DatePicker;
@@ -174,7 +174,7 @@ class ConditionForm extends React.PureComponent {
           );
           break;
         default:
-          FormItem = <InputClose placeholder={label} />;
+          FormItem = <Input placeholder={label} allowClear/>;
           // helper
           if (helper) {
             // FormItem = <BizAutoComplete helper={helper}><Input placeholder={label} /></BizAutoComplete>;
