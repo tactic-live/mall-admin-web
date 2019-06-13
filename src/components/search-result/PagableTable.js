@@ -1,9 +1,10 @@
 import React from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table } from 'antd';
 import classnames from 'classnames';
 import Pagination from '../pagination';
 
-function PagableTable({ data = {}, columns = [], className, pagination: inPagination, onChangePage }) {
+function PagableTable({ data = {}, columns = [], className, pagination: inPagination,
+  onChangePage, ...rest }) {
   let dataSource = [];
   const pagination = { total: 0, current: 1, pageSize: 10 };
   if (data) {
@@ -22,7 +23,7 @@ function PagableTable({ data = {}, columns = [], className, pagination: inPagina
     <div className={classnames('searchResult', className)}>
       <Table
         columns={columns} dataSource={dataSource}
-        pagination={false}></Table>
+        pagination={false}  {...rest}></Table>
       <Pagination {...pagination} onChange={onChangePage} />
     </div>
   );

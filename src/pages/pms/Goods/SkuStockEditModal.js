@@ -1,7 +1,9 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal, List, Typography } from 'antd';
 
 import SkuModel from '@/models/SkuModel';
+
+import './SkuStockEditModal.less';
 
 class SkuStockEditModal extends React.Component {
   state = {
@@ -38,9 +40,9 @@ class SkuStockEditModal extends React.Component {
   };
 
   render() {
-    const { onOk, afterClose } = this.props;
+    const { onOk, afterClose, pid } = this.props;
     const { visible, result } = this.state;
-    result.map(skuInfo=><div></div>)
+    // const skuListElem = result.map(skuInfo => <div></div>)
     return (
       <Modal
         title="编辑货品信息"
@@ -50,10 +52,18 @@ class SkuStockEditModal extends React.Component {
         okText="确定"
         destroyOnClose={true}
         afterClose={afterClose}
+        className="skuStockEditModal"
+        width={700}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <List
+          header={<div>编号 {pid}</div>}
+          dataSource={result}
+          renderItem={item => (
+            <List.Item>
+              <Typography.Text mark>[ITEM]</Typography.Text> {item.stock}
+            </List.Item>
+          )}
+        />
       </Modal>
     );
   }

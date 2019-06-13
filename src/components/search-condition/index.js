@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Button, Input, Row, Col, Icon, Radio, Select, DatePicker, Tooltip } from 'antd';
+import { Form, Button, Input, Row, Col, Icon, Radio, Select, DatePicker } from 'antd';
 import classnames from 'classnames';
-import moment, { isMoment } from 'moment';
+import moment from 'moment';
 
 import './index.less';
 

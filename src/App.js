@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { LocaleProvider } from 'antd';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Routes from './pages/Routes';
 import LoginModel from './models/AdminModel';
 

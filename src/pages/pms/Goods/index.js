@@ -8,6 +8,7 @@ import ProductModel from '@/models/ProductModel';
 
 import './index.less';
 import SkuStockEditModal from './SkuStockEditModal';
+import ExpandedRow from './ExpandedRow';
 
 
 const fields = [
@@ -110,15 +111,15 @@ class Goods extends React.PureComponent {
       render: text => <a href="javascript:;">{text}</a>,
       width: 80
     },
-    {
-      title: 'SKU库存',
-      dataIndex: 'id',
-      key: 'stock',
-      render: text => (
-        <Button type="primary" shape="circle" icon="edit" onClick={() => this.toggleEditModal(text)} />
-      ),
-      width: 100
-    },
+    // {
+    //   title: 'SKU库存',
+    //   dataIndex: 'id',
+    //   key: 'stock',
+    //   render: text => (
+    //     <Button type="primary" shape="circle" icon="edit" onClick={() => this.toggleEditModal(text)} />
+    //   ),
+    //   width: 100
+    // },
     {
       title: '销量',
       dataIndex: 'sale',
@@ -256,8 +257,11 @@ class Goods extends React.PureComponent {
           className="productConditionForm"
           onSearch={this.onSearch} fields={fields} defaultValues={defaultValues} />
         <PagableTable
+          scroll={{ y: 440 }}
           className="productSearchResult"
-          data={result} columns={this.columns} pagination={pagination} onChangePage={this.onChangePage} />
+          data={result} columns={this.columns} pagination={pagination} onChangePage={this.onChangePage}
+          expandedRowRender={record => <ExpandedRow pid={record.id} productAttributeCategoryId={record.productAttributeCategoryId} />}
+        />
         {showEditModalElem}
       </div>
     );
