@@ -57,12 +57,12 @@ class ConditionForm extends React.PureComponent {
     });
   }
 
-  getFields = (form, fields, defaultValues) => {
+  getFields = (form, fields, defaultValues = {}) => {
     const { hideExtCond } = this.state;
     const children = [];
     const { getFieldDecorator } = form;
     this.colCount = 0;
-    fields.forEach((fieldDefine) => {
+    fields && fields.forEach((fieldDefine) => {
       // format是moment的format格式
       const {
         name, label, type, options, span = 6, initialValue, params, showTime,
@@ -174,7 +174,7 @@ class ConditionForm extends React.PureComponent {
           );
           break;
         default:
-          FormItem = <Input placeholder={label} allowClear/>;
+          FormItem = <Input placeholder={label} allowClear />;
           // helper
           if (helper) {
             // FormItem = <BizAutoComplete helper={helper}><Input placeholder={label} /></BizAutoComplete>;

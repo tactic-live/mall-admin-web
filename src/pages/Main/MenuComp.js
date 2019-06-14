@@ -47,6 +47,9 @@ function MenuComp({ defaultSelectedKeys = [], onSelect, ...rest }) {
   const goodsMenuList = [
     { key: 'pms/goods', title: '商品列表', icon: 'web-icon-goods-list' },
     { key: 'pms/addGoods', title: '增加商品', icon: 'web-icon-goods-add' },
+    { key: 'pms/productCate', title: '商品分类', icon: 'web-icon-goods-cate' },
+    { key: 'pms/productAttr', title: '商品类型', icon: 'web-icon-goods-list' },
+    { key: 'pms/brand', title: '品牌管理', icon: 'web-icon-goods-brand' },
   ];
   menus.push(createMenu('pms', '商品', 'web-icon-goods', goodsMenuList));
   const orderMenuList = [

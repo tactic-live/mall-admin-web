@@ -44,7 +44,7 @@ const Main = ({ history, match }) => {
             <Switch>
               <Route path="/home" exact component={loadable(() => import('../Home'))} />
               <Route path="/pms" component={loadable(() => import('../pms'))} />
-              <Route path="/" component={loadable(() => import('../404'))} />
+              <Route path="/" component={loadable(() => import('@/pages/404'))} />
             </Switch>
           </ErrorBoundary>
         </Content>
