@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SkuModel from '@/models/SkuModel';
 import ProductAttributeModel from '@/models/ProductAttributeModel';
 import LabelMoney from '@/components/label-money';
-import { Table, Statistic } from 'antd';
+import { Table } from 'antd';
 
 function createColumns(attrs = []) {
 

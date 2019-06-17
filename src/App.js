@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { Provider } from 'react-redux';
 import Routes from './pages/Routes';
+import store from '@/core/store';
 import LoginModel from './models/AdminModel';
 
 function App() {
@@ -14,9 +16,9 @@ function App() {
 
   const routesElem = isLogin ? <Routes /> : null;
   return (
-    <div className="App">
+    <Provider className="App" store={store}>
       {routesElem}
-    </div>
+    </Provider>
   );
 }
 

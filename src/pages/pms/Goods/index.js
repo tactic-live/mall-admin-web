@@ -3,11 +3,9 @@ import QueryString from 'query-string';
 import ConditionForm from '@/components/search-condition';
 import { PagableTable } from '@/components/search-result';
 import { Button, Switch } from 'antd';
-
-import ProductModel from '@/models/ProductModel';
+import { connect } from 'react-redux';
 
 import './index.less';
-import SkuStockEditModal from './SkuStockEditModal';
 import ExpandedRow from './ExpandedRow';
 
 
@@ -197,30 +195,36 @@ class Goods extends React.PureComponent {
     });
   }
 
-  componentDidMount() {
-    const { location } = this.props;
+  async init() {
+    const { location, fetchGoodsByCondition, dispatch } = this.props;
     const defaultValues = QueryString.parse(location.search);
     const { current, goodsName, ...rest } = defaultValues;
-    new ProductModel().fetchGoodsByCondition({
+    const action = await fetchGoodsByCondition({
       pageNum: current,
       pageSize: 5,
-      keyword: goodsName,
+      goodsName,
       ...rest
-    })
-      .then(result => {
-        if (result) {
-          result.list = result.list.map(data => ({ key: data.id, ...data }))
-          this.setState({
-            result
-          });
-        }
-      });
+    });
+    dispatch(action);
+  }
+
+  componentDidMount() {
+    console.log('props', this.props);
+    this.init();
+    //   .then(result => {
+    //     if (result) {
+    //       result.list = result.list.map(data => ({ key: data.id, ...data }))
+    //       this.setState({
+    //         result
+    //       });
+    //     }
+    //   });
   }
 
   render() {
-    const { location } = this.props;
+    const { location, productListInfo } = this.props;
     const defaultValues = QueryString.parse(location.search);
-    const { editModalPid, result, showEditModal } = this.state;
+    const { editModalPid, showEditModal } = this.state;
     // 搜索
     // const onSearch = (searchCond) => {
     //   const condition = {
@@ -249,8 +253,6 @@ class Goods extends React.PureComponent {
       pagination.current = defaultValues.pageNum;
     }
 
-    const showEditModalElem = showEditModal ? <SkuStockEditModal pid={editModalPid} afterClose={this.toggleEditModal} visible={showEditModal} /> : null;
-
     return (
       <div className="product">
         <ConditionForm
@@ -259,13 +261,23 @@ class Goods extends React.PureComponent {
         <PagableTable
           scroll={{ y: 440 }}
           className="productSearchResult"
-          data={result} columns={this.columns} pagination={pagination} onChangePage={this.onChangePage}
+          rowKey="id"
+          data={productListInfo} columns={this.columns} pagination={pagination} onChangePage={this.onChangePage}
           expandedRowRender={record => <ExpandedRow pid={record.id} productAttributeCategoryId={record.productAttributeCategoryId} />}
         />
-        {showEditModalElem}
       </div>
     );
   }
 }
 
-export default Goods;
+const store = (state) => {
+  const { productListInfo } = state.pms;
+  // productListInfo.list && productListInfo.list.forEach((item) => {
+  //   item.key = item.id;
+  // })
+  return {
+    productListInfo
+  };
+}
+
+export default connect(store)(Goods);
