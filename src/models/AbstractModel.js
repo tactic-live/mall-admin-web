@@ -35,6 +35,14 @@ class AbstractModel {
       body: JSON.stringify(params)
     });
   }
+
+  async patch(api, params) {
+    return this.execute({
+      path: api,
+      method: 'PATCH',
+      body: JSON.stringify(params)
+    });
+  }
 }
 
 export default AbstractModel;

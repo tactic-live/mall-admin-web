@@ -8,7 +8,6 @@ files.keys().forEach(key => {
   const contents = files(key);
   reducers[module] = contents.default ? contents.default : contents ;
 });
-
 const combReducers = combineReducers(reducers);
 
 // module.exports = reducers;

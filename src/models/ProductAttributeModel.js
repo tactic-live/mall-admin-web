@@ -16,6 +16,17 @@ class ProductAttributeModel extends AbstractModel {
     const result = await super.get(`/api/productAttribute/category`, { pageNumm, pageSize });
     return result.data;
   };
+
+  /**
+   * 更新属性类型
+   *
+   * @param {string} id 类型id
+   * @param {string} name 类型名称
+   */
+  async updateAttributeCategory(id, name) {
+    const result = await super.patch(`/api/productAttribute/category/${id}`, { name });
+    return result.data;
+  }
 }
 
 export default ProductAttributeModel;

@@ -1,10 +1,10 @@
 import React from 'react';
-import QueryString from 'query-string';
-import ConditionForm from '@/components/search-condition';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
 import { SearchLayout } from '@/components/layout';
-import { PagableTable } from '@/components/search-result';
 
 import ProductAttributeModel from '@/models/ProductAttributeModel';
+import EditButton from './EditButton';
 
 const fields = [
   {
@@ -15,65 +15,6 @@ const fields = [
   }
 ]
 
-// class ProductAttr extends React.Component {
-
-//   state = {
-//     curCond: null,
-//     curPageCond: null,
-//     defaultValues: {},
-//     result: [],
-
-//   componentWillMount() {
-//     const { location } = this.props;
-//     const defaultValues = QueryString.parse(location.search);
-//     const { current, pageSize, ...rest } = defaultValues;
-//     this.setState({
-//       curPageCond: rest,
-//       curCond: { current, pageSize }
-//     });
-//   }
-
-//   componentDidMount() {
-//     new ProductAttributeModel().fetchAttributeCategory().then((result) => {
-//       this.setState({
-//         result
-//       });
-//     })
-//   }
-
-//   /**
-//    * 翻页
-//    */
-//   onChangePage = (pageCond) => {
-//     const { curCond } = this.state;
-//     this.setState({
-//       curPageCond: pageCond
-//     })
-//     this.onSearch({
-//       ...curCond,
-//       ...pageCond
-//     });
-//   }
-//   render() {
-//     const { defaultValues, columns, result } = this.state;
-//     console.log('result', result)
-//     return (
-//       <div className="productAttr">
-//         <ConditionForm className="productAttrConditionForm" fields={fields}
-//           defaultValues={defaultValues}
-//         />
-//         <PagableTable
-//           // scroll={{ y: 640 }}
-//           className="productAttrSearchResult"
-//           data={result}
-//           columns={columns}
-//           // pagination={pagination}
-//           onChangePage={this.onChangePage}
-//         />
-//       </div>
-//     );
-//   }
-// }
 const columns = [
   {
     title: '编号',
@@ -100,15 +41,43 @@ const columns = [
   },
   {
     title: '设置',
-    dataIndex: 'setting',
+    dataIndex: 'id',
     key: 'setting',
-    width: 150
+    width: 250,
+    render(text, record) {
+      return (
+        <div>
+          <Link to={{
+            pathname: '/pms/productAttrList',
+            search: `?cid=${text}&cname=${encodeURIComponent(record.name)}&type=0`
+          }}>
+            <Button type="primary" ghost size="small" onClick={() => { }}>属性列表</Button>
+          </Link>
+          &nbsp;
+          <Link to={{
+            pathname: '/pms/productAttrList',
+            search: `?cid=${text}&cname=${encodeURIComponent(record.name)}&type=1`
+          }}>
+            <Button type="primary" ghost size="small">参数列表</Button>
+          </Link>
+        </div >
+      )
+    }
   },
   {
     title: '操作',
-    dataIndex: 'actions',
+    dataIndex: 'id',
     key: 'actions',
-    width: 150
+    width: 150,
+    render(text, record) {
+      return (
+        <div>
+          <EditButton record={record}/>
+          &nbsp;
+          <Button type="primary" ghost size="small" onClick={() => { }}>删除</Button>
+        </div>
+      );
+    }
   },
 ]
 
