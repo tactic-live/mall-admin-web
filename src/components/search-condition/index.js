@@ -213,15 +213,27 @@ class ConditionForm extends React.PureComponent {
   }
 
   render() {
-    const { fields, form, defaultValues, className } = this.props;
+    const { fields, form, defaultValues, className, extActions } = this.props;
+    const conditionActionsElem = fields.length ? (
+      <Col span={12} className="conditionActions">
+        <Button type="default" className="action-item" onClick={this.handleReset}>重置</Button>
+        <Button htmlType="submit" type="primary" className="action-item">查询</Button>
+      </Col>
+    ) : null;
+    let extActionsElem = null;
+    if (extActions) {
+      extActionsElem = (
+        <Col span={12} className="conditionActions">
+          {extActions}
+        </Col>
+      );
+    }
     return (
       <Form onSubmit={this.onSubmit} className={classnames('conditionForm', className)}>
         <Row gutter={24} className="conditionActionsRow">
           <Col span={12}><Icon type="search" /> 筛选搜索</Col>
-          <Col span={12} className="conditionActions">
-            <Button type="default" className="action-item" onClick={this.handleReset}>重置</Button>
-            <Button htmlType="submit" type="primary" className="action-item">查询</Button>
-          </Col>
+          {conditionActionsElem}
+          {extActionsElem}
         </Row>
         <Row gutter={24}>{this.getFields(form, fields, defaultValues)}</Row>
       </Form>

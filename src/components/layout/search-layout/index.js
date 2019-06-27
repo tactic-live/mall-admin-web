@@ -13,7 +13,8 @@ class SearchLayout extends React.Component {
     curPagination: {},
     // 查询结果(数组)
     result: [],
-    conditionFields: []
+    conditionFields: [],
+    loading: true
   }
 
   // componentWillMount() {
@@ -27,14 +28,22 @@ class SearchLayout extends React.Component {
   // }
   static getDerivedStateFromProps(props, state) {
     console.log('getDerivedStateFromProps', props);
-    const { location } = props;
+    // 从props获取数据
+    const { location, _result, loading } = props;
     const defaultValues = QueryString.parse(location.search);
     const { current, pageSize, ...rest } = defaultValues;
-    return {
+    const retVal = {
       ...state,
       curPagination: { current, pageSize },
       curCond: rest
     }
+    if (_result) {
+      retVal.result = _result;
+    }
+    if (loading !== undefined && loading !== null) {
+      retVal.loading = loading;
+    }
+    return retVal;
   }
 
   /**
@@ -56,12 +65,13 @@ class SearchLayout extends React.Component {
    * 搜索
    */
   onSearch = (searchCond) => {
-    const { history, match } = this.props;
+    const { history, match, changeLoading } = this.props;
     const { curPagination } = this.state;
     const condition = {
       ...curPagination,
       ...searchCond
     };
+    changeLoading && changeLoading(true);
     this.setState({
       curCond: searchCond
     });
@@ -72,16 +82,31 @@ class SearchLayout extends React.Component {
     });
   }
 
+  /**
+   * 不改变当前条件更新数据
+   */
+  reSearch = () => {
+    const { history, location, match } = this.props;
+    // 设置路由
+    history.replace({
+      path: match.path,
+      search: location.search
+    });
+  }
+
   render() {
-    const { curCond, curPagination, columns, result, conditionFields } = this.state;
+    // 从state获取数据
+    const { curCond, curPagination, columns, result, conditionFields, loading, extActions } = this.state;
     const pagination = {
       ...curPagination
     }
+    console.log('render state result', result);
     return (
       <div className="search-layout">
         <ConditionForm className="search-layout-condition-form" fields={conditionFields}
           defaultValues={curCond}
           onSearch={this.onSearch}
+          extActions={extActions}
         />
         <PagableTable
           // scroll={{ y: 640 }}
@@ -90,6 +115,7 @@ class SearchLayout extends React.Component {
           columns={columns}
           pagination={pagination}
           onChangePage={this.onChangePage}
+          loading={loading}
         />
       </div>
     );

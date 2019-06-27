@@ -1,18 +1,21 @@
 import React from 'react';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
+import QueryString from 'query-string';
 import { SearchLayout } from '@/components/layout';
-
-import ProductAttributeModel from '@/models/ProductAttributeModel';
+import { connect } from 'react-redux';
+import { actions } from './action';
 import EditButton from './EditButton';
+import AddButton from './AddButton';
 
 const fields = [
-  {
-    name: 'productAttrName',
-    label: '类型名称',
-    required: true,
-    placeholder: ''
-  }
+  // {
+  //   name: 'productAttrName',
+  //   label: '类型名称',
+  //   required: true,
+  //   placeholder: '',
+  //   span: 8
+  // }
 ]
 
 const columns = [
@@ -72,7 +75,7 @@ const columns = [
     render(text, record) {
       return (
         <div>
-          <EditButton record={record}/>
+          <EditButton record={record} />
           &nbsp;
           <Button type="primary" ghost size="small" onClick={() => { }}>删除</Button>
         </div>
@@ -82,24 +85,43 @@ const columns = [
 ]
 
 class ProductAttr extends SearchLayout {
+  extActions = [
+    <AddButton onCreate={this.reSearch}/>
+  ];
+
   componentDidMount() {
     this.setState({
       conditionFields: fields,
-      columns: columns
+      columns: columns,
+      extActions: this.extActions
     });
     this.init();
   }
 
   async init() {
-    const result = await new ProductAttributeModel().fetchAttributeCategory()
-    result.list = result.list.map(item => {
+    const { fetchAll, location } = this.props;
+    console.log('props', this.props)
+    const { search } = location;
+    const params = QueryString.parse(search);
+    const { current, pageSize, productAttrName } = params;
+    fetchAll(current, pageSize, productAttrName);
+    // const { payload } = await fetchProductAttributeCategory(current, pageSize);
+    // dispatch({
+    //   type: ACTION_TYPES.FETCH_PRODUCT_ATTRIBUTE_CATEGORY,
+    //   payload
+    // });
+  }
+}
+const store = (state) => {
+  const { pms = {} } = state;
+  const { productAttrList = {}, loading } = pms;
+  const retVal = { ...productAttrList };
+  if (productAttrList.list) {
+    retVal.list = productAttrList.list.map(item => {
       item.key = item.id
       return item;
     });
-    this.setState({
-      result
-    });
   }
+  return { _result: retVal, loading };
 }
-
-export default ProductAttr;
+export default connect(store, actions)(ProductAttr);

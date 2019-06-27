@@ -6,19 +6,18 @@ class AbstractModel {
     const { path, headers = {}, ...rest } = options;
     const searchApi = path || this.api;
     // 设置其他参数
-    const opts = Object.assign({ credentials: 'include' }, rest);
+    const opts = Object.assign({ credentials: 'include', cache: 'default' }, rest);
 
     // 设置默认的content-type
     const tmpHeaders = Object.assign({
       'content-type': 'application/json'
     }, headers);
     opts.headers = tmpHeaders;
-    console.log('opts', opts)
     const response = await fetch(searchApi, opts);
     return response.json();
   }
 
-  get(api, params) {
+  async get(api, params) {
     let path = api;
     if (params) {
       path = `${api}?${QueryString.stringify(params)}`;
@@ -40,6 +39,14 @@ class AbstractModel {
     return this.execute({
       path: api,
       method: 'PATCH',
+      body: JSON.stringify(params)
+    });
+  }
+
+  async delete(api, params) {
+    return this.execute({
+      path: api,
+      method: 'DELETE',
       body: JSON.stringify(params)
     });
   }

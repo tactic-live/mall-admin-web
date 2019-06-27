@@ -2,21 +2,28 @@ import ProductActions from './Goods/action';
 
 const { ACTION_TYPES: PRODUCT_ACTION_TYPES, ...productRest } = ProductActions;
 
-const ACTION_TYPES = {
+export const ACTION_TYPES = {
   ...PRODUCT_ACTION_TYPES,
-  ADD_PRODUCT: 'ADD_PRODUCT'
+  LOADING: 'LOADING',
 }
 
-function addProduct() {
-  console.log('addProduct');
+export async function wrapLoading(func) {
+  await func.apply(this, arguments);
+
 }
 
-const actions = {
-  addProduct,
-  ...productRest,
+export const actions = (dispatch, ownProps) => {
+  return {
+    changeLoading: (isLoading) => {
+      dispatch({
+        type: ACTION_TYPES.LOADING,
+        payload: isLoading
+      })
+    }
+  }
 };
 
 export default {
   ACTION_TYPES,
-  ...actions
+  actions
 };
