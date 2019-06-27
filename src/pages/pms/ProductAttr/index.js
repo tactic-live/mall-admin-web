@@ -86,7 +86,7 @@ const columns = [
 
 class ProductAttr extends SearchLayout {
   extActions = [
-    <AddButton onCreate={this.reSearch}/>
+    <AddButton onCreate={this.reSearch} key="btnAdd"/>
   ];
 
   componentDidMount() {
