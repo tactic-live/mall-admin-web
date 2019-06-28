@@ -5,6 +5,7 @@ import { PagableTable } from '@/components/search-result';
 import { Button, Switch } from 'antd';
 import { connect } from 'react-redux';
 
+import { actions } from './action';
 import './index.less';
 import ExpandedRow from './ExpandedRow';
 
@@ -196,16 +197,15 @@ class Goods extends React.PureComponent {
   }
 
   async init() {
-    const { location, fetchGoodsByCondition, dispatch } = this.props;
+    const { location, fetchGoodsByCondition } = this.props;
     const defaultValues = QueryString.parse(location.search);
     const { current, goodsName, ...rest } = defaultValues;
-    const action = await fetchGoodsByCondition({
+    fetchGoodsByCondition({
       pageNum: current,
       pageSize: 5,
       goodsName,
       ...rest
     });
-    dispatch(action);
   }
 
   componentDidMount() {
@@ -280,4 +280,4 @@ const store = (state) => {
   };
 }
 
-export default connect(store)(Goods);
+export default connect(store, actions)(Goods);

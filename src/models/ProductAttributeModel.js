@@ -39,6 +39,16 @@ class ProductAttributeModel extends AbstractModel {
   }
 
   /**
+   * 删除商品类型
+   *
+   * @param {string} name 类型名称
+   */
+  async deleteAttributeCategory(id) {
+    const result = await super.delete(`/api/productAttribute/category/${id}`);
+    return result.data;
+  }
+
+  /**
    * 删除商品属性
    *
    * @param {number} id 属性id

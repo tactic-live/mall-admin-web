@@ -22,18 +22,21 @@ const Main = ({ history, match }) => {
     <Layout className="main">
       <Sider trigger={null} collapsible collapsed={collapsed}
         style={{
-          overflow: 'auto'
+          overflow: 'auto',
+          position: 'fixed',
+          left: 0,
+          height: '100vh'
         }}>
         <div className="logo" />
-        <MenuComp onSelect={onSelect} defaultSelectedKeys={defaultSelectedKeys} mode="inline"/>
+        <MenuComp onSelect={onSelect} defaultSelectedKeys={defaultSelectedKeys} mode="inline" />
       </Sider>
-      <Layout>
+      <Layout style={{marginLeft: collapsed ? 80 : 200}}>
         <Header className="header">
-          <Icon
+          {/*不显示收缩按钮 <Icon
             className="trigger"
             type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={() => { setCollapsed(!collapsed) }}
-          />
+          /> */}
           <i className="breadcrumb">
             <BreadcrumbComp />
           </i>
