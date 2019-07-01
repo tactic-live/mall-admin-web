@@ -79,17 +79,20 @@ class ProductAttrList extends SearchLayout {
     },
   ]
 
-  extActions = [
-    <Link to={`/pms/addProductAttr`}>
-      <Button type="primary" ghost size="small" key="btnAdd">增加</Button>
-    </Link>
-  ];
 
   componentDidMount() {
+    const { location } = this.props;
+    const params = QueryString.parse(location.search);
+    const extActions = [
+      <Link to={`/pms/addProductAttr/${params.cid}/${params.type}`} key="btnAdd">
+        <Button type="primary" ghost size="small" key="btnAdd">增加</Button>
+      </Link>
+    ];
+    console.log('match', location.search)
     this.setState({
       conditionFields: [],
       columns: this.columns,
-      extActions: this.extActions
+      extActions: extActions
     });
     this.init();
   }

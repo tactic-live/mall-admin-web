@@ -12,10 +12,11 @@ class ProductAttributeModel extends AbstractModel {
    * @param {integer} pageNum
    * @param {integer} pageSize
    */
-  async fetchAttributeCategory(pageNum = 1, pageSize = 5) {
+  async fetchAttributeCategory(pageNum = 1, pageSize = 100) {
     const result = await super.get(`/api/productAttribute/category`, { pageNum, pageSize });
     return result.data;
   };
+
 
   /**
    * 更新属性类型
@@ -55,6 +56,36 @@ class ProductAttributeModel extends AbstractModel {
    */
   async deleteProductAttribute(id){
     const result = await super.delete(`/api/productAttribute/${id}`);
+    return result.data;
+  }
+
+  /**
+   * 获取商品属性
+   *
+   * @param {number} id 属性id
+   */
+  async fetchProductAttribute(id){
+    const result = await super.get(`/api/productAttribute/${id}`);
+    return result.data;
+  }
+
+  /**
+   * 创建商品属性
+   *
+   * @param {object} productAttributeInfo 属性信息
+   */
+  async createProductAttribute(productAttributeInfo){
+    const result = await super.post(`/api/productAttribute`, productAttributeInfo);
+    return result.data;
+  }
+
+  /**
+   * 更新商品属性
+   *
+   * @param {object} productAttributeInfo 属性信息
+   */
+  async updateProductAttribute(productAttributeInfo){
+    const result = await super.put(`/api/productAttribute/${productAttributeInfo.id}`, productAttributeInfo);
     return result.data;
   }
 }

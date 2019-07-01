@@ -50,6 +50,14 @@ class AbstractModel {
       body: JSON.stringify(params)
     });
   }
+
+  async put(api, params) {
+    return this.execute({
+      path: api,
+      method: 'PUT',
+      body: JSON.stringify(params)
+    });
+  }
 }
 
 export default AbstractModel;
