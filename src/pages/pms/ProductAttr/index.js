@@ -111,7 +111,7 @@ class ProductAttr extends SearchLayout {
 
   async init() {
     const { fetchAll, location } = this.props;
-    console.log('props', this.props)
+    console.log('ProductAttr props', this.props)
     const { search } = location;
     const params = QueryString.parse(search);
     const { current, pageSize, productAttrName } = params;

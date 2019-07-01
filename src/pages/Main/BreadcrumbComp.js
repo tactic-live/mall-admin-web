@@ -23,10 +23,10 @@ function itemRender(route, params, routes, paths) {
     );
 }
 
-function BreadcrumbComp() {
+function BreadcrumbComp({ route }) {
   return (
     <div>
-      <Breadcrumb itemRender={itemRender} routes={routes}></Breadcrumb>
+      <Breadcrumb itemRender={itemRender} routes={routes} route={route}></Breadcrumb>
     </div>
   )
 }

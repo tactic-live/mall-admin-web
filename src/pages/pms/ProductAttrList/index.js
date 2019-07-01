@@ -102,8 +102,8 @@ class ProductAttrList extends SearchLayout {
     console.log('props', this.props)
     const { search } = location;
     const params = QueryString.parse(search);
-    const { cid, current, pageSize } = params;
-    fetchAll(cid, 0, current, pageSize);
+    const { cid, current, pageSize, type = 0 } = params;
+    fetchAll(cid, type, current, pageSize);
   }
 }
 

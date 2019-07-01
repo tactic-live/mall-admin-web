@@ -1,6 +1,7 @@
 import React from 'react';
-import { Form, Input, Select, Radio, Spin, InputNumber, Button } from 'antd';
+import { Form, Input, Select, Radio, Spin, InputNumber, Button, message } from 'antd';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { actions } from './action';
 
 const { TextArea } = Input;
@@ -22,14 +23,15 @@ class EditProductAttr extends React.PureComponent {
     submiting: false
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { changeLoading, fetchProductAttribute, fetchAllAttributeCategory, mode, match } = this.props;
     fetchAllAttributeCategory();
     // 更新模式
     if (mode === 'update') {
       changeLoading(true);
-      fetchProductAttribute(match.params.id);
+      await fetchProductAttribute(match.params.id);
     }
+    changeLoading(false);
   }
 
   createProductAttributeCategoryList() {
@@ -154,7 +156,8 @@ class EditProductAttr extends React.PureComponent {
   }
 
   submitForm = (e) => {
-    const { createProductAttribute, updateProductAttribute, mode, productAttrInfo, history } = this.props;
+    const { clearState, createProductAttribute, updateProductAttribute, mode, productAttrInfo, history, match } = this.props;
+    const { type } = match.params;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       this.setState({
@@ -163,15 +166,31 @@ class EditProductAttr extends React.PureComponent {
       try {
         if (!err) {
           const val = { ...values };
-          const inputList = values.inputList.replace(/\n/g, ',');
-          val.inputList = inputList;
+          if (values.inputList) {
+            const inputList = values.inputList.replace(/\n/g, ',');
+            val.inputList = inputList;
+          }
           // 更新
           if (mode === 'update') {
             await updateProductAttribute({ ...productAttrInfo, ...val });
             history.goBack();
           } else {
             // 新增
-            await createProductAttribute({ ...val });
+            await createProductAttribute({ ...val, type: parseInt(type, 10) });
+            let msg = '';
+            switch (type) {
+              case '0':
+                msg = '商品属性添加成功';
+                break;
+              case '1':
+                msg = '商品参数添加成功';
+                break;
+              default:
+            }
+            // 清除相关状态
+            clearState('productAttrInfo', {});
+            this.props.form.resetFields();
+            msg && message.success(msg);
           }
         }
       } finally {
@@ -211,6 +230,6 @@ const store = (state) => {
   return { loading, productAttrInfo, productAttributeCategoryList };
 }
 
-const connectedEditProductAttr = connect(store, actions)(EditProductAttr);
+const connectedEditProductAttr = connect(store, actions)(withRouter(EditProductAttr));
 const WrappedEditProductAttr = Form.create({ name: 'editproductattr' })(connectedEditProductAttr);
 export default WrappedEditProductAttr;

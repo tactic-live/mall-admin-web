@@ -12,6 +12,8 @@ function Routes({ authKey }) {
           <Route path="/login" exact component={loadable(() => import('./Login'))} />
           <Redirect path="/" exact to="/home" />
           <PrivateRoute path="/:subPath/:subPath2?" component={loadable(() => import('./Main'))} />
+          <Route path="/404" exact component={loadable(() => import('@/pages/404'))} />
+          <Redirect to="/404" />
         </Switch>
       </Router>
     </div>
