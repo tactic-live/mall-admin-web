@@ -40,8 +40,8 @@ export async function deleteProductAttribute(id) {
   }
 }
 
-export async function fetchAttributeListById(id, type, pageNumm = 1, pageSize = 5) {
-  const payload = await new ProductAttributeModel().fetchAttributeById(id, type, pageNumm, pageSize);
+export async function fetchAttributeListById(id, type, pageNum = 1, pageSize = 5) {
+  const payload = await new ProductAttributeModel().fetchAttributeById(id, type, pageNum, pageSize);
   return {
     type: ACTION_TYPES.FETCH_PRODUCT_ATTRIBUTE_LIST_BY_ID,
     payload

@@ -65,7 +65,7 @@ class ConditionForm extends React.PureComponent {
     fields && fields.forEach((fieldDefine) => {
       // format是moment的format格式
       const {
-        name, label, type, options, span = 6, initialValue, params, showTime,
+        name, placeholder, label, type, options, span = 6, initialValue, params, showTime,
         format = 'YYYY-MM-DD', helper, render
       } = fieldDefine;
       this.colCount += span;
@@ -174,7 +174,7 @@ class ConditionForm extends React.PureComponent {
           );
           break;
         default:
-          FormItem = <Input placeholder={label} allowClear />;
+          FormItem = <Input placeholder={placeholder || label} allowClear />;
           // helper
           if (helper) {
             // FormItem = <BizAutoComplete helper={helper}><Input placeholder={label} /></BizAutoComplete>;
@@ -215,28 +215,27 @@ class ConditionForm extends React.PureComponent {
   render() {
     const { fields, form, defaultValues, className, extActions } = this.props;
     const conditionActionsElem = fields.length ? (
-      <Col span={12} className="conditionActions">
+      <div>
+        {extActions}
         <Button type="default" className="action-item" onClick={this.handleReset}>重置</Button>
         <Button htmlType="submit" type="primary" className="action-item">查询</Button>
-      </Col>
-    ) : null;
-    let extActionsElem = null;
-    if (extActions) {
-      extActionsElem = (
-        <Col span={12} className="conditionActions">
-          {extActions}
-        </Col>
-      );
-    }
+      </div>
+    ) : extActions;
+    // const extActionsElem = extActions;
+    // if (extActions) {
+    //   extActionsElem = extActions;
+    // }
     return (
       <Form onSubmit={this.onSubmit} className={classnames('conditionForm', className)}>
         <Row gutter={24} className="conditionActionsRow">
           <Col span={12}><Icon type="search" /> 筛选搜索</Col>
-          {conditionActionsElem}
-          {extActionsElem}
+          <Col span={12} className="conditionActions">
+            {conditionActionsElem}
+            {/* {extActionsElem} */}
+          </Col>
         </Row>
         <Row gutter={24}>{this.getFields(form, fields, defaultValues)}</Row>
-      </Form>
+      </Form >
     );
   }
 }

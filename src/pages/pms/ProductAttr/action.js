@@ -30,8 +30,8 @@ export async function createAttributeCategory(name) {
   }
 }
 
-export async function fetchProductAttributeCategory(pageNumm = 1, pageSize = 5) {
-  const payload = await new ProductAttributeModel().fetchAttributeCategory(pageNumm, pageSize);
+export async function fetchProductAttributeCategory(pageNum = 1, pageSize = 5) {
+  const payload = await new ProductAttributeModel().fetchAttributeCategory(pageNum, pageSize);
   return {
     type: ACTION_TYPES.FETCH_PRODUCT_ATTRIBUTE_CATEGORY,
     payload
