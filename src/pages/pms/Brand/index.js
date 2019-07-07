@@ -82,8 +82,18 @@ class Brand extends SearchLayout {
       width: 150,
       render: (text, record) => (
         <div>
-          <Button ghost type="primary" size="small">编辑</Button>&nbsp;
-          <Button ghost type="danger" size="small">删除</Button>
+          <Link to={`/pms/updateBrand/${text}`}>
+            <Button ghost type="primary" size="small">编辑</Button>
+          </Link>
+          &nbsp;
+          <Popconfirm
+            title={`确认要删除品牌 [${record.name}] 吗?`}
+            onConfirm={() => this.deleteBrand(text, record.name)}
+            okText="删除"
+            onCancel="取消"
+          >
+            <Button ghost type="danger" size="small">删除</Button>
+          </Popconfirm>
         </div>
       )
     },
@@ -91,7 +101,9 @@ class Brand extends SearchLayout {
 
   extActions = [
     (
-      <Button type="primary" key="btnAdd" ghost>添加</Button>
+      <Link to="/pms/addBrand" key="btnAdd">
+        <Button type="primary" ghost>添加</Button>
+      </Link>
     )
   ]
 
@@ -113,6 +125,18 @@ class Brand extends SearchLayout {
     const params = QueryString.parse(search);
     const { current, pageSize = 10 } = params;
     fetchAll(current, pageSize);
+  }
+
+  /**
+   * 删除品牌信息
+   *
+   * @param {number} id 品牌id
+   */
+  deleteBrand = async (id, name) => {
+    const { deleteBrand } = this.props;
+    await deleteBrand(id);
+    message.success(`品牌 [${name}] 删除成功`);
+    this.reSearch();
   }
 
   /**

@@ -11,6 +11,8 @@ function pms({ match, ...rest }) {
     <div>
       <Switch>
         <PrivateRoute path={`${match.path}/brand`} exact component={loadable(() => import('./Brand'))} routeName="品牌管理" />
+        <PrivateRoute path={`${match.path}/addBrand`} exact component={loadable(() => import('./EditBrand'))} routeName="添加品牌" />
+        <PrivateRoute path={`${match.path}/updateBrand/:id`} exact component={loadable(() => import('./EditBrand'))} routeName="编辑管理" />
         <PrivateRoute path={`${match.path}/addGoods`} exact component={loadable(() => import('./AddGoods'))} routeName="添加商品" />
         <PrivateRoute path={`${match.path}/goods`} exact component={loadable(() => import('./Goods'))} actions={actions} routeName="商品列表" />
         <PrivateRoute path={`${match.path}/productAttr`} exact component={loadable(() => import('./ProductAttr'))} routeName="商品类型列表" />

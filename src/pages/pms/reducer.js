@@ -5,6 +5,7 @@ const INIT_STATE = {
     list: []
   },
   brandList: { total: 0, current: 1, pageSize: 10, list: [] },
+  brandInfo: {},
   productAttributeCategoryList: [],
   loading: true
 }
@@ -65,6 +66,9 @@ function reducer(state = INIT_STATE, action) {
           showStatus
         };
       });
+      break;
+    case 'FETCH_BRAND_BY_ID':
+      result.brandInfo = payload;
       break;
     default:
   }

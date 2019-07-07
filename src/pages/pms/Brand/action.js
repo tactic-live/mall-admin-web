@@ -5,7 +5,8 @@ export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
   FETCH_BRAND: 'FETCH_BRAND',
   UPDATE_FACTORY_STATUS: 'UPDATE_FACTORY_STATUS',
-  UPDATE_SHOW_STATUS: 'UPDATE_SHOW_STATUS'
+  UPDATE_SHOW_STATUS: 'UPDATE_SHOW_STATUS',
+  DELETE_BRAND: 'DELETE_BRAND'
 };
 
 export async function fetchBrand(pageNum, pageSize) {
@@ -27,6 +28,21 @@ export async function updateFactoryStatus(ids, factoryStatus) {
   return {
     type: ACTION_TYPES.UPDATE_FACTORY_STATUS,
     payload: { ids, factoryStatus }
+  }
+}
+
+
+/**
+ * 批量更新厂家制造商状态
+ *
+ * @param {*} ids id数组
+ * @param {*} factoryStatus 厂家制造商状态
+ */
+export async function deleteBrand(id) {
+  await new BrandModel().deleteBrand(id);
+  return {
+    type: ACTION_TYPES.DELETE_BRAND,
+    payload: { id }
   }
 }
 
@@ -60,6 +76,10 @@ export function actions(dispatch, ownProps) {
       dispatch(await updateShowStatus(...args));
       changeLoading(false);
     },
+    deleteBrand: async (...args) => {
+      dispatch(await deleteBrand(...args));
+      changeLoading(false);
+    },
 
   }
 }
@@ -67,5 +87,6 @@ export function actions(dispatch, ownProps) {
 export default {
   ACTION_TYPES,
   fetchBrand,
-  updateFactoryStatus
+  updateFactoryStatus,
+  deleteBrand
 }

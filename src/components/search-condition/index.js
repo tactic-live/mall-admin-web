@@ -35,7 +35,7 @@ const { Option } = Select;
 // }
 
 
-class ConditionForm extends React.PureComponent {
+class SearchCondition extends React.PureComponent {
 
   colCount = 0;
   state = {
@@ -240,5 +240,5 @@ class ConditionForm extends React.PureComponent {
   }
 }
 
-const WrappedConditionForm = Form.create({ name: 'condition_search' })(ConditionForm);
+const WrappedConditionForm = Form.create({ name: 'condition_search' })(SearchCondition);
 export default WrappedConditionForm;
