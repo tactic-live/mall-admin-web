@@ -1,12 +1,22 @@
-const INIT_STATE = {
+const defaultPageable = { total: 0, current: 1, pageSize: 10, list: [] };
+
+export const INIT_STATE = {
   productListInfo: {},
   productAttrInfo: {},
   productAttrList: {
-    list: []
+    ...defaultPageable
   },
-  brandList: { total: 0, current: 1, pageSize: 10, list: [] },
+  brandList: { ...defaultPageable },
   brandInfo: {},
   productAttributeCategoryList: [],
+  productCateList: {
+    ...defaultPageable
+  },
+  productCateInfo: {
+    productAttributeIdList: [],
+  },
+  // 筛选属性
+  productAttributeList: [],
   loading: true
 }
 
@@ -69,6 +79,25 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'FETCH_BRAND_BY_ID':
       result.brandInfo = payload;
+      break;
+    case 'FETCH_PRODUCT_CATE_BY_PARENT_ID':
+      result.productCateList = payload;
+      break;
+    case 'UPDATE_PRODUCT_CATE_FOR_LIST':
+      if (result.productCateList) {
+        result.productCateList.list = result.productCateList.list.map(productCateInfo => {
+          if (productCateInfo.id === payload.id) {
+            return payload;
+          }
+          return productCateInfo;
+        });
+      }
+      break;
+    case 'FETCH_PRODUCT_CATE_BY_ID':
+      result.productCateInfo = payload;
+      break;
+    case 'FETCH_CATEGORY_LIST_WITH_ATTR':
+      result.productAttributeList = payload;
       break;
     default:
   }

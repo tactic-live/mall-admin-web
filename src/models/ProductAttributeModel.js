@@ -7,6 +7,15 @@ class ProductAttributeModel extends AbstractModel {
   };
 
   /**
+   * 根据商品分类的id获取商品属性及属性分类
+   * @param {*} productCategoryId 商品分类的id
+   */
+  async fetchAttrInfoByProductCategoryId(productCategoryId) {
+    const result = await super.get(`/api/productAttribute/attrInfo/${productCategoryId}`);
+    return result.data;
+  };
+
+  /**
    * 获取全部属性分类
    *
    * @param {integer} pageNum
@@ -14,6 +23,14 @@ class ProductAttributeModel extends AbstractModel {
    */
   async fetchAttributeCategory(pageNum = 1, pageSize = 100) {
     const result = await super.get(`/api/productAttribute/category`, { pageNum, pageSize });
+    return result.data;
+  };
+
+  /**
+   * 获取所有商品属性分类及其下属性
+   */
+  async fetchCategoryListWithAttr() {
+    const result = await super.get(`/api/productAttribute/category/list/withAttr`);
     return result.data;
   };
 

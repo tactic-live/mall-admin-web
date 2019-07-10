@@ -4,24 +4,12 @@ import OssModel from '@/models/OssModel';
 import COS from 'cos-js-sdk-v5';
 import BMF from 'browser-md5-file';
 
-const fileList = [
-  {
-    uid: '59',
-    name: 'xxx.png',
-    status: 'done',
-    url: 'https://lg-jaj9ub0g-1254151762.cos.ap-shanghai.myqcloud.com/mall/image/af1e33d198b226b6bc64497502da23e9.jpg',
-    thumbUrl: 'https://lg-jaj9ub0g-1254151762.cos.ap-shanghai.myqcloud.com/mall/image/af1e33d198b226b6bc64497502da23e9.jpg',
-  },
-  // {
-  //   uid: '-2',
-  //   name: 'yyy.png',
-  //   status: 'done',
-  //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  //   thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  // },
-];
-
 class FormUpload extends React.Component {
+
+  state = {
+    defaultFileList: null,
+    break: 0
+  }
 
   uploadToOss = (file) => {
     return new Promise((resolve, reject) => {
@@ -73,39 +61,71 @@ class FormUpload extends React.Component {
     const { beforeUpload, onChange } = this.props;
     if (!beforeUpload || beforeUpload(file)) {
       console.log('beforeUpload', file, fileList)
-      this.uploadToOss(file).then((url)=>{
+      this.uploadToOss(file).then((url) => {
         file.url = url;
-        onChange && onChange(file, fileList);
+        onChange && onChange({ file, fileList });
       });
     }
     return false;
   }
 
-  onChange = (file, fileList, event) => {
-    const { onChange } = this.props;
-    console.log('onChange', file, fileList, event);
-    onChange && onChange(file, fileList, event)
-  }
+  // onChange = ({ file, fileList, event }) => {
+  //   const { onChange } = this.props;
+  //   console.log('onChange', file, fileList, event);
+  //   this.setState({
+  //     fileList
+  //   });
+  //   onChange && onChange(file, fileList, event)
+  // }
+
+  // onRemove = (file) => {
+  //   console.log('onRemove', file)
+  //   this.setState({
+  //     fileList: [],
+  //     break: 1
+  //   })
+  // }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log('getDerivedStateFromProps, nextProps, prevState', nextProps, prevState)
+  //   const { defaultFileList } = nextProps;
+  //   if (defaultFileList !== prevState.defaultFileList) {
+  //     prevState.defaultFileList = defaultFileList;
+  //     return { ...prevState, fileList: defaultFileList };
+  //   }
+  //   return prevState;
+  //   // if (fileList === null) {
+  //   // }
+  //   // this.setState({
+  //   //   fileList: [...defaultFileList]
+  //   // });
+  //   // fileList.push(...defaultFileList);
+  // }
 
   render() {
-    const { onChange, beforeUpload, defaultFileList, vaule, initialValue, ...rest } = this.props;
-    console.log('FormUpload render props', defaultFileList, this.props);
+    const { onChange, beforeUpload, vaule, fileList = [], maxLength = 10, ...rest } = this.props;
+    // if (fileList.length === 0) {
+    //   fileList.push(...defaultFileList)
+    // }
+    console.log('FormUpload render props', fileList, this.props);
     return (
-      <div className="form-upload" >
+      <div className="form-upload">
         <Upload
           className="form-upload-item upload-file"
           beforeUpload={this.beforeUpload}
           accept=".jpg,.jpeg,.png"
           multiple={true}
           listType='picture'
-          onChange={this.onChange}
-          // {...rest}
-          defaultFileList={defaultFileList}
+          onChange={onChange}
+          fileList={fileList}
+          // disabled={fileList.length === maxLength}
+          {...rest}
         >
-          <Button>
-            <Icon type="upload" /> 上传文件
+          <Button icon="upload">
+            上传文件
           </Button>
         </Upload>
+        {}
         <div className="form-upload-item description">
           只能上传jpg/png文件，且不超过10MB
         </div>
