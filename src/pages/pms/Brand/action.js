@@ -9,7 +9,7 @@ export const ACTION_TYPES = {
   DELETE_BRAND: 'DELETE_BRAND'
 };
 
-export async function fetchBrand(pageNum, pageSize) {
+export async function fetchBrand(pageNum, pageSize = 5) {
   const payload = await new BrandModel().fetchBrand(pageNum, pageSize);
   return {
     type: ACTION_TYPES.FETCH_BRAND,

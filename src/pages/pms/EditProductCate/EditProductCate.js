@@ -54,7 +54,7 @@ class EditProductCate extends React.PureComponent {
   onSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
-      const { id, mode, addBrand, updateProductCate } = this.props;
+      const { id, mode, addProductCategory, updateProductCate } = this.props;
       if (err) {
         return;
       }
@@ -67,9 +67,16 @@ class EditProductCate extends React.PureComponent {
       }
       iconItem = iconItem || {};
       // 整合筛选属性
-      const tmpProductAttributeIdList = productAttributeIdList.map((item) => {
+      const removeList = [];
+      const tmpProductAttributeIdList = productAttributeIdList.map((item, index) => {
+        if (item.length === 0) {
+          removeList.push(index);
+        }
         return item.pop();
       });
+      removeList.forEach((idx) => {
+        tmpProductAttributeIdList.splice(idx, 1);
+      })
       // const productAttributeIdListKeys = Object.keys(rest).filter(key => /productAttributeIdList_/.test(key));
       // const otherProps = { ...rest };
       // productAttributeIdListKeys.forEach(key => {
@@ -89,38 +96,10 @@ class EditProductCate extends React.PureComponent {
         const { history } = this.props;
         history.goBack();
       } else {
-        addBrand(productCateInfo);
+        addProductCategory(productCateInfo);
         message.success(`商品分类 [${productCateInfo.name}] 添加成功.`);
       }
     })
-  }
-
-  /**
-   * 增加属性筛选项
-   */
-  addProductAttributeSelect = () => {
-    console.log('click')
-    this.setState({
-      productAttributeIdList: [
-        ...this.state.productAttributeIdList,
-        {
-          attributeCategoryId: -1, attributeId: -1
-        }
-      ]
-    });
-  }
-
-
-  /**
-   * 删除属性筛选项
-   */
-  delProductAttributeSelect = (index) => {
-    const productAttributeIdList = [...this.state.productAttributeIdList];
-    productAttributeIdList.splice(index, 1);
-    console.log('productAttributeIdList', productAttributeIdList)
-    this.setState({
-      productAttributeIdList
-    });
   }
 
   /**
@@ -214,7 +193,7 @@ class EditProductCate extends React.PureComponent {
     const { id, form, productCateInfo, productCateList } = this.props;
     const { list: productCateListDatas } = productCateList;
     const {
-      name, parentId, productUnit, description, icon, keywords, navStatus = 0,
+      name, parentId = 0, productUnit, description, icon, keywords, navStatus = 0,
       sort = 0, showStatus = 0
     } = productCateInfo;
     const { getFieldDecorator } = form;
@@ -243,7 +222,12 @@ class EditProductCate extends React.PureComponent {
         </Form.Item>
         <Form.Item {...formItemLayout} label="上级分类">
           {getFieldDecorator('parentId', {
-            rules: [],
+            rules: [
+              {
+                required: true,
+                message: '[上级分类]不能为空',
+              },
+            ],
             initialValue: parentId
           })(
             <Select placeholder="上级分类" >
@@ -255,7 +239,7 @@ class EditProductCate extends React.PureComponent {
         <Form.Item {...formItemLayout} label="数量单位">
           {getFieldDecorator('productUnit', {
             initialValue: productUnit
-          })(<Input placeholder="上级分类" />)}
+          })(<Input placeholder="数量单位" />)}
         </Form.Item>
         <Form.Item {...formItemLayout} label="排序">
           {getFieldDecorator('sort', {

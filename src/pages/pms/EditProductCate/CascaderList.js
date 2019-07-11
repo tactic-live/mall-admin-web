@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cascader, Button } from 'antd';
+import { Cascader, Button, message } from 'antd';
 
 import './CascaderList.less';
 
@@ -34,6 +34,10 @@ class CascaderList extends React.Component {
 
   delCascader = (index) => {
     const { onChange, valueList } = this.props;
+    if (valueList.length === 1) {
+      message.warn('[筛选属性] 不能少于一个')
+      return;
+    }
     const tmpValueList = valueList.concat();
     tmpValueList.splice(index, 1);
     onChange([...tmpValueList], {}, index)
@@ -47,12 +51,15 @@ class CascaderList extends React.Component {
 
   render() {
     const { options, onChange, valueList = [], ...rest } = this.props;
-    console.log('CascaderList data', valueList, this.props)
+    console.log('CascaderList data', valueList, this.props);
+    if (valueList.length === 0) {
+      valueList.push([])
+    }
     const listElem = valueList.map((item, index, data) => {
       const perInitValue = valueList.length > index ? valueList[index] : [];
       console.log('CascaderList perInitValue', perInitValue)
       return (
-        <div className="cascader-list-item" key={`CascaderList_${index}`}>
+        <div className="cascader-list-item" key={`cascaderList_${index}`}>
           <Cascader
             onChange={(...args) => {
               this.onChange(...args, index)
@@ -63,7 +70,7 @@ class CascaderList extends React.Component {
             value={perInitValue}
           // {...rest}
           />
-          {index > 0 ? <Button type="ghost" onClick={() => this.delCascader(index)}>删除</Button> : null}
+          <Button type="ghost" onClick={() => this.delCascader(index)}>删除</Button>
         </div>
       );
     });

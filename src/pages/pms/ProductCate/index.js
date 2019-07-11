@@ -173,11 +173,6 @@ class ProductCate extends SearchLayout {
     const params = QueryString.parse(search);
     const { current, pageSize, parentId } = params;
     fetchAll(parentId, current, pageSize);
-    // const { payload } = await fetchProductAttributeCategory(current, pageSize);
-    // dispatch({
-    //   type: ACTION_TYPES.FETCH_PRODUCT_ATTRIBUTE_CATEGORY,
-    //   payload
-    // });
   }
 }
 const store = (state) => {

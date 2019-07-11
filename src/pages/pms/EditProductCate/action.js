@@ -12,12 +12,12 @@ export const ACTION_TYPES = {
 };
 
 /**
- * 添加品牌
+ * 添加商品属性分类
  *
- * @param {*} brandInfo 品牌信息
+ * @param {*} categoryInfo 商品属性分类信息
  */
-export async function addBrand(brandInfo) {
-  const payload = await new ProductCategoryModel().addBrand(brandInfo);
+export async function addProductCategory(categoryInfo) {
+  const payload = await new ProductCategoryModel().addProductCategory(categoryInfo);
   return {
     type: ACTION_TYPES.ADD_PRODUCT_CATE,
     payload
@@ -70,8 +70,8 @@ export function actions(dispatch, ownProps) {
   return {
     changeLoading,
     clearState,
-    addBrand: async (...args) => {
-      dispatch(await addBrand(...args));
+    addProductCategory: async (...args) => {
+      dispatch(await addProductCategory(...args));
       changeLoading(false);
     },
     updateProductCate: async (categoryInfo) => {

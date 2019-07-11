@@ -38,8 +38,8 @@ export async function updateBrand(brandInfo) {
  *
  * @param {number} id 品牌id
  */
-export async function fetchBrandById(brandInfo) {
-  const payload = await new BrandModel().fetchBrandById(brandInfo);
+export async function fetchBrandById(id) {
+  const payload = await new BrandModel().fetchBrandById(id);
   return {
     type: ACTION_TYPES.FETCH_BRAND_BY_ID,
     payload

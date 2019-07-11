@@ -123,8 +123,8 @@ class Brand extends SearchLayout {
     console.log('props', this.props)
     const { search } = location;
     const params = QueryString.parse(search);
-    const { current, pageSize = 10 } = params;
-    fetchAll(current, pageSize);
+    const { current } = params;
+    fetchAll(current, this.state.pageSize);
   }
 
   /**

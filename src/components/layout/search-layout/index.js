@@ -6,15 +6,23 @@ import { PagableTable } from '@/components/search-result';
 import './index.less';
 
 class SearchLayout extends React.Component {
-  state = {
-    // 当前查询条件对象
-    curCond: {},
-    // 当前分页对象
-    curPagination: {},
-    // 查询结果(数组)
-    result: [],
-    conditionFields: [],
-    loading: true
+
+  constructor(props, context) {
+    super(props, context);
+    const { location } = props;
+    const { pageSize } = QueryString.parse(location.search);
+    this.state = {
+      // 默认pageSize
+      pageSize: (pageSize || 5),
+      // 当前查询条件对象
+      curCond: {},
+      // 当前分页对象
+      curPagination: {},
+      // 查询结果(数组)
+      result: [],
+      conditionFields: [],
+      loading: true
+    }
   }
 
   // componentWillMount() {
@@ -34,7 +42,7 @@ class SearchLayout extends React.Component {
     const { current, pageSize, ...rest } = defaultValues;
     const retVal = {
       ...state,
-      curPagination: { current, pageSize },
+      curPagination: { current, pageSize: state.pageSize },
       curCond: rest
     }
     if (_result) {

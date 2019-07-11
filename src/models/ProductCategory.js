@@ -31,6 +31,16 @@ class ProductCategoryModel extends AbstractModel {
     const result = await super.put(`/api/productCategory/${productCategoryInfo.id}`, productCategoryInfo);
     return result.data;
   }
+
+  /**
+   * 添加商品分类信息
+   *
+   * @param {object} productCategoryInfo 商品分类信息
+   */
+  async addProductCategory(productCategoryInfo){
+    const result = await super.post(`/api/productCategory`, productCategoryInfo);
+    return result.data;
+  }
 }
 
 export default ProductCategoryModel;
