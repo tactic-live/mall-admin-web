@@ -12,6 +12,16 @@ class ProductCategoryModel extends AbstractModel {
     const result = await super.get(`/api/productCategory`, { parentId, pageNum, pageSize });
     return result.data;
   };
+
+  /**
+   * 分页查询商品分类及子分类
+   *
+   */
+  async fetchProductCategoryWithChildren() {
+    const result = await super.get(`/api/productCategory/list/withChildren`);
+    return result.data;
+  };
+
   /**
    * 获取商品分类信息
    *

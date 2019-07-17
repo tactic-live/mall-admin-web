@@ -69,39 +69,6 @@ class FormUpload extends React.Component {
     return false;
   }
 
-  // onChange = ({ file, fileList, event }) => {
-  //   const { onChange } = this.props;
-  //   console.log('onChange', file, fileList, event);
-  //   this.setState({
-  //     fileList
-  //   });
-  //   onChange && onChange(file, fileList, event)
-  // }
-
-  // onRemove = (file) => {
-  //   console.log('onRemove', file)
-  //   this.setState({
-  //     fileList: [],
-  //     break: 1
-  //   })
-  // }
-
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   console.log('getDerivedStateFromProps, nextProps, prevState', nextProps, prevState)
-  //   const { defaultFileList } = nextProps;
-  //   if (defaultFileList !== prevState.defaultFileList) {
-  //     prevState.defaultFileList = defaultFileList;
-  //     return { ...prevState, fileList: defaultFileList };
-  //   }
-  //   return prevState;
-  //   // if (fileList === null) {
-  //   // }
-  //   // this.setState({
-  //   //   fileList: [...defaultFileList]
-  //   // });
-  //   // fileList.push(...defaultFileList);
-  // }
-
   render() {
     const { onChange, beforeUpload, vaule, fileList = [], maxLength = 10, ...rest } = this.props;
     // if (fileList.length === 0) {

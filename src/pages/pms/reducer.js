@@ -1,8 +1,50 @@
+import moment from 'moment';
+
 const defaultPageable = { total: 0, current: 1, pageSize: 10, list: [] };
 
 export const INIT_STATE = {
+  productInfo: {
+    promotionType: '3',
+    productLadderList: [
+      {
+        "id": 69,
+        "productId": 26,
+        "count": 0,
+        "discount": 0.00,
+        "price": 0.00
+      }
+    ],
+    promotionStartTime: moment(),
+    promotionEndTime: moment(),
+    promotionPrice: 100,
+    memberPriceList: [
+      {
+        "id": 204,
+        "productId": 26,
+        "memberLevelId": 1,
+        "memberPrice": 111.00,
+        "memberLevelName": "黄金会员"
+      },
+      {
+        "id": 205,
+        "productId": 26,
+        "memberLevelId": 2,
+        "memberPrice": 222.00,
+        "memberLevelName": "白金会员"
+      },
+      {
+        "id": 206,
+        "productId": 26,
+        "memberLevelId": 3,
+        "memberPrice": 333.00,
+        "memberLevelName": "钻石会员"
+      }
+    ]
+  },
   productListInfo: {},
   productAttrInfo: {},
+  // 商品分类
+  productCategorySelectList: [],
   productAttrList: {
     ...defaultPageable
   },
@@ -54,6 +96,7 @@ function reducer(state = INIT_STATE, action) {
       result.loading = payload;
       break;
     case 'FETCH_BRAND':
+    case 'FETCH_BRAND_LIST':
       result.brandList = payload;
       break;
     case 'UPDATE_FACTORY_STATUS':
@@ -98,6 +141,9 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'FETCH_CATEGORY_LIST_WITH_ATTR':
       result.productAttributeList = payload;
+      break;
+    case 'FETCH_PRODUCT_CATEGORY_WITH_CHILDREN':
+      result.productCategorySelectList = payload;
       break;
     default:
   }
