@@ -3,17 +3,14 @@ import { Tabs } from 'antd';
 import MemberPrice from './MemberPrice';
 import PreferentialPromotion from './PreferentialPromotion';
 import DifferentialPrice from './ProductLadder';
-import PriceReduction from './PriceReduction';
+import ProductFullReductionList from './ProductFullReductionList';
 
 const { TabPane } = Tabs;
 
 const PromotionType = React.forwardRef((props, ref) => {
+  console.log('PromotionType props', props);
   const { form, data } = props;
   const { getFieldDecorator } = form;
-  // function productLadderListNormalize(value) {
-  //   console.log('productLadderListNormalize value', value)
-  //   return value;
-  // }
   return (
     <Tabs type="card" {...props} ref={ref}>
       <TabPane tab="无优惠" key="0">
@@ -33,7 +30,12 @@ const PromotionType = React.forwardRef((props, ref) => {
         )}
       </TabPane>
       <TabPane tab="满减价格" key="4">
-        <PriceReduction {...props} />
+        {getFieldDecorator('productFullReductionList', {
+          initialValue: data.productFullReductionList,
+          valuePropName: 'productFullReductionList'
+        })(
+          <ProductFullReductionList />
+        )}
       </TabPane>
     </Tabs>
   )

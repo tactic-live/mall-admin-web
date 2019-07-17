@@ -145,7 +145,7 @@ class PromotionInfo extends React.PureComponent {
     ];
     const data = { ...productInfo, ...propData }
 
-    const fields = this.fields({ productInfo: productInfo, data, ...rest }).map(field => {
+    const fields = this.fields({ data, ...rest }).map(field => {
       field.initialValue = data[field.name];
       return field;
     });

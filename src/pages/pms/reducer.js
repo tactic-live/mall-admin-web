@@ -4,14 +4,22 @@ const defaultPageable = { total: 0, current: 1, pageSize: 10, list: [] };
 
 export const INIT_STATE = {
   productInfo: {
-    promotionType: '3',
+    promotionType: '4',
     productLadderList: [
       {
-        "id": 69,
-        "productId": 26,
-        "count": 0,
-        "discount": 0.00,
-        "price": 0.00
+        id: 69,
+        productId: 26,
+        count: 0,
+        discount: 0.00,
+        price: 0.00
+      }
+    ],
+    productFullReductionList: [
+      {
+        id: 64,
+        productId: 26,
+        fullPrice: 0.00,
+        reducePrice: 0.00
       }
     ],
     promotionStartTime: moment(),

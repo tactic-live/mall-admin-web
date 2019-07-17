@@ -5,15 +5,15 @@ import { uniqueId } from 'lodash'
 /**
  * 阶梯价格
  */
-const ProductLadder = (props, ref) => {
-  console.log('DifferentialPrice props', props);
-  const { productLadderList = [] } = props;
+const ProductFullReductionList = (props, ref) => {
+  console.log('ProductFullReductionList props', props);
+  const { productFullReductionList = [] } = props;
   const [extData, setExtData] = useState(() => {
-    const val = productLadderList.map((productLadderInfo) => {
+    const val = productFullReductionList.map((productFullReductionInfo) => {
       const uid = uniqueId('i_');
       return {
         key: uid,
-        ...productLadderInfo
+        ...productFullReductionInfo
       }
     })
     return val;
@@ -24,9 +24,8 @@ const ProductLadder = (props, ref) => {
     const uid = uniqueId('t_');
     const datas = extData.slice(0, idx + 1).concat([{
       key: uid,
-      count: 0,
-      discount: 0.00,
-      price: 0.00
+      reducePrice: 0.00,
+      fullPrice: 0.00
     }]).concat(extData.slice(idx + 1, extData.length));
     setExtData(datas);
     onChange && onChange(datas);
@@ -50,17 +49,17 @@ const ProductLadder = (props, ref) => {
 
   const columns = [
     {
-      title: '数量',
-      dataIndex: 'count',
+      title: '满',
+      dataIndex: 'fullPrice',
       render: (text, record, index) => {
-        return <InputNumber defaultValue={text} precision={0} min={0} max={999} onChange={(val) => onChange('count', val, index)} />
+        return <InputNumber defaultValue={text} precision={2} min={0} max={999} onChange={(val) => onChange('fullPrice', val, index)} />
       }
     },
     {
-      title: '折扣',
-      dataIndex: 'discount',
+      title: '立减',
+      dataIndex: 'reducePrice',
       render: (text, record, index) => {
-        return <InputNumber defaultValue={text} precision={0} min={0} max={999} onChange={(val) => onChange('discount', val, index)} />
+        return <InputNumber defaultValue={text} precision={2} min={0} max={999} onChange={(val) => onChange('reducePrice', val, index)} />
       }
     },
     {
@@ -92,4 +91,4 @@ const ProductLadder = (props, ref) => {
   )
 };
 
-export default React.forwardRef(ProductLadder);
+export default React.forwardRef(ProductFullReductionList);
