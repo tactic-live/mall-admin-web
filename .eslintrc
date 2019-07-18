@@ -1,0 +1,26 @@
+{
+  "extends": "react-app",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "class-methods-use-this": [0],
+    "no-underscore-dangle": [0],
+    "react/sort-comp": [0],
+    "import/no-extraneous-dependencies": [0],
+    "react/prop-types": [0],
+    "react/jsx-filename-extension": [0],
+    "no-unused-expressions": [0],
+    "jsx-a11y/anchor-has-content": ["off"],
+    "jsx-a11y/no-static-element-interactions": [0],
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to" ],
+      "aspects": [ "noHref", "preferButton" ]
+    }],
+    "no-script-url": ["off"],
+    "react/react-in-jsx-scope": [0],
+    "import/no-unresolved": [0],
+    "import/extensions": [0]
+  }
+}
