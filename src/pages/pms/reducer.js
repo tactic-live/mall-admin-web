@@ -4,7 +4,7 @@ const defaultPageable = { total: 0, current: 1, pageSize: 10, list: [] };
 
 export const INIT_STATE = {
   productInfo: {
-    promotionType: '4',
+    promotionType: '1',
     productLadderList: [
       {
         id: 69,
@@ -47,7 +47,9 @@ export const INIT_STATE = {
         "memberPrice": 333.00,
         "memberLevelName": "钻石会员"
       }
-    ]
+    ],
+    pic: 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/5ac1bf58Ndefaac16.jpg',
+    albumPics: "http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/5ab46a3cN616bdc41.jpg,http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/5ac1bf5fN2522b9dc.jpg",
   },
   productListInfo: {},
   productAttrInfo: {},

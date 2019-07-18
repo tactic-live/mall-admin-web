@@ -58,43 +58,69 @@ class FormUpload extends React.Component {
   }
 
   beforeUpload = (file, fileList) => {
-    const { beforeUpload, onChange } = this.props;
+    const { beforeUpload, onChange, fileList: propFileList } = this.props;
     if (!beforeUpload || beforeUpload(file)) {
       console.log('beforeUpload', file, fileList)
       this.uploadToOss(file).then((url) => {
         file.url = url;
-        onChange && onChange({ file, fileList });
+        onChange && onChange({ file, fileList: propFileList.concat(fileList) });
       });
     }
     return false;
   }
 
   render() {
-    const { onChange, beforeUpload, vaule, fileList = [], maxLength = 10, ...rest } = this.props;
+    const { onChange, beforeUpload, vaule, fileList = [],
+      listType: propListType, maxLength = 10, ...rest } = this.props;
     // if (fileList.length === 0) {
     //   fileList.push(...defaultFileList)
     // }
-    console.log('FormUpload render props', fileList, this.props);
+    console.log('FormUpload render props', this.props.defaultFileList, fileList, this.props);
+    const Buttons = {
+      'picture-card': (
+        <div>
+          <Icon type="plus" />
+          <div className="ant-upload-text">Upload</div>
+        </div>
+      ),
+      picture: (
+        <Button icon="upload">
+          上传文件
+        </Button>
+      )
+    };
+    let listType = 'picture';
+    switch (propListType) {
+      case 'picture-card':
+        listType = propListType;
+        break;
+      case 'picture':
+      default:
+    }
+    // 上传按钮
+    let UploadButton = Buttons[listType];
+    if (maxLength <= fileList.length) {
+      UploadButton = null;
+    }
+
     return (
-      <div className="form-upload">
+      <div className="form-upload" >
         <Upload
           className="form-upload-item upload-file"
           beforeUpload={this.beforeUpload}
           accept=".jpg,.jpeg,.png"
           multiple={true}
-          listType='picture'
+          listType={listType}
           onChange={onChange}
           fileList={fileList}
           // disabled={fileList.length === maxLength}
           {...rest}
         >
-          <Button icon="upload">
-            上传文件
-          </Button>
+          {UploadButton}
         </Upload>
         {}
-        <div className="form-upload-item description">
-          只能上传jpg/png文件，且不超过10MB
+        <div className="form-upload-item description" >
+          只能上传jpg / png文件，且不超过10MB
         </div>
       </div >
     );

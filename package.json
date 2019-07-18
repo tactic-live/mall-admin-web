@@ -15,6 +15,7 @@
     "babel-plugin-import": "^1.11.2",
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-preset-react-app": "^9.0.0",
+    "braft-editor": "^2.3.7",
     "browser-md5-file": "^1.1.1",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
@@ -86,13 +87,9 @@
   "browserslist": {
     "production": [
       ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "not dead"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
     ]
   },
   "jest": {

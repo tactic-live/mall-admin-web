@@ -7,12 +7,18 @@ const formItemLayout = {
 };
 
 function FormItemLayout(props) {
-  const { form, fields = [] } = props;
+  const { form, defaultValues = {} } = props;
   const { getFieldDecorator } = form;
+  const fields = props.fields || [];
+  const fieldsWithDefaultValues = fields.map(field => {
+    field.initialValue = defaultValues[field.name];
+    return field;
+  });
+
   return (
     <div>
       {
-        fields.map(field => {
+        fieldsWithDefaultValues.map(field => {
           // const {} = productInfo;
           const { label,
             placeholder: fieldPlaceholder, initialValue, name, render, component, span, ...rest

@@ -145,13 +145,14 @@ class PromotionInfo extends React.PureComponent {
     ];
     const data = { ...productInfo, ...propData }
 
-    const fields = this.fields({ data, ...rest }).map(field => {
-      field.initialValue = data[field.name];
-      return field;
-    });
+    const fields = this.fields({ data, ...rest });
+    // .map(field => {
+    //   field.initialValue = data[field.name];
+    //   return field;
+    // });
 
     return (
-      <FormLayout {...formTailLayout} data fields={fields} {...rest}
+      <FormLayout {...formTailLayout} defaultValues={data} fields={fields} {...rest}
         onLoad={this.onLoad} actions={actions} onSubmit={this.submitForm} />
     )
   }

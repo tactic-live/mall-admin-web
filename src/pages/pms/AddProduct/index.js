@@ -16,7 +16,7 @@ class AddProduct extends React.PureComponent {
   constructor(props, ctx) {
     super(props, ctx);
     this.state = {
-      current: 1,
+      current: 2,
       steps: 4,
       tmpDatas: {},
       currentFieldsData: {}
@@ -65,11 +65,6 @@ class AddProduct extends React.PureComponent {
     }
     return;
     // form.setFieldsValue(step2Data);
-    // 初始化首页list信息
-    Promise.all([fetchProductCategoryWithChildren(), fetchBrandList(1, 100)])
-      .then(() => {
-        // form.setFieldsValue(data);
-      });
   }
 
   nextStep = (values) => {
@@ -89,6 +84,7 @@ class AddProduct extends React.PureComponent {
   }
 
   render() {
+    const { productInfo } = this.props;
     const { current, currentFieldsData } = this.state;
     const StepComp = stepFormList[current];
     const buttons = [];
@@ -106,15 +102,17 @@ class AddProduct extends React.PureComponent {
       <div className="add-product">
         <Steps current={current} />
         <StepComp {...this.props}
-          data={currentFieldsData} actions={buttons} onSubmit={this.onSubmit}
+          data={{...productInfo, ...currentFieldsData}}
+          // actions={buttons}
+          onSubmit={this.onSubmit}
           nextStep={this.nextStep} prevStep={this.prevStep} />
       </div>
     );
   }
 }
 const store = (state) => {
-  const { productInfo, productCategorySelectList, brandList } = state.pms;
-  return { productInfo, productCategorySelectList, brandList }
+  const { productInfo, productCategorySelectList, brandList, productAttributeCategoryList } = state.pms;
+  return { productInfo, productCategorySelectList, brandList, productAttributeCategoryList }
 }
 const connAddProduct = connect(store, actions)(AddProduct);
 // const WrappedAddProduct = Form.create({ name: 'add.product' })(connAddProduct)
