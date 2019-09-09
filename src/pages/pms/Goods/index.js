@@ -139,7 +139,6 @@ class Goods extends React.PureComponent {
       render: text => (
         <div>
           <Button type="primary" size="small" ghost>编辑</Button>
-
           <Button type="danger" size="small" ghost>删除</Button>
         </div>
       ),
@@ -200,6 +199,7 @@ class Goods extends React.PureComponent {
     const { location, fetchGoodsByCondition } = this.props;
     const defaultValues = QueryString.parse(location.search);
     const { current, goodsName, ...rest } = defaultValues;
+    console.log('defaultValues',defaultValues,location.search)
     fetchGoodsByCondition({
       pageNum: current,
       pageSize: 5,

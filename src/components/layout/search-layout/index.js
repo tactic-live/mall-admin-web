@@ -79,6 +79,8 @@ class SearchLayout extends React.Component {
       ...curPagination,
       ...searchCond
     };
+
+    console.log('onSearchcondition', curPagination, condition)
     changeLoading && changeLoading(true);
     this.setState({
       curCond: searchCond
@@ -108,7 +110,7 @@ class SearchLayout extends React.Component {
     const pagination = {
       ...curPagination
     }
-    console.log('render state result', result);
+    console.log('render state result', this.state, result, conditionFields);
     return (
       <div className="search-layout">
         <ConditionForm className="search-layout-condition-form" fields={conditionFields}

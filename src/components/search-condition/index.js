@@ -209,8 +209,12 @@ class SearchCondition extends React.PureComponent {
   }
 
   handleReset = () => {
+    const { onSearch} = this.props;
     this.props.form.resetFields();
+    onSearch && onSearch({});
   }
+
+
 
   render() {
     const { fields, form, defaultValues, className, extActions } = this.props;

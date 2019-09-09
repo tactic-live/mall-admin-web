@@ -115,6 +115,7 @@ class ProductAttr extends SearchLayout {
     const { search } = location;
     const params = QueryString.parse(search);
     const { current, pageSize, productAttrName } = params;
+    console.log('location', current, pageSize)
     fetchAll(current, pageSize, productAttrName);
     // const { payload } = await fetchProductAttributeCategory(current, pageSize);
     // dispatch({

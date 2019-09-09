@@ -7,6 +7,7 @@ export const ACTION_TYPES = {
 
 export async function fetchGoodsByCondition(condition) {
   const { pageNum, pageSize, goodsName, rest } = condition;
+  console.log('fetchGoodsByCondition', condition)
   const payload = await new ProductModel().fetchGoodsByCondition({
     pageNum,
     pageSize,

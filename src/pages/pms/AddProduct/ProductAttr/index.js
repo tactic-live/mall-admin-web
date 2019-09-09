@@ -12,7 +12,7 @@ function ProductAttr(props) {
   const { productAttributeCategoryList = [], fetchAllAttributeCategory } = props;
   useEffect(() => {
     fetchAllAttributeCategory();
-  }, [])
+  }, [fetchAllAttributeCategory])
   const prevStep = () => {
     const { prevStep } = props;
     prevStep && prevStep();

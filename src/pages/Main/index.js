@@ -30,7 +30,7 @@ const Main = ({ history, match }) => {
         <div className="logo" />
         <MenuComp onSelect={onSelect} defaultSelectedKeys={defaultSelectedKeys} mode="inline" />
       </Sider>
-      <Layout style={{marginLeft: collapsed ? 80 : 200}}>
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
         <Header className="header">
           {/*不显示收缩按钮 <Icon
             className="trigger"
@@ -47,6 +47,7 @@ const Main = ({ history, match }) => {
             <Switch>
               <Route path="/home" exact component={loadable(() => import('../Home'))} />
               <Route path="/pms" component={loadable(() => import('../pms'))} />
+              <Route path="/oms" component={loadable(() => import('../oms'))} />
               <Route path="/" component={loadable(() => import('@/pages/404'))} />
             </Switch>
           </ErrorBoundary>
