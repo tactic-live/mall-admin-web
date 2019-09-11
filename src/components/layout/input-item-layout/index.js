@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Input, Form } from 'antd';
 
-const formItemLayout = {
+const formItemLayoutDefault = {
   labelCol: { span: 4 },
   wrapperCol: { span: 10 },
 };
@@ -14,7 +14,9 @@ function FormItemLayout(props) {
     field.initialValue = defaultValues[field.name];
     return field;
   });
+  const { formItemLayout = formItemLayoutDefault } = props;
 
+  console.log("formItemLayout", formItemLayout , props)
   return (
     <div>
       {

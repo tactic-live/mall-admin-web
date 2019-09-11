@@ -5,7 +5,7 @@ import InputItemLayout from '../input-item-layout';
 function FormLayout({ onSubmit, fields, formTailLayout, actions, labelCol, wrapperCol, ...rest }) {
   return (
     <Form onSubmit={onSubmit}>
-      <InputItemLayout fields={fields} {...rest} />
+      <InputItemLayout fields={fields} {...rest}/>
       <Form.Item labelCol={labelCol} wrapperCol={wrapperCol}>
         <div className="actions">
           {actions}
