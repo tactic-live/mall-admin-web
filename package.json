@@ -89,8 +89,7 @@
       ">0.2%",
       "not dead"
     ],
-    "development": [
-    ]
+    "development": []
   },
   "jest": {
     "collectCoverageFrom": [
