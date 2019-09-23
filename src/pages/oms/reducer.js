@@ -17,7 +17,8 @@ export const INIT_STATE = {
   returnReasonList: [],
   deleteReturnReasonStatus: false,
   addReturnReasonStatus: false,
-  updateReturnReasonStatus: false
+  updateReturnReasonStatus: false,
+  orderDetail: {}
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -75,6 +76,9 @@ function reducer(state = INIT_STATE, action) {
       if (payload.updateResult) {
         result.updateReturnReasonStatus = true;
       }
+      break;
+    case 'FETCH_ORDER_DETAIL':
+      result.orderDetail = payload;
       break;
     default:
   }
