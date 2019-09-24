@@ -14,6 +14,15 @@ class OrderModel extends AbstractModel {
     const result = await super.get(`/api/order/${id}`);
     return result.data;
   };
+
+  /**
+   * 订单s发货
+   * @param {Array} orders 需要发货的订单s
+   */
+  async deliverOrders(orders) {
+    const result = await super.post('/api/order/update/delivery', orders);
+    return result.data;
+  }
 }
 
 export default OrderModel;
