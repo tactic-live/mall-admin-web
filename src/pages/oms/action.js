@@ -1,3 +1,4 @@
+import OrderDetailAction from './OrderDetail/action';
 
 export const ACTION_TYPES = {
   LOADING: 'LOADING',
@@ -12,6 +13,7 @@ export async function wrapLoading(func) {
 
 
 export const actions = (dispatch, ownProps) => {
+  const { fetchOrderDetail } = OrderDetailAction;
   return {
     changeLoading: (isLoading) => {
       dispatch({
@@ -25,6 +27,7 @@ export const actions = (dispatch, ownProps) => {
         payload: { name, value }
       })
     },
+    fetchOrderDetail
   }
 };
 
