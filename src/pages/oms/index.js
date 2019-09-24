@@ -12,6 +12,7 @@ function oms({ match, ...rest }) {
         <PrivateRoute path={`${match.path}/order`} exact component={loadable(() => import('./Order'))} routeName="订单列表" />
         <PrivateRoute path={`${match.path}/orderSetting`} exact component={loadable(() => import('./OrderSetting'))} routeName="订单设置" />
         <PrivateRoute path={`${match.path}/returnReason`} exact component={loadable(() => import('./ReturnReason'))} routeName="退货原因设置" />
+        <PrivateRoute path={`${match.path}/returnApplyDetail`} exact component={loadable(()=> import('./ReturnApplyDetail'))} routeName='退货原因详情' />
         <Redirect to="/404" />
       </Switch>
     </div>
