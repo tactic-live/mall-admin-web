@@ -5,6 +5,15 @@ class OrderModel extends AbstractModel {
     const result = await super.get('/api/order/list', condition);
     return result.data;
   };
+
+  /**
+   * 订单详情
+   * @param {number} id 
+   */
+  async fetchOrderDetail(id) {
+    const result = await super.get(`/api/order/${id}`);
+    return result.data;
+  };
 }
 
 export default OrderModel;

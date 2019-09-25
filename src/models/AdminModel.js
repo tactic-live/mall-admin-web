@@ -6,6 +6,11 @@ class AdminModel extends AbstractModel {
     console.log('login', result);
     return result.data;
   };
+
+  async fetchAdminInfo() {
+    const result = await super.get('/api/admin/info');
+    return result.data;
+  }
 }
 
 export default AdminModel;

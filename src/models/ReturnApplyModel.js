@@ -10,6 +10,14 @@ class ReturnApplyModel extends AbstractModel {
     const result = await super.get(`/api/returnApply/${id}`);
     return result.data;
   };
+
+  /**
+   * 修改退货状态
+   */
+  async updateReturnStatus(params) {
+    const result = await super.put('/api/returnApply/status', params);
+    return result.data;
+  }
 }
 
 export default ReturnApplyModel;
