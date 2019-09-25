@@ -1,12 +1,14 @@
 import React from 'react';
 import QueryString from 'query-string';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { actions } from './action';
 import './index.less';
 import { SearchLayout } from '@/components/layout';
-import LogisiticsDialog from './logisticsDialog'
+import LogisiticsDialog from './logisticsDialog';
+import DeliveryModal from './deliveryModal';
+
 // 订单状态：
 const orderTypeOptions = [
   {
@@ -129,6 +131,48 @@ class Order extends SearchLayout {
     // <AddButton onCreate={this.reSearch} key="btnAdd" />
   ];
 
+  /**
+   * "订单发货"按钮点击事件
+   * @param {Number} id 订单id
+   */
+  onDelivery = ({ id }) => {
+    this.setState({
+      deliveryDatas: {
+        id,
+        visible: true
+      }
+    });
+  }
+
+  /**
+   * 确认发货操作
+   * @param {Number} id 订单id
+   * @param {String} deliveryCompany 物流公司
+   * @param {String} deliverySn 物流单号
+   */
+  confirmDelivery = async ({ id, deliveryCompany, deliverySn }) => {
+    // 调接口 - 发货
+    await this.props.deliverOrders([{
+      orderId: id,
+      deliveryCompany,
+      deliverySn
+    }]);
+
+    message.success('操作成功');
+    this.cancelDelivery();
+  }
+
+  /**
+   * 取消发货操作
+   */
+  cancelDelivery = () => {
+    this.setState({
+      deliveryDatas: {
+        id: null,
+        visible: false
+      }
+    });
+  }
 
   // 按钮展示
   showButton = (text, record) => {
@@ -138,7 +182,26 @@ class Order extends SearchLayout {
         button = (<Button type="primary" size="small" ghost>关闭订单</Button>)
         break;
       case 1:
-        button = (<Button type="primary" size="small" ghost>订单发货</Button>)
+        const {
+          deliveryDatas = {
+            visible: false,
+            id: null
+          },
+          loading = false
+        } = this.state;
+        button = (
+          <div>
+            <DeliveryModal
+              {...deliveryDatas}
+              loading={loading}
+              handleOk={this.confirmDelivery}
+              handleCancel={this.cancelDelivery}
+            />
+            <Button type="primary" size="small" ghost onClick={() => { this.onDelivery(record); }}>
+              订单发货
+            </Button>
+          </div>
+        );
         break;
       case 2:
       case 3:
@@ -148,7 +211,6 @@ class Order extends SearchLayout {
             <Button type="primary" onClick={() => { this.handleViewLogistics(record) }} size="small" ghost>订单跟踪</Button>
           </div>
         )
-
         break;
       case 4:
         button = (<Button type="danger" size="small" ghost>删除订单</Button>)
