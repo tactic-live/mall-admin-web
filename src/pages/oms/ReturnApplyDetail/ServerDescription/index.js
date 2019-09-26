@@ -140,7 +140,7 @@ function ServerDescription(props) {
         <Descriptions.Item label="服务单号">{id}</Descriptions.Item>
         <Descriptions.Item label="申请状态">{statusText}</Descriptions.Item>
         <Descriptions.Item label="订单编号">{orderSn}
-          <Link to={{ pathname: `/oms/OrderDetail/${orderId}` }}> 查看</Link>
+          <Link to={{ pathname: `/oms/orderDetail/${orderId}` }}> 查看</Link>
         </Descriptions.Item>
         <Descriptions.Item label="申请时间">{moment(createTime).format("YYYY-MM-DD HH:mm:ss")}</Descriptions.Item>
         <Descriptions.Item label="用户账号">{memberUsername}</Descriptions.Item>

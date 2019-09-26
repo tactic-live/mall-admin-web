@@ -139,8 +139,7 @@ class Order extends SearchLayout {
   onDelivery = ({ id }) => {
     this.setState({
       deliveryDatas: {
-        id,
-        visible: true
+        visibleId: id
       }
     });
   }
@@ -160,7 +159,10 @@ class Order extends SearchLayout {
     }]);
 
     message.success('操作成功');
+    // 关闭发货弹层
     this.cancelDelivery();
+    // 刷新搜索结果
+    this.onSearch();
   }
 
   /**
@@ -169,8 +171,7 @@ class Order extends SearchLayout {
   cancelDelivery = () => {
     this.setState({
       deliveryDatas: {
-        id: null,
-        visible: false
+        visibleId: null
       }
     });
   }
@@ -193,16 +194,16 @@ class Order extends SearchLayout {
         break;
       case 1:
         const {
-          deliveryDatas = {
-            visible: false,
-            id: null
-          },
+          deliveryDatas,
           loading = false
         } = this.state;
+        const { id } = record;
+        const modalVisible = deliveryDatas.visibleId === id;
         button = (
           <div>
             <DeliveryModal
-              {...deliveryDatas}
+              visible={modalVisible}
+              id={id}
               loading={loading}
               handleOk={this.confirmDelivery}
               handleCancel={this.cancelDelivery}
@@ -327,6 +328,13 @@ class Order extends SearchLayout {
     }
   ]
 
+  constructor(props, context) {
+    super(props, context);
+    // 排序modal数据
+    this.state.deliveryDatas = {
+      visibleId: null
+    }
+  }
 
   goToDetail = (source) => {
     console.log('goToDetail', source)
