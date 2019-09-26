@@ -59,7 +59,10 @@ function MenuComp({ defaultSelectedKeys = [], onSelect, ...rest }) {
     { key: 'oms/returnReason', title: '退货原因设置', icon: 'web-icon-order-return-reason' },
   ];
   menus.push(createMenu('oms', '订单', 'web-icon-order', orderMenuList));
-  menus.push(createMenu('sms', '营销', 'web-icon-sms'));
+  const marketingMenuList = [
+    { key: 'sms/new', title: '新品推荐', icon: 'web-icon-goods-list' }
+  ];
+  menus.push(createMenu('sms', '营销', 'web-icon-sms', marketingMenuList));
   menus.push(
     <SubMenu
       key="management"
