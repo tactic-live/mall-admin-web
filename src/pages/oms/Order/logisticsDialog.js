@@ -3,12 +3,13 @@ import React from 'react';
 import './logisticsDialog.less';
 
 const LogisiticsDialog = ({ ...props }) => {
-  console.log('LogisiticsDialogprops', props);
-  const { visible, data, onCancel } = props;
+  const { visible, data, onCancel, recordid, id } = props;
+  console.log('LogisiticsDialogprops', props, visible && (id === recordid));
+
   return (
     <Modal
       title="订单跟踪"
-      visible={visible}
+      visible={visible && (id === recordid)}
       onCancel={onCancel}
       footer={null}
     >
@@ -18,7 +19,7 @@ const LogisiticsDialog = ({ ...props }) => {
             <ul className="logisticeDialogStep">
               {
                 data.map((res, index) => (
-                  <li key={res.name+index}>
+                  <li key={res.name + index}>
                     <div className="stepMain">
                       {
                         Number(res.status) !== 1 ?
@@ -57,4 +58,4 @@ const LogisiticsDialog = ({ ...props }) => {
   )
 }
 
-export default  React.forwardRef(LogisiticsDialog) ;
+export default React.forwardRef(LogisiticsDialog);
