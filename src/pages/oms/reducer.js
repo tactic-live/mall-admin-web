@@ -18,6 +18,9 @@ export const INIT_STATE = {
   deleteReturnReasonStatus: false,
   addReturnReasonStatus: false,
   updateReturnReasonStatus: false,
+  returnApplyDetail: {},
+  returnAdderssList: [],
+  updateReturnApplyStatus: false,
   orderDetail: {}
 }
 
@@ -76,6 +79,15 @@ function reducer(state = INIT_STATE, action) {
       if (payload.updateResult) {
         result.updateReturnReasonStatus = true;
       }
+      break;
+    case 'FETCH_RETURN_APPLY_DETAIL_BY_ID':
+      result.returnApplyDetail = payload;
+      break;
+    case 'FETCH_RETURN_COMPANY_ADDRESS_LIST':
+      result.returnAdderssList = payload;
+      break;
+    case 'UPDATE_RETURN_STATUS':
+      result.updateReturnApplyStatus = payload;
       break;
     case 'FETCH_ORDER_DETAIL':
       result.orderDetail = payload;

@@ -104,7 +104,7 @@ export function actions(dispatch, ownProps) {
     async updateReturnReason(...args) {
       dispatch(await updateReturnReason(...args));
       changeLoading(false);
-    },
+    }
   }
 }
 

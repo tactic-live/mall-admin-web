@@ -25,10 +25,10 @@ class ReturnReasonModel extends AbstractModel {
 
   /**
    * 删除退款原因
-   * @param {Integer} ids  退款原因id
+   * @param {Array} ids  批量退款原因id
    */
-  async deleteReturnReason(ids) {
-    const result = await super.post(`/api/returnReason/delete?ids=${ids}`, { ids });
+  async deleteReturnReason(ids = []) {
+    const result = await super.delete(`/api/returnReason/delete?ids=${ids}`);
     return result.data;
   }
 
@@ -50,7 +50,7 @@ class ReturnReasonModel extends AbstractModel {
    * 修改退货原因
    */
   async updateReturnReason(returnData = {}) {
-    const result = await super.post('/api/returnReason/update', returnData);
+    const result = await super.put('/api/returnReason/update', returnData);
     return result.data;
   }
 }

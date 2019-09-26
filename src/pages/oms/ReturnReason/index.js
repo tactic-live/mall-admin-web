@@ -100,7 +100,7 @@ class ReturnReason extends SearchLayout {
               title={`确认要删除退货原因[${record.name}]吗?`}
               onConfirm={() => {
                 const { deleteReturnReasonById } = this.props;
-                deleteReturnReasonById(record.id);
+                deleteReturnReasonById([record.id]);
                 this.reSearch();
               }}
               okText="删除"
