@@ -14,7 +14,7 @@ export const INIT_STATE = {
     id: 0
   },
   isOrderSettingUpdateSuccess: true,
-  returnReasonList: [],
+  returnReasonList: {},
   deleteReturnReasonStatus: false,
   addReturnReasonStatus: false,
   updateReturnReasonStatus: false,

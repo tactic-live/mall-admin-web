@@ -60,7 +60,8 @@ function MenuComp({ defaultSelectedKeys = [], onSelect, ...rest }) {
   ];
   menus.push(createMenu('oms', '订单', 'web-icon-order', orderMenuList));
   const marketingMenuList = [
-    { key: 'sms/new', title: '新品推荐', icon: 'web-icon-goods-list' }
+    { key: 'sms/new', title: '新品推荐', icon: 'web-icon-sms-new' },
+    { key: 'sms/hot', title: '人气推荐', icon: 'web-icon-sms-hot' }
   ];
   menus.push(createMenu('sms', '营销', 'web-icon-sms', marketingMenuList));
   menus.push(

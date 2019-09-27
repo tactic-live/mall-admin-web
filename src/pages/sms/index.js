@@ -15,6 +15,7 @@ function oms({ match, ...rest }) {
           component={loadable(() => import('./New'))}
           routeName="新品推荐"
         />
+        <PrivateRoute exact path={`${match.path}/hot`} component={loadable(() => import('./Hot'))} routeName="人气推荐" />
         <Redirect to="/404" />
       </Switch>
     </div>

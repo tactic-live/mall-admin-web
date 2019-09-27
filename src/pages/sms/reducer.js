@@ -4,7 +4,8 @@ export const INIT_STATE = {
   loading: true,
   newRecommendList: {
     ...defaultPageable
-  }
+  },
+  hotRecommendList: {}
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -17,6 +18,19 @@ function reducer(state = INIT_STATE, action) {
     // 获取新品推荐列表
     case 'FETCH_NEW_PRODUCT_LIST':
       result.newRecommendList = payload;
+      break;
+    case 'FETCH_HOT_RECOMMEND_PRODUCT_LIST':
+      result.hotRecommendList = payload;
+      break;
+    case 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS':
+      if (payload.updateResult && result.hotRecommendList) {
+        result.hotRecommendList.list = result.hotRecommendList.list.map(returnReasonItem => {
+          if (returnReasonItem.id === payload.ids[0]) {
+            returnReasonItem.recommendStatus = payload.recommendStatus;
+          }
+          return returnReasonItem;
+        })
+      }
       break;
     default:
   }
