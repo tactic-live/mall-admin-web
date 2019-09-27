@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import QueryString from 'query-string';
-import { Switch, Button } from 'antd';
-
+import { Switch, Button, Popconfirm } from 'antd';
 import { SearchLayout } from '@/components/layout';
 import { actions } from './action';
 
@@ -72,14 +71,21 @@ class HotRecommend extends SearchLayout {
     key: 'actions',
     width: 80,
     render: (text, record) => {
-      // const { id } = record;
-      // const { sortDatas } = this.state;
-      // const { visibleId, sort } = sortDatas;
-      // const modalVisible = visibleId === id;
       return (
         <div>
           <Button type="primary" size="small" ghost onClick={() => { }}>设置排序</Button>
-          <Button type="primary" size="small" ghost onClick={() => { }}>删除</Button>
+          <Popconfirm
+              title={`确认要删除该推荐商品吗?`}
+              onConfirm={() => {
+                const { deleteHotRecommendProduct } = this.props;
+                deleteHotRecommendProduct(record.id);
+                this.reSearch();
+              }}
+              okText="删除"
+              cancelText="取消"
+            >
+              <Button type="primary" ghost size="small" onClick={() => { }}>删除</Button>
+            </Popconfirm>
         </div>
       );
     }

@@ -4,7 +4,8 @@ import RootActions from '../action';
 export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
   FETCH_HOT_RECOMMEND_PRODUCT_LIST: 'FETCH_HOT_RECOMMEND_PRODUCT_LIST',
-  UPDATE_HOT_RECOMMEND_PRODUCT_STATUS: 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS'
+  UPDATE_HOT_RECOMMEND_PRODUCT_STATUS: 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS',
+  DELETE_HOT_RECOMMEND_PRODUCT: 'DELETE_HOT_RECOMMEND_PRODUCT'
 }
 
 /**
@@ -22,7 +23,7 @@ export async function fetchHotRecommendProductList({ pageNum, pageSize, ...res }
  * 更改人气推荐商品状态
  */
 export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
-  console.log('hhhhhhhhhh', ids, recommendStatus)
+  // console.log('hhhhhhhhhh', ids, recommendStatus)
   const updateResult = await new RecommendProductModel().updataHotRecommentStatus({ ids, recommendStatus });
   return {
     type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_STATUS,
@@ -34,6 +35,13 @@ export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
   }
 }
 
+export async function deleteHotRecommendProduct(ids) {
+  const deleteResult = await new RecommendProductModel().deleteHotRecommendProduct(ids);
+  return {
+    type: ACTION_TYPES.DELETE_HOT_RECOMMEND_PRODUCT,
+    payload: deleteResult
+  }
+}
 
 export function actions(dispatch, ownProps) {
   const { changeLoading } = RootActions.actions(dispatch, ownProps);
@@ -47,11 +55,16 @@ export function actions(dispatch, ownProps) {
       dispatch(await updateHotRecommendStatus(...args));
       changeLoading(false);
     },
+    deleteHotRecommendProduct: async (...args) => {
+      dispatch(await deleteHotRecommendProduct(...args));
+      changeLoading(false);
+    }
   }
 }
 
 export default {
   ACTION_TYPES,
   fetchHotRecommendProductList,
-  updateHotRecommendStatus
+  updateHotRecommendStatus,
+  deleteHotRecommendProduct
 }

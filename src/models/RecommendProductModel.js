@@ -17,8 +17,17 @@ class RecommendProductModel extends AbstractModel {
   async updataHotRecommentStatus({ ids = [], recommendStatus }) {
     const result = await super.put('/api/home/recommendProduct/recommendStatus', { ids, recommendStatus });
     return result.data;
-
   }
+
+  /**
+   * 删除人气推荐商品
+   * @param {*} ids 商品id
+   */
+  async deleteHotRecommendProduct(ids) {
+    const result = await super.post(`/api/home/recommendProduct/delete?ids=${ids}`);
+    return result.data;
+  }
+
 }
 
 export default RecommendProductModel;
