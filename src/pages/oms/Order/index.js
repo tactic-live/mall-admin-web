@@ -8,6 +8,7 @@ import './index.less';
 import { SearchLayout } from '@/components/layout';
 import LogisiticsDialog from './logisticsDialog';
 import DeliveryModal from './deliveryModal';
+import CloseModal from './closeModal';
 
 // 订单状态：
 const orderTypeOptions = [
@@ -138,8 +139,7 @@ class Order extends SearchLayout {
   onDelivery = ({ id }) => {
     this.setState({
       deliveryDatas: {
-        id,
-        visible: true
+        visibleId: id
       }
     });
   }
@@ -159,7 +159,10 @@ class Order extends SearchLayout {
     }]);
 
     message.success('操作成功');
+    // 关闭发货弹层
     this.cancelDelivery();
+    // 刷新搜索结果
+    this.onSearch();
   }
 
   /**
@@ -168,8 +171,7 @@ class Order extends SearchLayout {
   cancelDelivery = () => {
     this.setState({
       deliveryDatas: {
-        id: null,
-        visible: false
+        visibleId: null
       }
     });
   }
@@ -179,20 +181,29 @@ class Order extends SearchLayout {
     let button = '';
     switch (text) {
       case 0:
-        button = (<Button type="primary" size="small" ghost>关闭订单</Button>)
+        button = (
+          <div>
+            <CloseModal
+              id={record.id}
+              handleOk={this.confirmCloseOrder}
+              handleCancel={this.cancelCloseOrder}
+              {...this.state.modalCloseOrderData} />
+            <Button type="primary" size="small" ghost onClick={() => this.closeOrder(record)}>关闭订单</Button>
+          </div>
+        )
         break;
       case 1:
         const {
-          deliveryDatas = {
-            visible: false,
-            id: null
-          },
+          deliveryDatas,
           loading = false
         } = this.state;
+        const { id } = record;
+        const modalVisible = deliveryDatas.visibleId === id;
         button = (
           <div>
             <DeliveryModal
-              {...deliveryDatas}
+              visible={modalVisible}
+              id={id}
               loading={loading}
               handleOk={this.confirmDelivery}
               handleCancel={this.cancelDelivery}
@@ -207,7 +218,7 @@ class Order extends SearchLayout {
       case 3:
         button = (
           <div>
-            <LogisiticsDialog {...this.state.modalData} onCancel={this.onCancel} />
+            <LogisiticsDialog recordid={record.id} {...this.state.modalData} onCancel={this.onCancel} />
             <Button type="primary" onClick={() => { this.handleViewLogistics(record) }} size="small" ghost>订单跟踪</Button>
           </div>
         )
@@ -317,13 +328,20 @@ class Order extends SearchLayout {
     }
   ]
 
+  constructor(props, context) {
+    super(props, context);
+    // 排序modal数据
+    this.state.deliveryDatas = {
+      visibleId: null
+    }
+  }
 
   goToDetail = (source) => {
     console.log('goToDetail', source)
   }
 
   handleViewLogistics = (record) => {
-    console.log('record', LogisiticsDialog)
+    console.log('record----', record)
     const { visible } = this.state;
     const data = [
       { name: '订单已提交，等待付款', time: '2017-04-01 12:00:00 ', status: 1 },
@@ -337,7 +355,8 @@ class Order extends SearchLayout {
     this.setState({
       modalData: {
         visible: !visible || false,
-        data: data
+        data: data,
+        id: record.id
       }
     })
   }
@@ -364,6 +383,37 @@ class Order extends SearchLayout {
     this.setState({
       modalData: {
         visible: false,
+      }
+    })
+  }
+
+  confirmCloseOrder = async (data) => {
+    const { closeOrders } = this.props;
+    this.setState({
+      modalCloseOrderData: {
+        visible: false,
+      }
+    });
+    const source = await closeOrders({ ...data });
+    console.log('confirmCloseOrder', source);
+    if (!source) {
+      message.info('关闭失败');
+    }
+  }
+
+  cancelCloseOrder = () => {
+    this.setState({
+      modalCloseOrderData: {
+        visible: false,
+      }
+    })
+  }
+
+  closeOrder = (record) => {
+    this.setState({
+      modalCloseOrderData: {
+        visible: true,
+        modalId: record.id
       }
     })
   }
@@ -395,6 +445,8 @@ class Order extends SearchLayout {
     });
     this.init();
   }
+
+
 
 
 }
