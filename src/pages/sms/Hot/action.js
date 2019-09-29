@@ -5,7 +5,8 @@ export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
   FETCH_HOT_RECOMMEND_PRODUCT_LIST: 'FETCH_HOT_RECOMMEND_PRODUCT_LIST',
   UPDATE_HOT_RECOMMEND_PRODUCT_STATUS: 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS',
-  DELETE_HOT_RECOMMEND_PRODUCT: 'DELETE_HOT_RECOMMEND_PRODUCT'
+  DELETE_HOT_RECOMMEND_PRODUCT: 'DELETE_HOT_RECOMMEND_PRODUCT',
+  UPDATE_HOT_RECOMMEND_PRODUCT_SORT: 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT'
 }
 
 /**
@@ -23,7 +24,6 @@ export async function fetchHotRecommendProductList({ pageNum, pageSize, ...res }
  * 更改人气推荐商品状态
  */
 export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
-  // console.log('hhhhhhhhhh', ids, recommendStatus)
   const updateResult = await new RecommendProductModel().updataHotRecommentStatus({ ids, recommendStatus });
   return {
     type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_STATUS,
@@ -35,11 +35,23 @@ export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
   }
 }
 
+/**
+ *  删除人气商品
+ * @param {*} ids
+ */
 export async function deleteHotRecommendProduct(ids) {
   const deleteResult = await new RecommendProductModel().deleteHotRecommendProduct(ids);
   return {
     type: ACTION_TYPES.DELETE_HOT_RECOMMEND_PRODUCT,
     payload: deleteResult
+  }
+}
+
+export async function updateHotRecommendProductSort({ sort, id }) {
+  const updateResult = await new RecommendProductModel().updateHotRecommendProductSort({ sort, id })
+  return {
+    type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_SORT,
+    payload: updateResult
   }
 }
 
@@ -58,6 +70,10 @@ export function actions(dispatch, ownProps) {
     deleteHotRecommendProduct: async (...args) => {
       dispatch(await deleteHotRecommendProduct(...args));
       changeLoading(false);
+    },
+    updateHotRecommendProductSort: async (...args) => {
+      dispatch(await updateHotRecommendProductSort(...args));
+      changeLoading(false);
     }
   }
 }
@@ -66,5 +82,6 @@ export default {
   ACTION_TYPES,
   fetchHotRecommendProductList,
   updateHotRecommendStatus,
-  deleteHotRecommendProduct
+  deleteHotRecommendProduct,
+  updateHotRecommendProductSort
 }

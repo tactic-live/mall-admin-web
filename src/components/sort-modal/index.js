@@ -9,7 +9,7 @@ class SortModal extends React.PureComponent {
     e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, values) => {
-      if (values.sort) {
+      if (values.sort !== null) {
         this.props.handleOk && this.props.handleOk({
           id: this.props.id || 0,
           values
