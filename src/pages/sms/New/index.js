@@ -4,7 +4,7 @@ import QueryString from 'query-string';
 import { Switch, Button, message } from 'antd';
 
 import { SearchLayout } from '@/components/layout';
-import SortModal from './sortModal';
+import SortModal from '@/components/sort-modal';
 import { actions } from './action';
 
 import './index.less';
@@ -80,16 +80,19 @@ class New extends SearchLayout {
     dataIndex: 'actions',
     key: 'actions',
     render: (text, record) => {
-      const { id } = record;
+      const { id, sort } = record;
       const { sortDatas } = this.state;
-      const { visibleId, sort } = sortDatas;
+      const { visibleId } = sortDatas;
       const modalVisible = visibleId === id;
       return (
         <div>
           <div>
             <SortModal
-              {...sortDatas}
+              id={id}
+              sort={sort}
               visible={modalVisible}
+              loading={this.props.loading}
+              handleOk={this.confirmSort}
               handleCancel={this.cancelSort}
             />
             <Button type="primary" size="small" ghost onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
@@ -143,6 +146,20 @@ class New extends SearchLayout {
         sort
       }
     });
+  }
+
+  /**
+   * 确认排序操作
+   */
+  confirmSort = async ({ id, values }) => {
+    const { sort } = values;
+    await this.props.updateNewProductSort(id, sort);
+
+    message.success('操作成功');
+    // 关闭排序弹层
+    this.cancelSort();
+    // 刷新搜索结果
+    this.init();
   }
 
   /**

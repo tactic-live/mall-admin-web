@@ -3,7 +3,8 @@ import RootActions from '../action';
 
 export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
-  FETCH_NEW_PRODUCT_LIST: 'FETCH_NEW_PRODUCT_LIST'
+  FETCH_NEW_PRODUCT_LIST: 'FETCH_NEW_PRODUCT_LIST',
+  UPDATE_NEW_PRODUCT_SORT: 'UPDATE_NEW_PRODUCT_SORT'
 };
 
 /**
@@ -17,12 +18,30 @@ export async function fetchNewProductList({ pageNum, pageSize, ...res }) {
   }
 }
 
+/**
+ * 更新排序
+ * @param {Number} id 编号
+ * @param {Number} sort 排序值
+ */
+export async function updateNewProductSort(id, sort) {
+  const payload = await new NewProductModel().updateNewProductSort(id, sort);
+  return {
+    type: ACTION_TYPES.UPDATE_NEW_PRODUCT_SORT,
+    payload
+  }
+}
+
 export function actions(dispatch, ownProps) {
   const { changeLoading } = RootActions.actions(dispatch, ownProps);
   return {
     changeLoading,
     fetchNewProductList: async (...args) => {
       dispatch(await fetchNewProductList(...args));
+      changeLoading(false);
+    },
+    updateNewProductSort: async (...args) => {
+      changeLoading(true);
+      dispatch(await updateNewProductSort(...args));
       changeLoading(false);
     },
   }
