@@ -3,7 +3,8 @@ import RootActions from '../action';
 
 export const ACTION_TYPES = {
   FETCH_ORDER_LIST: 'FETCH_ORDER_LIST',
-  DELIVER_ORDER: 'DELIVER_ORDER'
+  DELIVER_ORDER: 'DELIVER_ORDER',
+  CLOSE_ORDER: 'CLOSE_ORDER'
 };
 
 export async function fetchOrderListCondition(condition) {
@@ -21,6 +22,7 @@ export async function fetchOrderListCondition(condition) {
   }
 }
 
+
 export async function deliverOrders(orders = []) {
   const payload = await new OrderModel().deliverOrders(orders);
   return {
@@ -28,6 +30,16 @@ export async function deliverOrders(orders = []) {
     payload
   }
 }
+
+
+export async function closeOrders({ ids, note }) {
+  const payload = await new OrderModel().closeOrders({ ids, note });
+  return {
+    type: ACTION_TYPES.CLOSE_ORDER,
+    payload
+  }
+}
+
 
 export function actions(dispatch, ownProps) {
   console.log('ownProps', ownProps)
@@ -43,11 +55,18 @@ export function actions(dispatch, ownProps) {
       changeLoading(true);
       dispatch(await deliverOrders(...args));
       changeLoading(false);
-    }
+    },
+    closeOrders: async (...args) => {
+      changeLoading(true);
+      dispatch(await closeOrders(...args));
+      changeLoading(false);
+    },
   }
 }
 
 export default {
   ACTION_TYPES,
-  fetchOrderListCondition
+  fetchOrderListCondition,
+  closeOrders,
+  deliverOrders
 }

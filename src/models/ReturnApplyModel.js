@@ -18,6 +18,23 @@ class ReturnApplyModel extends AbstractModel {
     const result = await super.put('/api/returnApply/status', params);
     return result.data;
   }
+
+  /**
+   * 获取退货订单列表
+   */
+
+   async fetchReturnApplyList(params){
+    const result = await super.get(`/api/returnApply/list`,params);
+    return result.data;
+   }
+
+   /***
+    * 删除订单
+    */
+   async deleteApply(params){
+    const result = await super.post(`/api/returnApply/delete`,params);
+    return result.data;
+   }
 }
 
 export default ReturnApplyModel;

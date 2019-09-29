@@ -14,14 +14,15 @@ export const INIT_STATE = {
     id: 0
   },
   isOrderSettingUpdateSuccess: true,
-  returnReasonList: [],
+  returnReasonList: {},
   deleteReturnReasonStatus: false,
   addReturnReasonStatus: false,
   updateReturnReasonStatus: false,
   returnApplyDetail: {},
   returnAdderssList: [],
   updateReturnApplyStatus: false,
-  orderDetail: {}
+  orderDetail: {},
+  returnApplyList:[]
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -91,6 +92,9 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'FETCH_ORDER_DETAIL':
       result.orderDetail = payload;
+      break;
+    case 'FETCH_RETURN_APPLY_LIST':
+      result.returnApplyList = payload;
       break;
     default:
   }

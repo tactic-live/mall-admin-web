@@ -23,6 +23,25 @@ class OrderModel extends AbstractModel {
     const result = await super.post('/api/order/update/delivery', orders);
     return result.data;
   }
+
+
+  /**
+   * 关闭订单
+   * @param {string} ids 需要关闭的订单
+   * @param {string} note 理由
+   */
+  async closeOrders({
+    ids,
+    note
+  }) {
+    const result = await super.post('/api/order/update/close', {
+      ids,
+      note
+    });
+    return result.data;
+  }
+
+
 }
 
 export default OrderModel;
