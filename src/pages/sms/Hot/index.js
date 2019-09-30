@@ -92,16 +92,16 @@ class HotRecommend extends SearchLayout {
           </div>
 
           <Popconfirm
+            disabled={delStatus}
             title={`确认要删除该推荐商品吗?`}
             onConfirm={() => {
               const { deleteHotRecommendProduct } = this.props;
               deleteHotRecommendProduct([record.id]);
-              // this.reSearch();
             }}
             okText="删除"
             cancelText="取消"
           >
-            <Button type="primary" ghost size="small" disabled={delStatus} onClick={() => { }}>删除</Button>
+            <Button type="primary" ghost size="small" disabled={delStatus}>删除</Button>
           </Popconfirm>
         </div>
       );
@@ -159,8 +159,6 @@ class HotRecommend extends SearchLayout {
     const { updateHotRecommendProductSort } = this.props;
     updateHotRecommendProductSort({ sort, id });
     this.cancelSort();
-    // 刷新搜索结果
-    this.init();
   }
 
   /**

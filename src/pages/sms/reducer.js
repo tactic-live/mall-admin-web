@@ -46,6 +46,17 @@ function reducer(state = INIT_STATE, action) {
         });
       }
       break;
+    case 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT':
+      if (payload.updateResult && result.hotRecommendList) {
+        const { id, sort } = payload;
+        result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
+          if (recommendItem.id === id) {
+            recommendItem.sort = sort;
+          }
+          return recommendItem;
+        });
+      }
+      break;
     // 更新新品推荐推荐状态
     case 'UPDATE_NEW_PRODUCT_RECOMMEND_STATUS':
       if (payload.count) {

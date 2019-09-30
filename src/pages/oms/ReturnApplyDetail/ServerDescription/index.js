@@ -57,8 +57,8 @@ function ServerDescription(props) {
   let proofPicsElem = null;
   if (proofPics) {
     const proofPicsArr = proofPics.split(',');
-    proofPicsElem = proofPicsArr.map((item) => {
-      return <img src={item} alt="" />;
+    proofPicsElem = proofPicsArr.map((item, index) => {
+      return <img src={item} alt="" key={`img_${index}`} />;
     });
   }
   let selectChildren = [];

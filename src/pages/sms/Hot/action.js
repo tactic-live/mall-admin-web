@@ -50,11 +50,18 @@ export async function deleteHotRecommendProduct(ids) {
   }
 }
 
+/**
+ * 更改人气推荐商品排序
+ */
 export async function updateHotRecommendProductSort({ sort, id }) {
   const updateResult = await new RecommendProductModel().updateHotRecommendProductSort({ sort, id })
   return {
     type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_SORT,
-    payload: updateResult
+    payload: {
+      id,
+      sort,
+      updateResult
+    }
   }
 }
 
