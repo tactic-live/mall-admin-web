@@ -24,7 +24,19 @@ class RecommendProductModel extends AbstractModel {
    * @param {*} ids 商品id
    */
   async deleteHotRecommendProduct(ids) {
-    const result = await super.post(`/api/home/recommendProduct/delete?ids=${ids}`);
+    const result = await super.delete(`/api/home/recommendProduct/delete?ids=${ids}`);
+    return result.data;
+  }
+
+  /**
+   * 修改人气推荐商品排序
+   * @param {Object} {
+   * {Integer} sort 排序值
+   * {Integer} id id
+   * }
+   */
+  async updateHotRecommendProductSort({ sort, id }) {
+    const result = await super.put('/api/home/recommendProduct/sort', { sort, id });
     return result.data;
   }
 
