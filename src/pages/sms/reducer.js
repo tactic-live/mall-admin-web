@@ -32,6 +32,51 @@ function reducer(state = INIT_STATE, action) {
         })
       }
       break;
+    // 更新新品推荐推荐状态
+    case 'UPDATE_NEW_PRODUCT_RECOMMEND_STATUS':
+      if (payload.count) {
+        const { ids, recommendStatus } = payload;
+        const newList = [];
+        result.newRecommendList.list.forEach((recommend) => {
+          let newRecommend = recommend;
+          if (ids.indexOf(newRecommend.id) > -1) {
+            newRecommend.recommendStatus = recommendStatus;
+          }
+          newList.push(newRecommend);
+        });
+        result.newRecommendList.list = newList;
+      }
+      break;
+    // 更新新品推荐排序
+    case 'UPDATE_NEW_PRODUCT_SORT':
+      if (payload.count) {
+        const { id, sort } = payload;
+        const newList = [];
+        result.newRecommendList.list.forEach((recommend) => {
+          let newRecommend = recommend;
+          if (newRecommend.id === id) {
+            newRecommend.sort = sort;
+          }
+          newList.push(newRecommend);
+        });
+        result.newRecommendList.list = newList;
+      }
+      break;
+    // 删除新品推荐
+    case 'DELETE_NEW_PRODUCTS':
+      if (payload.count) {
+        const { ids } = payload;
+        const newList = [];
+        result.newRecommendList.list.forEach((recommend) => {
+          let newRecommend = recommend;
+          if (ids.indexOf(newRecommend.id) > -1) {
+            newRecommend.isDel = true;
+          }
+          newList.push(newRecommend);
+        });
+        result.newRecommendList.list = newList;
+      }
+      break;
     default:
   }
   return result;

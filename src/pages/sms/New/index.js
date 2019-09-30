@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import QueryString from 'query-string';
-import { Switch, Button, message } from 'antd';
+import { Popconfirm, Switch, Button, message } from 'antd';
 
 import { SearchLayout } from '@/components/layout';
 import SortModal from '@/components/sort-modal';
@@ -11,29 +11,21 @@ import './index.less';
 
 class New extends SearchLayout {
   fields = [{
-    name: 'name',
-    label: '商品名称',
-    // placeholder: '商品名称',
-    // span: 12
+    name: 'productName',
+    label: '商品名称'
   }, {
-    name: 'recommend',
+    name: 'recommendStatus',
     label: '推荐状态',
     type: 'select',
     options: [{
-      value: 0,
+      value: '0',
       label: '未推荐'
     }, {
-      value: 1,
+      value: '1',
       label: '推荐中'
     }]
   }];
 
-  // 这里放选择商品按钮
-  // extActions = [(
-  //   <div>
-  //     <Button type="primary">选择商品</Button>
-  //   </div>
-  // )];
   extActions = [];
 
   columns = [{
@@ -48,20 +40,21 @@ class New extends SearchLayout {
     width: 100
   }, {
     title: '是否推荐',
-    dataIndex: 'recommend',
+    dataIndex: 'recommendStatus',
     key: 'recommend',
     width: 100,
     render: (text, record) => {
+      console.log('recommend', text, record.id);
       // TODO: 是否推荐switch
+      const { isDel = false } = record;
       return (
-        <Switch defaultChecked={!text} onChange={
-          // (checked) => {
-          //   const { updateProductCategoryPart } = this.props;
-          //   const navStatus = checked ? 1 : 0;
-          //   updateProductCategoryPart({ id: record.id, navStatus })
-          // }
-          () => { }
-        } />
+        <Switch
+          disabled={isDel}
+          defaultChecked={!!text}
+          onChange={(checked) => {
+            this.updateRecommendStatus([record.id], checked);
+          }}
+        />
       )
     }
   }, {
@@ -77,25 +70,45 @@ class New extends SearchLayout {
     render: text => (text === 0 ? '未推荐' : '推荐中'),
   }, {
     title: '操作',
-    dataIndex: 'actions',
+    dataIndex: 'id',
     key: 'actions',
     render: (text, record) => {
-      const { id, sort } = record;
+      const { sort, isDel = false } = record;
       const { sortDatas } = this.state;
       const { visibleId } = sortDatas;
-      const modalVisible = visibleId === id;
+      const modalVisible = visibleId === text;
       return (
         <div>
-          <div>
+          <div className="action-sort">
             <SortModal
-              id={id}
+              id={text}
               sort={sort}
               visible={modalVisible}
               loading={this.props.loading}
               handleOk={this.confirmSort}
               handleCancel={this.cancelSort}
             />
-            <Button type="primary" size="small" ghost onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
+            <Button
+              type="primary"
+              size="small"
+              ghost
+              disabled={isDel}
+              onClick={() => { this.onSort(text, sort); }}
+            >
+              设置排序
+            </Button>
+          </div>
+          <div className="action-delete">
+            <Popconfirm
+              title="确认要删除该推荐吗？"
+              okText="删除"
+              cancelText="取消"
+              onConfirm={() => {
+                this.deleteRecommend(text);
+              }}
+            >
+              <Button type="primary" size="small" ghost disabled={isDel}>删除</Button>
+            </Popconfirm>
           </div>
         </div>
       )
@@ -135,6 +148,18 @@ class New extends SearchLayout {
   }
 
   /**
+   * 更新推荐状态
+   * @param {Array} ids 编号列表
+   * @param {Boolean} checked 是否推荐
+   */
+  updateRecommendStatus = async (ids, checked) => {
+    const recommendStatus = checked ? 1 : 0;
+    await this.props.updateNewProductRecommendStatus(ids, recommendStatus);
+
+    message.success('操作成功');
+  }
+
+  /**
    * "设置排序"按钮点击事件
    * @param {Number} id 编号
    * @param {Number} sort 原有排序
@@ -158,8 +183,6 @@ class New extends SearchLayout {
     message.success('操作成功');
     // 关闭排序弹层
     this.cancelSort();
-    // 刷新搜索结果
-    this.init();
   }
 
   /**
@@ -172,6 +195,17 @@ class New extends SearchLayout {
         sort: 0
       }
     });
+  }
+
+  /**
+   * 删除推荐
+   * @param {Number} id 编号
+   */
+  deleteRecommend = async (id) => {
+    await this.props.deleteNewProducts([id]);
+    message.success('操作成功');
+    // 刷新搜索结果
+    // this.init();
   }
 }
 
