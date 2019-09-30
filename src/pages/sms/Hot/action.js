@@ -37,13 +37,16 @@ export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
 
 /**
  *  删除人气商品
- * @param {*} ids
+ * @param {Array} ids
  */
 export async function deleteHotRecommendProduct(ids) {
   const deleteResult = await new RecommendProductModel().deleteHotRecommendProduct(ids);
   return {
     type: ACTION_TYPES.DELETE_HOT_RECOMMEND_PRODUCT,
-    payload: deleteResult
+    payload: {
+      ids,
+      deleteResult
+    }
   }
 }
 

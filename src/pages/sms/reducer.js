@@ -24,12 +24,26 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS':
       if (payload.updateResult && result.hotRecommendList) {
-        result.hotRecommendList.list = result.hotRecommendList.list.map(returnReasonItem => {
-          if (returnReasonItem.id === payload.ids[0]) {
-            returnReasonItem.recommendStatus = payload.recommendStatus;
+        const { recommendStatus, ids } = payload;
+        result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
+          const idIndex = ids.findIndex(idItem => recommendItem.id === idItem);
+          if (idIndex > -1) {
+            recommendItem.recommendStatus = recommendStatus;
           }
-          return returnReasonItem;
-        })
+          return recommendItem;
+        });
+      }
+      break;
+    case 'DELETE_HOT_RECOMMEND_PRODUCT':
+      if (payload.deleteResult && result.hotRecommendList) {
+        const { ids } = payload;
+        result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
+          const idIndex = ids.findIndex(idItem => recommendItem.id === idItem);
+          if (idIndex > -1) {
+            recommendItem.delStatus = true;
+          }
+          return recommendItem;
+        });
       }
       break;
     default:

@@ -15,16 +15,16 @@ class RecommendProductModel extends AbstractModel {
    * @param {Integer} recommendStatus 更改状态
    */
   async updataHotRecommentStatus({ ids = [], recommendStatus }) {
-    const result = await super.put('/api/home/recommendProduct/recommendStatus', { ids, recommendStatus });
+    const result = await super.patch('/api/home/recommendProduct/recommendStatus', { ids, recommendStatus });
     return result.data;
   }
 
   /**
    * 删除人气推荐商品
-   * @param {*} ids 商品id
+   * @param {Array} ids 商品id
    */
   async deleteHotRecommendProduct(ids) {
-    const result = await super.delete(`/api/home/recommendProduct/delete?ids=${ids}`);
+    const result = await super.delete('/api/home/recommendProduct/delete', { ids });
     return result.data;
   }
 
