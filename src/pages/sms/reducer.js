@@ -5,14 +5,11 @@ export const INIT_STATE = {
   newRecommendList: {
     ...defaultPageable
   },
-<<<<<<< HEAD
   flashList: {
     ...defaultPageable
   },
-  flashChangeResult: ''
-=======
+  flashChangeResult: '',
   hotRecommendList: {}
->>>>>>> 6d891b04adf1e1ddfd7dd8e4618c70595a45a606
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -27,13 +24,12 @@ function reducer(state = INIT_STATE, action) {
     case 'FETCH_NEW_PRODUCT_LIST':
       result.newRecommendList = payload;
       break;
-<<<<<<< HEAD
     case 'FETCH_FLASH_LIST':
       result.flashList = payload;
       break;
     case 'UPDATE_FLASH_LIST':
       result.flashChangeResult = payload;
-=======
+      break;
     case 'FETCH_HOT_RECOMMEND_PRODUCT_LIST':
       result.hotRecommendList = payload;
       break;
@@ -116,7 +112,6 @@ function reducer(state = INIT_STATE, action) {
         });
         result.newRecommendList.list = newList;
       }
->>>>>>> 6d891b04adf1e1ddfd7dd8e4618c70595a45a606
       break;
     default:
   }
