@@ -42,14 +42,14 @@ export async function updateReturnReasonUseStatus(status, ids) {
 
 /**
  * 删除退货原因
- * @param {*} ids
+ * @param {Array} ids
  */
 export async function deleteReturnReasonById(ids) {
   const deleteResult = await new ReturnReasonModel().deleteReturnReason(ids);
   return {
     type: ACTION_TYPES.DELETE_RETURN_REASON_BY_ID,
     payload: {
-      // ids,
+      ids,
       deleteResult
     }
   }
@@ -74,7 +74,7 @@ export async function updateReturnReason(returnData = {}) {
   const updateResult = await new ReturnReasonModel().updateReturnReason(returnData);
   return {
     type: ACTION_TYPES.UPDATE_RETURN_REASON,
-    payload: { updateResult }
+    payload: { updateResult, returnData }
   }
 }
 

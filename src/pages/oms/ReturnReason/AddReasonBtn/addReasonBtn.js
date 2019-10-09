@@ -41,15 +41,17 @@ class AddReasonBtn extends React.Component {
     }
     handleConfirm(params);
     this.changeAddModal();
-    this.props.reSearch();
+    if (btnType !== 1) {
+      this.props.reSearch();
+    }
   }
 
   render() {
     const { addReasonModalStatus } = this.state;
-    const { btnType = 0, reasonName = '', reasonSort = 0, reasonStatus = 0 } = this.props;
+    const { btnType = 0, reasonName = '', reasonSort = 0, reasonStatus = 0, delStatus = false } = this.props;
     return (
       <div className="return-reason-modal">
-        <Button type="primary" ghost size="small" onClick={this.changeAddModal}>{btnType === 1 ? "编辑" : "添加"}</Button>
+        <Button type="primary" ghost size="small" disabled={delStatus} onClick={this.changeAddModal}>{btnType === 1 ? "编辑" : "添加"}</Button>
         <Modal
           title={btnType === 1 ? "修改退货原因" : "添加退货原因"}
           visible={addReasonModalStatus}

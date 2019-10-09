@@ -15,11 +15,10 @@ class ReturnReasonModel extends AbstractModel {
   /**
    * 更改退款原因使用状态
    * @param {Integer} status 状态
-   * @param {*} ids 退款原因id
+   * @param {Array} ids 退款原因id
    */
   async updateUseStatus(status, ids) {
-    // const result = await super.post(`/api/returnReason/update/status?status=${status}&ids=${ids}`);
-    const result = await super.put('/api/returnReason/status', { status, ids: [ids] });
+    const result = await super.patch('/api/returnReason/status', { status, ids });
     return result.data;
   }
 
@@ -28,7 +27,7 @@ class ReturnReasonModel extends AbstractModel {
    * @param {Array} ids  批量退款原因id
    */
   async deleteReturnReason(ids = []) {
-    const result = await super.delete(`/api/returnReason/delete?ids=${ids}`);
+    const result = await super.delete('/api/returnReason/delete', { ids });
     return result.data;
   }
 
@@ -50,7 +49,7 @@ class ReturnReasonModel extends AbstractModel {
    * 修改退货原因
    */
   async updateReturnReason(returnData = {}) {
-    const result = await super.put('/api/returnReason/update', returnData);
+    const result = await super.patch('/api/returnReason/update', returnData);
     return result.data;
   }
 }

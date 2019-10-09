@@ -52,14 +52,16 @@ class ReturnReason extends SearchLayout {
       key: 'status',
       width: 100,
       render: (text, record) => {
+        const { id, delStatus } = record;
         // console.log('开关数据', text, record);
         return (
           <Switch
             checked={!!text}
+            disabled={delStatus}
             onChange={(checked) => {
               const { updateReturnReasonUseStatus } = this.props;
               const status = checked ? 1 : 0;
-              updateReturnReasonUseStatus(status, record.id);
+              updateReturnReasonUseStatus(status, [id]);
             }}
           />
         )
@@ -82,33 +84,35 @@ class ReturnReason extends SearchLayout {
       key: 'actions',
       width: 250,
       render: (text, record) => {
+        const { id, name, sort, status, delStatus } = record;
         return (
           <div>
             <AddReasonBtn
               // btnName="编辑"
               // modalTitle="修改退货原因"
               btnType={1}
-              reasonId={record.id}
-              reasonName={record.name}
-              reasonSort={record.sort}
-              reasonStatus={record.status}
+              reasonId={id}
+              reasonName={name}
+              reasonSort={sort}
+              reasonStatus={status}
+              delStatus={delStatus}
               handleConfirm={this.props.updateReturnReason}
               reSearch={this.reSearch}
             />
             &nbsp;
             <Popconfirm
-              title={`确认要删除退货原因[${record.name}]吗?`}
+              disabled={delStatus}
+              title={`确认要删除退货原因[${name}]吗?`}
               onConfirm={() => {
                 const { deleteReturnReasonById } = this.props;
-                deleteReturnReasonById([record.id]);
-                this.reSearch();
+                deleteReturnReasonById([id]);
               }}
               okText="删除"
               cancelText="取消"
             >
-              <Button type="primary" ghost size="small" onClick={() => { }}>删除</Button>
+              <Button type="primary" ghost size="small" disabled={delStatus} onClick={() => { }}>删除</Button>
             </Popconfirm>
-          </div>
+          </div >
         );
       }
     },

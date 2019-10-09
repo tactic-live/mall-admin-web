@@ -174,6 +174,7 @@ class ReturnApply extends SearchLayout {
     //   path: 'oms/returnApplyDetail',
     //   id: source.id
     // })
+    history.push(`/oms/returnApplyDetail?id=${source.id}`);
   }
 
   onSearch(searchCond) {
