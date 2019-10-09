@@ -48,7 +48,7 @@ const fields = [
     label: '服务单号:',
   },
   {
-    name: 'receiverKeyword',
+    name: 'status',
     label: '处理状态:',
     type: 'select',
     options: defaultStatusOptions
