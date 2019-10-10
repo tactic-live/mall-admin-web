@@ -8,9 +8,7 @@ export default class GoodsInfo extends Component {
       title: '商品图片',
       dataIndex: 'productPic',
       align: 'center',
-      render: (text, record) => {
-        return <img className="od-goods-img" src={text} alt="" />;
-      }
+      render: text => (<img className="od-goods-img" src={text} alt="" />)
     },
     {
       title: '商品名称',
@@ -36,7 +34,7 @@ export default class GoodsInfo extends Component {
       align: 'center',
       render: (text) => {
         const productAttr = eval(text);
-        const attr = productAttr.map(({key, value}) => (<div>{key}{value}</div>));
+        const attr = productAttr.map(({key, value}) => (<div>{key}：{value}</div>));
         return attr;
       }
     },

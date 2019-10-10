@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { PrivateRoute } from '@/components/advance-route';
 
-function oms({ match, ...rest }) {
+function sms({ match, ...rest }) {
   console.log('oms', match, rest)
 
   return (
@@ -23,10 +23,11 @@ function oms({ match, ...rest }) {
           routeName="秒杀活动列表"
         />
         <PrivateRoute exact path={`${match.path}/hot`} component={loadable(() => import('./Hot'))} routeName="人气推荐" />
+        <PrivateRoute exact path={`${match.path}/coupon`} component={loadable(() => import('./Coupon'))} routeName="优惠券列表" />
         <Redirect to="/404" />
       </Switch>
     </div>
   )
 }
 
-export default oms;
+export default sms;

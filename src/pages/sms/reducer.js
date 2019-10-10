@@ -9,7 +9,8 @@ export const INIT_STATE = {
     ...defaultPageable
   },
   flashChangeResult: '',
-  hotRecommendList: {}
+  hotRecommendList: {},
+  couponList: {}
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -112,6 +113,9 @@ function reducer(state = INIT_STATE, action) {
         });
         result.newRecommendList.list = newList;
       }
+      break;
+    case 'FETCH_COUPON_LIST':
+      result.couponList = payload;
       break;
     default:
   }

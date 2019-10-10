@@ -8,7 +8,7 @@ import ReceiveInfo from './ReceiveInfo';
 import GoodsInfo from './GoodsInfo';
 import FeeInfo from './FeeInfo';
 import OperateInfo from './OperateInfo';
-import CommonConsts from '../../../../consts/CommonConsts';
+import CommonConsts from '@/consts/CommonConsts';
 import './style.less';
 
 const { confirm } = Modal;
@@ -20,38 +20,38 @@ function ExtraButton({ status, deleteOrder, descOrder, changeOrderInfo }) {
   switch (status) {
     case 0:
       buttons = [
-        (<Button className="card-button" type="default" onClick={changeOrderInfo}>修改发票信息</Button>),
-        (<Button className="card-button" type="default" onClick={changeOrderInfo}>修改收货人信息</Button>),
-        (<Button className="card-button" type="default" onClick={changeOrderInfo}>取消订单</Button>)
+        (<Button className="card-button" key="fp" type="default" onClick={changeOrderInfo}>修改发票信息</Button>),
+        (<Button className="card-button" key="shr" type="default" onClick={changeOrderInfo}>修改收货人信息</Button>),
+        (<Button className="card-button" key="qx" type="default" onClick={changeOrderInfo}>取消订单</Button>)
       ];
       break;
     case 1:
       buttons = [
-        (<Button className="card-button" type="default" onClick={changeOrderInfo}>修改收货人信息</Button>),
-        (<Button className="card-button" type="default" onClick={changeOrderInfo}>取消订单</Button>)
+        (<Button className="card-button" key="shr" type="default" onClick={changeOrderInfo}>修改收货人信息</Button>),
+        (<Button className="card-button" key="qx" type="default" onClick={changeOrderInfo}>取消订单</Button>)
       ];
       break;
     case 2:
       buttons = [
-        (<Button className="card-button" type="primary" onClick={changeOrderInfo}>发送站内信</Button>),
-        (<Button className="card-button" type="default" onClick={changeOrderInfo}>订单跟踪</Button>)
+        (<Button className="card-button" key="znx" type="primary" onClick={changeOrderInfo}>发送站内信</Button>),
+        (<Button className="card-button" key="gz" type="default" onClick={changeOrderInfo}>订单跟踪</Button>)
       ];
       break;
     case 3:
       buttons = [
-        (<Button className="card-button" type="primary" onClick={changeOrderInfo}>关闭订单</Button>),
-        (<Button className="card-button" type="danger" onClick={deleteOrder}>删除订单</Button>)
+        (<Button className="card-button" key="gb" type="primary" onClick={changeOrderInfo}>关闭订单</Button>),
+        (<Button className="card-button" key="sc" type="danger" onClick={deleteOrder}>删除订单</Button>)
       ];
       break;
     case 4:
       buttons = [
-        (<Button className="card-button" type="danger" onClick={deleteOrder}>删除订单</Button>)
+        (<Button className="card-button" key="sc" type="danger" onClick={deleteOrder}>删除订单</Button>)
       ];
       break;
     default:
       break;
   }
-  buttons.push(<Button className="card-button" type="default" onClick={descOrder}>备注订单</Button>);
+  buttons.push(<Button className="card-button" key="bz" type="default" onClick={descOrder}>备注订单</Button>);
   return buttons;
 }
 
