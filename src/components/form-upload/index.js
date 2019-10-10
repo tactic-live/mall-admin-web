@@ -122,7 +122,7 @@ class FormUpload extends React.Component {
         <div className="form-upload-item description" >
           只能上传jpg / png文件，且不超过10MB
         </div>
-      </div >
+      </div>
     );
   }
 }

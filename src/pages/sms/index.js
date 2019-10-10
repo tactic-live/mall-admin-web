@@ -24,6 +24,8 @@ function sms({ match, ...rest }) {
         />
         <PrivateRoute exact path={`${match.path}/hot`} component={loadable(() => import('./Hot'))} routeName="人气推荐" />
         <PrivateRoute exact path={`${match.path}/coupon`} component={loadable(() => import('./Coupon'))} routeName="优惠券列表" />
+        <PrivateRoute exact path={`${match.path}/advertise`} component={loadable(() => import('./Advertise'))} routeName="广告列表" />
+        <PrivateRoute exact path={`${match.path}/addAdvertise`} component={loadable(() => import('./AddAdvertise'))} routeName="添加广告" />
         <Redirect to="/404" />
       </Switch>
     </div>
