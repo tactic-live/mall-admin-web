@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actions } from './action';
+import OrderInfo from './OrderInfo';
 import './index.less';
 
 class OrderDetail extends Component {
@@ -13,7 +14,9 @@ class OrderDetail extends Component {
   
   render() {
     return (
-      <div className="order-detail">order detail</div>
+      <div className="order-detail">
+        <OrderInfo />
+      </div>
     )
   }
 }
