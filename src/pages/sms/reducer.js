@@ -5,6 +5,10 @@ export const INIT_STATE = {
   newRecommendList: {
     ...defaultPageable
   },
+  flashList: {
+    ...defaultPageable
+  },
+  flashChangeResult: '',
   hotRecommendList: {},
   advertiseList: {}
 }
@@ -12,6 +16,7 @@ export const INIT_STATE = {
 function reducer(state = INIT_STATE, action) {
   const { type, payload } = action;
   let result = { ...state };
+  console.log('payload', payload)
   switch (type) {
     case 'LOADING':
       result.loading = payload;
@@ -19,6 +24,12 @@ function reducer(state = INIT_STATE, action) {
     // 获取新品推荐列表
     case 'FETCH_NEW_PRODUCT_LIST':
       result.newRecommendList = payload;
+      break;
+    case 'FETCH_FLASH_LIST':
+      result.flashList = payload;
+      break;
+    case 'UPDATE_FLASH_LIST':
+      result.flashChangeResult = payload;
       break;
     case 'FETCH_HOT_RECOMMEND_PRODUCT_LIST':
       result.hotRecommendList = payload;

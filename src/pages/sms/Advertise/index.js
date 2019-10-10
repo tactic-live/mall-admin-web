@@ -28,7 +28,8 @@ const fields = [
   {
     name: 'endTime',
     label: '到期时间',
-    type: 'date-picker'
+    type: 'date-picker',
+    format: 'YYYY-MM-DD'
   }
 ];
 
@@ -160,6 +161,7 @@ class Advertise extends SearchLayout {
     const { search } = location;
     const params = QueryString.parse(search);
     const { current = 1, pageSize = 5, name, type, endTime } = params;
+    console.log('eeeeeeeeeeeeeeeeeeee', endTime);
     fetchAdvertiseList({
       pageNum: current,
       pageSize: pageSize,

@@ -15,6 +15,13 @@ function oms({ match, ...rest }) {
           component={loadable(() => import('./New'))}
           routeName="新品推荐"
         />
+
+        <PrivateRoute
+          exact
+          path={`${match.path}/flash`}
+          component={loadable(() => import('./Flash'))}
+          routeName="秒杀活动列表"
+        />
         <PrivateRoute exact path={`${match.path}/hot`} component={loadable(() => import('./Hot'))} routeName="人气推荐" />
         <PrivateRoute exact path={`${match.path}/advertise`} component={loadable(() => import('./Advertise'))} routeName="广告列表" />
         <PrivateRoute exact path={`${match.path}/addAdvertise`} component={loadable(() => import('./AddAdvertise'))} routeName="添加广告" />
