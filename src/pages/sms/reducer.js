@@ -5,7 +5,8 @@ export const INIT_STATE = {
   newRecommendList: {
     ...defaultPageable
   },
-  hotRecommendList: {}
+  hotRecommendList: {},
+  advertiseList: {}
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -100,6 +101,37 @@ function reducer(state = INIT_STATE, action) {
           newList.push(newRecommend);
         });
         result.newRecommendList.list = newList;
+      }
+      break;
+    case 'FETCH_ADVERTISE_LIST':
+      result.advertiseList = payload;
+      break;
+    case 'UPDATE_ADVERTISE_STATUS':
+      if (payload.updateStatus) {
+        const { id, status } = payload;
+        const newList = [];
+        result.advertiseList.list.forEach((advertiseItem) => {
+          let newAdvertiseItem = advertiseItem;
+          if (newAdvertiseItem.id === id) {
+            newAdvertiseItem.status = status;
+          }
+          newList.push(newAdvertiseItem);
+        });
+        result.advertiseList.list = newList;
+      }
+      break;
+    case 'DELETE_ADVERTISE_BY_ID':
+      if (payload.deleteStatus) {
+        const { ids } = payload;
+        const newList = [];
+        result.advertiseList.list.forEach((advertiseItem) => {
+          let newAdvertiseItem = advertiseItem;
+          if (ids.indexOf(newAdvertiseItem.id) > -1) {
+            newAdvertiseItem.delStatus = true;
+          }
+          newList.push(newAdvertiseItem);
+        });
+        result.advertiseList.list = newList;
       }
       break;
     default:
