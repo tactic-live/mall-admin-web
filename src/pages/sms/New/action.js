@@ -4,6 +4,7 @@ import RootActions from '../action';
 export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
   FETCH_NEW_PRODUCT_LIST: 'FETCH_NEW_PRODUCT_LIST',
+  ADD_RECOMMEND_NEW_PRODUCT: 'ADD_RECOMMEND_NEW_PRODUCT',
   UPDATE_NEW_PRODUCT_RECOMMEND_STATUS: 'UPDATE_NEW_PRODUCT_RECOMMEND_STATUS',
   UPDATE_NEW_PRODUCT_SORT: 'UPDATE_NEW_PRODUCT_SORT',
   DELETE_NEW_PRODUCTS: 'DELETE_NEW_PRODUCTS'
@@ -16,6 +17,18 @@ export async function fetchNewProductList({ pageNum, pageSize, ...res }) {
   const payload = await new NewProductModel().fetchNewProductList({ pageNum, pageSize, ...res });
   return {
     type: ACTION_TYPES.FETCH_NEW_PRODUCT_LIST,
+    payload
+  }
+}
+
+/**
+ * 新增新品推荐
+ * @param {Array} productList 商品列表
+ */
+export async function addRecommendNewProduct(productList) {
+  const payload = await new NewProductModel().addRecommendNewProduct(productList);
+  return {
+    type: ACTION_TYPES.ADD_RECOMMEND_NEW_PRODUCT,
     payload
   }
 }
@@ -75,6 +88,11 @@ export function actions(dispatch, ownProps) {
     changeLoading,
     fetchNewProductList: async (...args) => {
       dispatch(await fetchNewProductList(...args));
+      changeLoading(false);
+    },
+    addRecommendNewProduct: async (...args) => {
+      changeLoading(true);
+      dispatch(await addRecommendNewProduct(...args));
       changeLoading(false);
     },
     updateNewProductRecommendStatus: async (...args) => {
