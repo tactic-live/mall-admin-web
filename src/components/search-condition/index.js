@@ -184,11 +184,15 @@ class SearchCondition extends React.PureComponent {
       if (!FormItem) {
         return;
       }
+      let defaultValueTemp = defaultValues[name];
+      if (type === 'date-picker' && defaultValues[name]) {
+        defaultValueTemp = moment(defaultValues[name]);
+      }
       children.push(
         <Col span={(span || 6)} key={name} className={hideExtCondClassName}>
           <Form.Item label={label}>
             {getFieldDecorator(name, {
-              initialValue: (initialValue || defaultValues[name]),
+              initialValue: (initialValue || defaultValueTemp),
               normalize(value) {
                 if (formItemType === 'date-picker') {
                   if (Array.isArray(value)) {
@@ -249,7 +253,7 @@ class SearchCondition extends React.PureComponent {
             ) : extActions
           }
         </Row>
-      </Form >
+      </Form>
     );
   }
 }
