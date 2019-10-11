@@ -46,8 +46,9 @@ class HotRecommend extends SearchLayout {
     key: 'recommendStatus',
     width: 100,
     render: (text, record) => {
+      const { delStatus } = record;
       return (
-        <Switch checked={!!text} onChange={(checked) => {
+        <Switch checked={!!text} disabled={delStatus} onChange={(checked) => {
           const { updateHotRecommendStatus } = this.props;
           const status = checked ? 1 : 0;
           updateHotRecommendStatus({ ids: [record.id], recommendStatus: status })
@@ -72,7 +73,7 @@ class HotRecommend extends SearchLayout {
     key: 'actions',
     width: 80,
     render: (text, record) => {
-      const { id, sort } = record;
+      const { id, sort, delStatus } = record;
       const { sortDatas } = this.state;
       const { visibleId } = sortDatas;
       const modalVisible = visibleId === id;
@@ -87,20 +88,20 @@ class HotRecommend extends SearchLayout {
               handleOk={this.confirmSort}
               handleCancel={this.cancelSort}
             />
-            <Button type="primary" size="small" ghost onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
+            <Button type="primary" size="small" ghost disabled={delStatus} onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
           </div>
 
           <Popconfirm
+            disabled={delStatus}
             title={`确认要删除该推荐商品吗?`}
             onConfirm={() => {
               const { deleteHotRecommendProduct } = this.props;
-              deleteHotRecommendProduct(record.id);
-              this.reSearch();
+              deleteHotRecommendProduct([record.id]);
             }}
             okText="删除"
             cancelText="取消"
           >
-            <Button type="primary" ghost size="small" onClick={() => { }}>删除</Button>
+            <Button type="primary" ghost size="small" disabled={delStatus}>删除</Button>
           </Popconfirm>
         </div>
       );
@@ -158,8 +159,6 @@ class HotRecommend extends SearchLayout {
     const { updateHotRecommendProductSort } = this.props;
     updateHotRecommendProductSort({ sort, id });
     this.cancelSort();
-    // 刷新搜索结果
-    this.init();
   }
 
   /**

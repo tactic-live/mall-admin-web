@@ -16,6 +16,26 @@ class OrderModel extends AbstractModel {
   };
 
   /**
+   * 删除订单
+   * @param {array} ids
+   */
+  async deleteOrders(ids) {
+    const result = await super.post(`/api/order/delete?ids=${ids}`);
+    return result.data;
+  };
+
+  /**
+   * 备注订单
+   * @param {number} id 
+   * @param {string} note 
+   * @param {number} status 
+   */
+  async updateOrderNote(id, note, status) {
+    const result = await super.post('/api/order/update/note', { id, note, status });
+    return result.data;
+  };
+
+  /**
    * 订单s发货
    * @param {Array} orders 需要发货的订单s
    */

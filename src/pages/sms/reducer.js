@@ -8,12 +8,19 @@ export const INIT_STATE = {
   newRecommendList: {
     ...defaultPageable
   },
-  hotRecommendList: {}
+  flashList: {
+    ...defaultPageable
+  },
+  flashChangeResult: '',
+  hotRecommendList: {},
+  couponList: {},
+  advertiseList: {}
 }
 
 function reducer(state = INIT_STATE, action) {
   const { type, payload } = action;
   let result = { ...state };
+  console.log('payload', payload)
   switch (type) {
     case 'LOADING':
       result.loading = payload;
@@ -37,19 +44,6 @@ function reducer(state = INIT_STATE, action) {
           newList.push(newRecommend);
         });
         result.newRecommendList.list = newList;
-      }
-      break;
-    case 'FETCH_HOT_RECOMMEND_PRODUCT_LIST':
-      result.hotRecommendList = payload;
-      break;
-    case 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS':
-      if (payload.updateResult && result.hotRecommendList) {
-        result.hotRecommendList.list = result.hotRecommendList.list.map(returnReasonItem => {
-          if (returnReasonItem.id === payload.ids[0]) {
-            returnReasonItem.recommendStatus = payload.recommendStatus;
-          }
-          return returnReasonItem;
-        })
       }
       break;
     // 更新新品推荐推荐状态
@@ -97,6 +91,84 @@ function reducer(state = INIT_STATE, action) {
           newList.push(newRecommend);
         });
         result.newRecommendList.list = newList;
+      }
+      break;
+    case 'FETCH_FLASH_LIST':
+      result.flashList = payload;
+      break;
+    case 'UPDATE_FLASH_LIST':
+      result.flashChangeResult = payload;
+      break;
+    case 'FETCH_HOT_RECOMMEND_PRODUCT_LIST':
+      result.hotRecommendList = payload;
+      break;
+    case 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS':
+      if (payload.updateResult && result.hotRecommendList) {
+        const { recommendStatus, ids } = payload;
+        result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
+          const idIndex = ids.findIndex(idItem => recommendItem.id === idItem);
+          if (idIndex > -1) {
+            recommendItem.recommendStatus = recommendStatus;
+          }
+          return recommendItem;
+        });
+      }
+      break;
+    case 'DELETE_HOT_RECOMMEND_PRODUCT':
+      if (payload.deleteResult && result.hotRecommendList) {
+        const { ids } = payload;
+        result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
+          const idIndex = ids.findIndex(idItem => recommendItem.id === idItem);
+          if (idIndex > -1) {
+            recommendItem.delStatus = true;
+          }
+          return recommendItem;
+        });
+      }
+      break;
+    case 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT':
+      if (payload.updateResult && result.hotRecommendList) {
+        const { id, sort } = payload;
+        result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
+          if (recommendItem.id === id) {
+            recommendItem.sort = sort;
+          }
+          return recommendItem;
+        });
+      }
+      break;
+    case 'FETCH_COUPON_LIST':
+      result.couponList = payload;
+      break;
+    case 'FETCH_ADVERTISE_LIST':
+      result.advertiseList = payload;
+      break;
+    case 'UPDATE_ADVERTISE_STATUS':
+      if (payload.updateStatus) {
+        const { id, status } = payload;
+        const newList = [];
+        result.advertiseList.list.forEach((advertiseItem) => {
+          let newAdvertiseItem = advertiseItem;
+          if (newAdvertiseItem.id === id) {
+            newAdvertiseItem.status = status;
+          }
+          newList.push(newAdvertiseItem);
+        });
+        result.advertiseList.list = newList;
+      }
+      break;
+    case 'DELETE_ADVERTISE_BY_ID':
+      if (payload.deleteStatus) {
+        const { ids } = payload;
+        const newList = [];
+        result.advertiseList.list.forEach((advertiseItem) => {
+          let newAdvertiseItem = advertiseItem;
+          if (ids.indexOf(newAdvertiseItem.id) > -1) {
+            newAdvertiseItem.delStatus = true;
+          }
+          newList.push(newAdvertiseItem);
+        });
+        result.advertiseList.list = newList;
       }
       break;
     // 获取品牌推荐列表

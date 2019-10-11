@@ -184,11 +184,15 @@ class SearchCondition extends React.PureComponent {
       if (!FormItem) {
         return;
       }
+      let defaultValueTemp = defaultValues[name];
+      if (type === 'date-picker' && defaultValues[name]) {
+        defaultValueTemp = moment(defaultValues[name]);
+      }
       children.push(
         <Col span={(span || 6)} key={name} className={hideExtCondClassName}>
           <Form.Item label={label}>
             {getFieldDecorator(name, {
-              initialValue: (initialValue || defaultValues[name]),
+              initialValue: (initialValue || defaultValueTemp),
               normalize(value) {
                 if (formItemType === 'date-picker') {
                   if (Array.isArray(value)) {
@@ -209,7 +213,7 @@ class SearchCondition extends React.PureComponent {
   }
 
   handleReset = () => {
-    const { onSearch} = this.props;
+    const { onSearch } = this.props;
     this.props.form.resetFields();
     onSearch && onSearch({});
   }
@@ -220,11 +224,10 @@ class SearchCondition extends React.PureComponent {
     const { fields, form, defaultValues, className, extActions } = this.props;
     const conditionActionsElem = fields.length ? (
       <div>
-        {extActions}
         <Button type="default" className="action-item" onClick={this.handleReset}>重置</Button>
         <Button htmlType="submit" type="primary" className="action-item">查询</Button>
       </div>
-    ) : extActions;
+    ) : '';
     // const extActionsElem = extActions;
     // if (extActions) {
     //   extActionsElem = extActions;
@@ -239,7 +242,18 @@ class SearchCondition extends React.PureComponent {
           </Col>
         </Row>
         <Row gutter={24}>{this.getFields(form, fields, defaultValues)}</Row>
-      </Form >
+        <Row className="action-extAction">
+          {
+            fields.length ? (
+              <div>
+                {
+                  extActions
+                }
+              </div>
+            ) : extActions
+          }
+        </Row>
+      </Form>
     );
   }
 }

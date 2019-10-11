@@ -15,14 +15,12 @@ export const INIT_STATE = {
   },
   isOrderSettingUpdateSuccess: true,
   returnReasonList: {},
-  deleteReturnReasonStatus: false,
-  addReturnReasonStatus: false,
-  updateReturnReasonStatus: false,
+  // addReturnReasonStatus: false,
   returnApplyDetail: {},
   returnAdderssList: [],
   updateReturnApplyStatus: false,
   orderDetail: {},
-  returnApplyList:[]
+  returnApplyList: []
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -54,31 +52,49 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'UPDATE_RETURN_REASON_USE_STATUS':
       if (payload.updateResult && result.returnReasonList) {
+        const { ids, status } = payload;
         result.returnReasonList.list = result.returnReasonList.list.map(returnReasonItem => {
-          if (returnReasonItem.id === payload.ids) {
-            returnReasonItem.status = payload.status;
+          if (ids.indexOf(returnReasonItem.id) > -1) {
+            returnReasonItem.status = status;
           }
           return returnReasonItem;
         })
       }
       break;
     case 'DELETE_RETURN_REASON_BY_ID':
-      if (payload.deleteResult) {
-        result.deleteReturnReasonStatus = true;
+      if (payload.deleteResult && result.returnReasonList) {
+        const { ids } = payload;
+        const newList = [];
+        result.returnReasonList.list.forEach(reasonItem => {
+          let reasonItemTemp = reasonItem;
+          if (ids.indexOf(reasonItemTemp.id) > -1) {
+            reasonItemTemp.delStatus = true;
+          }
+          newList.push(reasonItemTemp);
+        });
+        result.returnReasonList.list = newList;
       }
-      // if (result.returnReasonList) {
-      //   const index = result.returnReasonList.list.findIndex(returnReasonItem => returnReasonItem.id === payload.ids);
-      //   result.returnReasonList.list.splice(index, 1);
-      // }
       break;
-    case 'ADD_RETURN_REASON':
-      if (payload.addResult) {
-        result.addReturnReasonStatus = true;
-      }
-      break;
+    // case 'ADD_RETURN_REASON':
+    //   if (payload.addResult) {
+    //     result.addReturnReasonStatus = true;
+    //   }
+    //   break;
     case 'UPDATE_RETURN_REASON':
-      if (payload.updateResult) {
-        result.updateReturnReasonStatus = true;
+      if (payload.updateResult && result.returnReasonList) {
+        const { returnData = {} } = payload;
+        const { id = '', name = '', sort = 0, status = 0 } = returnData;
+        const newList = [];
+        result.returnReasonList.list.forEach(reasonItem => {
+          let reasonItemTemp = reasonItem;
+          if (reasonItemTemp.id === id) {
+            reasonItemTemp.name = name;
+            reasonItemTemp.sort = sort;
+            reasonItemTemp.status = status;
+          }
+          newList.push(reasonItemTemp);
+        });
+        result.returnReasonList.list = newList;
       }
       break;
     case 'FETCH_RETURN_APPLY_DETAIL_BY_ID':
@@ -92,6 +108,12 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'FETCH_ORDER_DETAIL':
       result.orderDetail = payload;
+      break;
+    case 'DELETE_ORDERS':
+      result.deleteOrderCount = payload;
+      break;
+    case 'UPDATE_ORDER_NOTE':
+      result.updateOrderNote = payload;
       break;
     case 'FETCH_RETURN_APPLY_LIST':
       result.returnApplyList = payload;
