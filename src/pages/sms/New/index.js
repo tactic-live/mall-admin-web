@@ -51,12 +51,13 @@ class New extends SearchLayout {
         <Switch
           defaultChecked={!!text}
           onChange={(checked) => {
-            text ?
+            text !== null ?
               this.updateRecommendStatus([record.id], checked) :
               this.insertRecommendNewProduct([{
                 productId: record.productId,
                 productName: record.productName
               }]);
+            // console.log('recommend', text !== null ? 'update' : 'insert');
           }}
         />
       )

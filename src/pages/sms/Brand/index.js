@@ -51,7 +51,7 @@ class Brand extends SearchLayout {
         <Switch
           defaultChecked={!!text}
           onChange={(checked) => {
-            text ?
+            text !== null ?
               this.updateRecommendStatus([record.id], checked) :
               this.insertRecommendBrand([{
                 brandId: record.brandId,
