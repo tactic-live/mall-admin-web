@@ -66,16 +66,12 @@ class OrderInfo extends Component {
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
-        const { _result, deleteOrders } = that.props;
+        const { _result, deleteOrders, history } = that.props;
         const { id } = _result;
         const ids = [id];
-        const count = await deleteOrders(ids);
-        if (!count) {
-          message.error('删除失败');
-        } else {
-          message.success('删除成功');
-          //
-        }
+        await deleteOrders(ids);
+        message.success('删除成功');
+        history.push('/oms/order')
       }
     });
   }

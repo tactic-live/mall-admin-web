@@ -46,6 +46,10 @@ class CommonConsts {
     1: '已使用',
     2: '已过期'
   };
+  static couponGetType = {
+    0: '后台赠送',
+    1: '主动获取'
+  };
   
 }
 

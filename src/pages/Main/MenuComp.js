@@ -62,6 +62,7 @@ function MenuComp({ defaultSelectedKeys = [], onSelect, ...rest }) {
   const marketingMenuList = [
     { key: 'sms/flash', title: '秒杀活动列表', icon: 'web-icon-goods-list' },
     { key: 'sms/coupon', title: '优惠券列表', icon: 'web-icon-sms-coupon' },
+    { key: 'sms/brand', title: '品牌推荐', icon: 'web-icon-goods-brand' },
     { key: 'sms/new', title: '新品推荐', icon: 'web-icon-sms-new' },
     { key: 'sms/hot', title: '人气推荐', icon: 'web-icon-sms-hot' },
     { key: 'sms/advertise', title: '广告列表', icon: 'web-icon-sms-ad' }

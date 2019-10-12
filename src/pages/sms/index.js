@@ -11,6 +11,12 @@ function sms({ match, ...rest }) {
       <Switch>
         <PrivateRoute
           exact
+          path={`${match.path}/brand`}
+          component={loadable(() => import('./Brand'))}
+          routeName="品牌推荐"
+        />
+        <PrivateRoute
+          exact
           path={`${match.path}/new`}
           component={loadable(() => import('./New'))}
           routeName="新品推荐"
@@ -24,6 +30,8 @@ function sms({ match, ...rest }) {
         />
         <PrivateRoute exact path={`${match.path}/hot`} component={loadable(() => import('./Hot'))} routeName="人气推荐" />
         <PrivateRoute exact path={`${match.path}/coupon`} component={loadable(() => import('./Coupon'))} routeName="优惠券列表" />
+        <PrivateRoute exact path={`${match.path}/couponDetail`} component={loadable(() => import('./CouponDetail'))} routeName="优惠券详情" />
+        <PrivateRoute exact path={`${match.path}/couponAdd/:id`} component={loadable(() => import('./AddCoupon'))} routeName="添加优惠券" />
         <PrivateRoute exact path={`${match.path}/advertise`} component={loadable(() => import('./Advertise'))} routeName="广告列表" />
         <PrivateRoute exact path={`${match.path}/addAdvertise`} component={loadable(() => import('./AddAdvertise'))} routeName="添加广告" />
         <Redirect to="/404" />
