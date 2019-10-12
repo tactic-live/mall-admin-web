@@ -35,7 +35,11 @@ const fields = [
 
 class Advertise extends SearchLayout {
 
-  extActions = [];
+  extActions = [(
+    <Link to={{ pathname: '/sms/addAdvertise' }} key='add'>
+      <Button type="primary" ghost size="small" onClick={() => { }}>添加</Button>
+    </Link>
+  )];
 
   columns = [
     {

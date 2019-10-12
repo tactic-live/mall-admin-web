@@ -10,7 +10,6 @@ class AdvertiseModel extends AbstractModel {
    * @param {Integer} type 广告位置
    * @param {String} endTime 到期时间
    * }
-
    */
   async fetchAdvertiseList({ pageNum = 1, pageSize = 5, ...res }) {
     const result = await super.get('/api/home/advertise/list', { pageNum, pageSize, ...res });
@@ -34,6 +33,14 @@ class AdvertiseModel extends AbstractModel {
    */
   async deleteAdvertise(ids = []) {
     const result = await super.delete('/api/home/advertise/delete', { ids });
+    return result.data;
+  }
+
+  /**
+   * 增加广告
+   */
+  async addAdvertise(adParams = {}) {
+    const result = await super.post('/api/home/advertise/create', adParams);
     return result.data;
   }
 
