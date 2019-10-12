@@ -161,13 +161,12 @@ class Advertise extends SearchLayout {
     const { search } = location;
     const params = QueryString.parse(search);
     const { current = 1, pageSize = 5, name, type, endTime } = params;
-    console.log('eeeeeeeeeeeeeeeeeeee', endTime);
     fetchAdvertiseList({
       pageNum: current,
       pageSize: pageSize,
       name,
       type,
-      endTime
+      endTime: endTime ? moment(endTime).format('YYYY-MM-DD') : ''
     });
   }
 }
