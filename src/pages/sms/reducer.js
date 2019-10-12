@@ -11,6 +11,11 @@ export const INIT_STATE = {
   flashChangeResult: '',
   hotRecommendList: {},
   couponList: {},
+  couponDetail: {},
+  couponAddNum: 0,
+  couponUpdateNum: 0,
+  couponDeleteNum: 0,
+  couponHistory: {},
   advertiseList: {}
 }
 
@@ -117,6 +122,21 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'FETCH_COUPON_LIST':
       result.couponList = payload;
+      break;
+    case 'FETCH_COUPON_DETAIL':
+      result.couponDetail = payload;
+      break;
+    case 'ADD_COUPON':
+      result.couponAddNum = payload;
+      break;
+    case 'UPDATE_COUPON':
+      result.couponUpdateNum = payload;
+      break;
+    case 'COUPON_DELETE':
+      result.couponDeleteNum = payload;
+      break;
+    case 'FETCH_COUPON_HISTORY':
+      result.couponHistory = payload;
       break;
     case 'FETCH_ADVERTISE_LIST':
       result.advertiseList = payload;

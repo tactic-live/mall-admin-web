@@ -15,7 +15,7 @@ class OrderDetail extends Component {
   render() {
     return (
       <div className="order-detail">
-        <OrderInfo />
+        <OrderInfo history={this.props.history} />
       </div>
     )
   }

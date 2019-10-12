@@ -1,6 +1,7 @@
 import React from 'react';
 import QueryString from 'query-string';
-import { Button, message } from 'antd';
+import { Button, Popconfirm, message } from 'antd';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { actions } from './action';
@@ -99,24 +100,49 @@ class Coupon extends SearchLayout {
       key: 'actions',
       render: (text, record) => (
         <div className='couponListBtn'>
-          <Button type="primary" size="small" ghost onClick={() => { this.toPage('/show') }}>查看</Button>
-          <Button type="primary" size="small" ghost onClick={() => { this.toPage('/edit') }}>编辑</Button>
-          <Button type="primary" size="small" ghost onClick={() => { this.delete(record.id) }}>删除</Button>
+          <Link href={`/sms/couponDetail?id=${record.id}`} to={`/sms/couponDetail?id=${record.id}`}>
+            <Button
+              type="primary"
+              size="small"
+              ghost
+              // onClick={() => this.toPage(`/sms/couponDetail?id=${record.id}`)}
+            >查看</Button>
+          </Link>
+          <Button
+            type="primary"
+            size="small"
+            ghost
+            onClick={() => this.toPage(`/sms/couponAdd/${record.id}`)}
+          >编辑</Button>
+          <Popconfirm
+            placement="top"
+            title="确定要删除该优惠券吗？"
+            onConfirm={() => this.delete(record)}
+            okText="是"
+            cancelText="否"
+          >
+            <Button type="primary" size="small" ghost>删除</Button>
+          </Popconfirm>
         </div>
       ),
       width: 200
     }
   ]
 
-  extActions = [(<Button key="coupon-add" onClick={() => this.toPage('/add')}>添加</Button>)];
+  extActions = [(<Button key="coupon-add" onClick={() => this.toPage('/sms/couponAdd/0')}>添加</Button>)];
 
   // 查看、新增、编辑
   toPage = (url) => {
-    console.log('优惠券转跳到', url);
+    const { history } = this.props;
+    history.push(url);
   }
 
-  delete = (id) => {
-    console.log('优惠券删除', id);
+  delete = async (record) => {
+    const { id, name } = record;
+    const { deleteCoupon } = this.props;
+    await deleteCoupon(id);
+    message.success(`优惠券【${name}】删除成功`);
+    this.reSearch();
   }
 
   onSearch(searchCond) {
@@ -164,14 +190,14 @@ class Coupon extends SearchLayout {
 }
 
 const store = (state) => {
-  const { couponList, loading } = state.sms;
+  const { couponList, couponDeleteNum, loading } = state.sms;
   if (couponList.list) {
     couponList.list = couponList.list.map(item => {
       item.key = item.id
       return item;
     });
   }
-  return { _result: couponList, loading };
+  return { _result: couponList, couponDeleteNum, loading };
 }
 
 export default connect(store, actions)(Coupon);
