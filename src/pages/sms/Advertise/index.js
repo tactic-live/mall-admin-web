@@ -127,7 +127,7 @@ class Advertise extends SearchLayout {
         const { id, delStatus } = record;
         return (
           <div className="advertise-action-wrap">
-            <Link to={{ pathname: `/sms/updateAdvertise?id=${id}` }}>
+            <Link to={{ pathname: '/sms/updateAdvertise', search: `?id=${id}` }}>
               <Button type="primary" ghost size="small" disabled={delStatus} onClick={() => { }}>编辑</Button>
             </Link>
             &nbsp;&nbsp;

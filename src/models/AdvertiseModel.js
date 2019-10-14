@@ -44,6 +44,23 @@ class AdvertiseModel extends AbstractModel {
     return result.data;
   }
 
+  /**
+   * 获取广告详情
+   * @param {*} id
+   */
+  async fetchAdvertiseDetail(id) {
+    const result = await super.get(`/api/home/advertise/${id}`);
+    return result.data;
+  }
+
+  /**
+   * 编辑广告
+   */
+  async updateAdvertise(adParams) {
+    const result = await super.patch('/api/home/advertise/update', adParams);
+    return result.data;
+  }
+
 }
 
 export default AdvertiseModel;

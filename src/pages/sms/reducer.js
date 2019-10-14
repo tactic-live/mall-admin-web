@@ -1,3 +1,4 @@
+import { uniqueId } from 'lodash';
 const defaultPageable = { total: 0, current: 1, pageSize: 10, list: [] };
 
 export const INIT_STATE = {
@@ -19,7 +20,8 @@ export const INIT_STATE = {
   couponUpdateNum: 0,
   couponDeleteNum: 0,
   couponHistory: {},
-  advertiseList: {}
+  advertiseList: {},
+  advertiseDetail: {}
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -258,6 +260,27 @@ function reducer(state = INIT_STATE, action) {
         });
         result.brandList.list = newList;
       }
+      break;
+    case 'FETCH_ADVERTISE_DETAIL_BY_ID':
+      const { pic = '' } = payload;
+      const picList = [];
+      if (pic) {
+        picList.push({
+          uid: uniqueId('pic_'),
+          name: (pic || '').split('/').pop(),
+          status: 'done',
+          url: pic,
+          thumbUrl: pic
+        });
+      }
+      const advertiseDetail = {
+        ...payload,
+        picList
+      }
+      result.advertiseDetail = advertiseDetail;
+      break;
+    case 'UPDATE_UPLOAD_PIC':
+      result.advertiseDetail.picList = payload;
       break;
     default:
   }

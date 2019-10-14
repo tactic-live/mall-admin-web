@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import QueryString from 'query-string';
+import moment from 'moment';
 import { Form, Button, Select, DatePicker, Radio } from 'antd';
 import FormLayout from '@/components/layout/form-layout';
 import FormUpload from '@/components/form-upload';
@@ -9,12 +11,6 @@ import './index.less';
 const { Option } = Select;
 
 class AddAdvertise extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      picList: []
-    };
-  }
   fields = [
     {
       name: 'name',
@@ -84,15 +80,18 @@ class AddAdvertise extends React.PureComponent {
       name: 'picFile',
       label: '广告图片',
       render: () => {
-        const { picList } = this.state;
+        const { advertiseDetail = {}, updateUploadPic } = this.props;
+        const { picList = [] } = advertiseDetail;
+        // console.log('defaultFileList', defaultFileList)
         return (
           <FormUpload
             listType="picture-card"
             fileList={picList}
             maxLength={1}
             onChange={({ file, fileList }) => {
-              this.setState({ picList: fileList });
-            }}
+              updateUploadPic(fileList);
+            }
+            }
           />
         )
       }
@@ -118,31 +117,33 @@ class AddAdvertise extends React.PureComponent {
     }
   ];
   actions = [
-    <Button className='btn-submit-wrap' type="primary" onClick={(e) => { this.submitForm(e) }} key="btnSubmit">提交</Button>,
-    <Button type="primary" onClick={(e) => { this.resetForm(e) }} key="btnReset">重置</Button>
+    <Button className='btn-submit-wrap' type="primary" onClick={(e) => { this.submitForm(e) }} key="btnSubmit">提交</Button>
   ];
-  defaultValues = {
-    name: '',
-    type: 0,
-    status: 0,
-    sort: 0,
-    url: ''
+
+  async init() {
+    const { location, fetchAdvertiseDetailById } = this.props;
+    const { search } = location;
+    const params = QueryString.parse(search);
+    const { id } = params;
+    this.advertiseId = id;
+    fetchAdvertiseDetailById(id);
   }
 
   componentDidMount() {
-
+    this.init();
   }
 
   submitForm = (e) => {
     e.preventDefault();
-    const { form, addAdvertise } = this.props;
+    const { form, updateAdvertise } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       // console.log('submit values', values)
       if (err) {
         return;
       }
       const { picFile, note, endTime, type, name, sort, startTime, status, url } = values;
-      addAdvertise({
+      updateAdvertise({
+        id: this.advertiseId,
         name,
         type,
         pic: (picFile && picFile.file && picFile.file.url) || '',
@@ -156,25 +157,39 @@ class AddAdvertise extends React.PureComponent {
     })
   }
 
-  resetForm = (e) => {
-    e.preventDefault();
-    const { form } = this.props;
-    form.resetFields();
-  }
-
   render() {
     // console.log('this.fields', this.fields)
+    const { advertiseDetail = {} } = this.props;
+    const { name = '', type = 0, startTime, endTime, status = 0, sort = 0, url = '', note = '' } = advertiseDetail;
+    // console.log('advertiseDetail', advertiseDetail)
+    const defaultValues = {
+      name,
+      type,
+      startTime: moment(startTime),
+      endTime: moment(endTime),
+      status,
+      sort,
+      url,
+      note
+    };
+    console.log('defaultValuessssss', defaultValues)
     return (
       <FormLayout
         actions={this.actions}
         {...this.props}
-        defaultValues={this.defaultValues}
+        defaultValues={defaultValues}
         fields={this.fields}
       />
     )
   }
 }
 
-const store = () => { }
+const store = (state) => {
+  const { sms = {} } = state;
+  const { advertiseDetail = {}, loading } = sms;
+  return {
+    advertiseDetail, loading
+  }
+}
 const WrappedAddAdvertise = Form.create({ name: 'add.advertise' })(AddAdvertise)
 export default connect(store, actions)(WrappedAddAdvertise);
