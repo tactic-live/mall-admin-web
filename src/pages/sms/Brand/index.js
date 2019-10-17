@@ -9,10 +9,10 @@ import { actions } from './action';
 
 import './index.less';
 
-class New extends SearchLayout {
+class Brand extends SearchLayout {
   fields = [{
-    name: 'productName',
-    label: '商品名称'
+    name: 'brandName',
+    label: '品牌名称'
   }, {
     name: 'recommendStatus',
     label: '推荐状态',
@@ -32,13 +32,13 @@ class New extends SearchLayout {
   extActions = [];
 
   columns = [{
-    title: '商品编号',
-    dataIndex: 'productId',
+    title: '品牌编号',
+    dataIndex: 'brandId',
     key: 'id',
     width: 80
   }, {
-    title: '商品名称',
-    dataIndex: 'productName',
+    title: '品牌名称',
+    dataIndex: 'brandName',
     key: 'name',
     width: 100
   }, {
@@ -53,11 +53,10 @@ class New extends SearchLayout {
           onChange={(checked) => {
             text !== null ?
               this.updateRecommendStatus([record.id], checked) :
-              this.insertRecommendNewProduct([{
-                productId: record.productId,
-                productName: record.productName
+              this.insertRecommendBrand([{
+                brandId: record.brandId,
+                brandName: record.brandName
               }]);
-            // console.log('recommend', text !== null ? 'update' : 'insert');
           }}
         />
       )
@@ -83,7 +82,7 @@ class New extends SearchLayout {
       const { visibleId } = sortDatas;
       let modalVisible = text && visibleId === text;
       const isRecommendActions = (
-        <div className="sms-new-table-actions">
+        <div className="sms-brand-table-actions">
           <div className="action-sort">
             <SortModal
               id={text}
@@ -111,7 +110,13 @@ class New extends SearchLayout {
                 this.deleteRecommend(text);
               }}
             >
-              <Button type="primary" size="small" ghost>删除</Button>
+              <Button
+                type="primary"
+                size="small"
+                ghost
+              >
+                删除
+              </Button>
             </Popconfirm>
           </div>
         </div>
@@ -140,17 +145,25 @@ class New extends SearchLayout {
   }
 
   async init() {
-    const { location, fetchNewProductList } = this.props;
+    const { location, fetchBrandList } = this.props;
     const { search } = location;
     const params = QueryString.parse(search);
     const { current = 1, pageSize = 5, ...rest } = params;
-    // fetchAll(parentId, current, pageSize);
-    console.log('init', current, pageSize, rest);
-    fetchNewProductList({
+    fetchBrandList({
       pageNum: current,
       pageSize: pageSize,
       ...rest
     });
+  }
+
+  /**
+   * 新增品牌推荐
+   * @param {Array} brandList 品牌列表
+   */
+  insertRecommendBrand = async (brandList) => {
+    await this.props.addRecommendBrands(brandList);
+
+    message.success('操作成功');
   }
 
   /**
@@ -160,17 +173,7 @@ class New extends SearchLayout {
    */
   updateRecommendStatus = async (ids, checked) => {
     const recommendStatus = checked ? 1 : 0;
-    await this.props.updateNewProductRecommendStatus(ids, recommendStatus);
-
-    message.success('操作成功');
-  }
-
-  /**
-   * 新增新品推荐
-   * @param {Array} productList 商品列表
-   */
-  insertRecommendNewProduct = async (productList) => {
-    await this.props.addRecommendNewProduct(productList);
+    await this.props.updateBrandRecommendStatus(ids, recommendStatus);
 
     message.success('操作成功');
   }
@@ -194,7 +197,7 @@ class New extends SearchLayout {
    */
   confirmSort = async ({ id, values }) => {
     const { sort } = values;
-    await this.props.updateNewProductSort(id, sort);
+    await this.props.updateBrandSort(id, sort);
 
     message.success('操作成功');
     // 关闭排序弹层
@@ -218,23 +221,21 @@ class New extends SearchLayout {
    * @param {Number} id 编号
    */
   deleteRecommend = async (id) => {
-    await this.props.deleteNewProducts([id]);
+    await this.props.deleteBrands([id]);
     message.success('操作成功');
-    // 刷新搜索结果
-    // this.init();
   }
 }
 
 const store = (state) => {
-  const { loading, newRecommendList = {} } = state.sms;
-  const retVal = { ...newRecommendList };
-  if (newRecommendList.list) {
-    retVal.list = newRecommendList.list.map(item => {
-      item.key = item.productId
+  const { loading, brandList = {} } = state.sms;
+  const retVal = { ...brandList };
+  if (brandList.list) {
+    retVal.list = brandList.list.map(item => {
+      item.key = item.brandId
       return item;
     });
   }
   return { loading, _result: retVal };
 }
 
-export default connect(store, actions)(New);
+export default connect(store, actions)(Brand);

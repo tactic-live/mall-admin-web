@@ -109,6 +109,12 @@ function reducer(state = INIT_STATE, action) {
     case 'FETCH_ORDER_DETAIL':
       result.orderDetail = payload;
       break;
+    case 'DELETE_ORDERS':
+      result.deleteOrderCount = payload;
+      break;
+    case 'UPDATE_ORDER_NOTE':
+      result.updateOrderNote = payload;
+      break;
     case 'FETCH_RETURN_APPLY_LIST':
       result.returnApplyList = payload;
       break;

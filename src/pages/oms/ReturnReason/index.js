@@ -112,7 +112,7 @@ class ReturnReason extends SearchLayout {
             >
               <Button type="primary" ghost size="small" disabled={delStatus} onClick={() => { }}>删除</Button>
             </Popconfirm>
-          </div >
+          </div>
         );
       }
     },
