@@ -103,7 +103,7 @@ const fields = [
   {
     name: 'brandName',
     label: '请选择时间',
-    type: 'date'
+    type: 'date-picker'
   },
   {
     name: 'status',

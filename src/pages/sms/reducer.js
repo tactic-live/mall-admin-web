@@ -9,7 +9,8 @@ export const INIT_STATE = {
     ...defaultPageable
   },
   flashChangeResult: '',
-  hotRecommendList: {}
+  hotRecommendList: {},
+  flashGoodTimeList: []
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -112,6 +113,9 @@ function reducer(state = INIT_STATE, action) {
         });
         result.newRecommendList.list = newList;
       }
+      break;
+    case 'FETCH_FLASH_TIME_LIST':
+      result.flashGoodTimeList = payload;
       break;
     default:
   }

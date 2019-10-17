@@ -104,7 +104,7 @@ class Flash extends SearchLayout {
     render: (text, record, index) => {
       return (
         <div className='btnflex'>
-          <Button type="primary" size="small" ghost onClick={() => this.addGood()} >设置商品</Button>
+          <Button type="primary" size="small" ghost onClick={() => this.addGood(record)} >设置商品</Button>
           <Button type="primary" size="small" ghost onClick={() => this.editActivity(record)}>编辑</Button>
           {/* <Button type="primary" size="small" ghost >删除</Button> */}
           {
@@ -207,8 +207,10 @@ class Flash extends SearchLayout {
 
   }
   // 设置商品
-  addGood = () => {
+  addGood = (source) => {
 
+    const { history } = this.props;
+    history.push(`/sms/selectSession?flashPromotionId=${source.id}`);
   }
   async init() {
     const { location, fetchFlashList } = this.props;
@@ -252,7 +254,6 @@ const store = (state) => {
       return item;
     });
   }
-  console.log('retVal', retVal, flashList)
   return { loading, _result: retVal, flashChangeResult };
 }
 
