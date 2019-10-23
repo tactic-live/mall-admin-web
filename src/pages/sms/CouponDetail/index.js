@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import QueryString from 'query-string';
 import { actions } from './action';
 import CommonConsts from '@/consts/CommonConsts';
 import './index.less';
@@ -10,13 +9,14 @@ import HistoryList from './HistoryList';
 // 优惠券详情
 class CouponDetail extends React.Component {
   componentDidMount() {
-    const { fetchCouponDetail } = this.props;
-    const { id } = QueryString.parse(window.location.search);
+    const { fetchCouponDetail, match } = this.props;
+    const { id } = match.params || {};
     fetchCouponDetail(id);
   }
 
   render() {
-    const { couponDetail } = this.props;
+    const { couponDetail, match } = this.props;
+    const { id } = match.params || {};
     const {
       name, type, useType, minPoint, amount, useStatus, startTime, endTime, publishCount, receiveCount, useCount
     } = couponDetail || {};
@@ -37,7 +37,7 @@ class CouponDetail extends React.Component {
           <div className="cdi-block">已使用：{useCount}</div>
           <div className="cdi-block">未使用：{publishCount-useCount}</div>
         </div>
-        <HistoryList {...this.props}/>
+        <HistoryList id={id} {...this.props}/>
       </React.Fragment>
     )
   }

@@ -67,7 +67,7 @@ class CouponModel extends AbstractModel {
       useStatus = '',
       orderSn = ''
     } = params;
-    const result = await super.get('/api/coupon/couponHistory', {
+    const result = await super.get('/api/couponHistory/list', {
       pageNum, pageSize, couponId: id, useStatus, orderSn
     });
     return result.data;

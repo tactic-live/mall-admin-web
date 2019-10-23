@@ -16,11 +16,11 @@ for(let [key, value] of Object.entries(CommonConsts.couponType)) {
 
 const fields = [
   {
-    name: 'couponName',
+    name: 'name',
     label: '优惠券名称',
   },
   {
-    name: 'couponType',
+    name: 'type',
     label: '优惠券类型',
     type: 'select',
     options: couponTypeOptions
@@ -100,12 +100,12 @@ class Coupon extends SearchLayout {
       key: 'actions',
       render: (text, record) => (
         <div className='couponListBtn'>
-          <Link href={`/sms/couponDetail?id=${record.id}`} to={`/sms/couponDetail?id=${record.id}`}>
+          <Link href={`/sms/couponDetail/${record.id}`} to={`/sms/couponDetail/${record.id}`}>
             <Button
               type="primary"
               size="small"
               ghost
-              // onClick={() => this.toPage(`/sms/couponDetail?id=${record.id}`)}
+              // onClick={() => this.toPage(`/sms/couponDetail/${record.id}`)}
             >查看</Button>
           </Link>
           <Button
