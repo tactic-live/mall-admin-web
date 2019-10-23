@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, Button, Input, Spin, Radio, InputNumber, message } from 'antd';
+import { Form, Button, Input, Radio, InputNumber, message } from 'antd';
 import FormUpload from '@/components/form-upload';
 import { actions } from './action';
 
@@ -14,11 +14,11 @@ const formTailLayout = {
   wrapperCol: { span: 8, offset: 4 },
 };
 
+
 /**
  * 品牌编辑/添加
  */
 class EditBrand extends React.PureComponent {
-
   componentDidMount() {
     const { id, fetchBrandById } = this.props;
     console.log('EditBrand componentDidMount');
@@ -39,13 +39,18 @@ class EditBrand extends React.PureComponent {
       if (err) {
         return;
       }
+      console.log('before Submit, values', values);
       let { logoItem, bigPicItem, ...rest } = values;
       if (typeof (logoItem) === 'string') {
         logoItem = { url: logoItem };
+      } else if (logoItem instanceof Array && logoItem.length) {
+        logoItem = logoItem[0];
       }
       logoItem = logoItem || {};
       if (typeof (bigPicItem) === 'string') {
         bigPicItem = { url: bigPicItem };
+      } else if (bigPicItem instanceof Array && bigPicItem.length) {
+        bigPicItem = bigPicItem[0];
       }
       bigPicItem = bigPicItem || {};
       const brandInfo = { id, ...rest, logo: logoItem.url, bigPic: bigPicItem.url };
@@ -57,8 +62,17 @@ class EditBrand extends React.PureComponent {
         addBrand(brandInfo);
         message.success(`品牌[${brandInfo.name}] 添加成功.`);
       }
-    })
+    });
   }
+
+  // logo发生变化
+  formLogo = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
   /**
    * 创建表单输入元素
    */
@@ -116,14 +130,23 @@ class EditBrand extends React.PureComponent {
                 message: '[品牌LOGO]不能为空',
               },
             ],
-            initialValue: logo
-          })(<FormUpload defaultFileList={logoDefaultFileList} />)}
+            initialValue: logoDefaultFileList,
+            valuePropName: 'fileList',
+            getValueFromEvent: this.formLogo
+          })(
+            <FormUpload
+              multiple={false}
+              maxLength="1"
+            />
+          )}
         </Form.Item>
         <Form.Item {...formItemLayout} label="品牌专区大图">
           {getFieldDecorator('bigPicItem', {
             rules: [],
-            initialValue: bigPic
-          })(<FormUpload defaultFileList={bigPicDefaultFileList} />)}
+            initialValue: bigPicDefaultFileList,
+            valuePropName: 'fileList',
+            getValueFromEvent: this.formLogo
+          })(<FormUpload multiple={false} maxLength="1" />)}
         </Form.Item>
         <Form.Item {...formItemLayout} label="品牌故事">
           {getFieldDecorator('brandStory', {
@@ -163,13 +186,13 @@ class EditBrand extends React.PureComponent {
     )
   }
 
-  componentDidUpdate(){
-    console.log('EditBrand componentDidUpdate');
-  }
+  // componentDidUpdate() {
+  //   console.log('EditBrand componentDidUpdate');
+  // }
 
   render() {
     const { mode, id, loading } = this.props;
-    console.log('mode', mode)
+    // console.log('mode', mode)
     if (mode === 'update' && loading) {
       return null;
     }
