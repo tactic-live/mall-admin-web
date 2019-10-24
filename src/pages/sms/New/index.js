@@ -57,7 +57,6 @@ class New extends SearchLayout {
                 productId: record.productId,
                 productName: record.productName
               }]);
-            // console.log('recommend', text !== null ? 'update' : 'insert');
           }}
         />
       )

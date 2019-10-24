@@ -63,18 +63,19 @@ class HistoryList extends SearchLayout {
       dataIndex: 'useTime',
       key: 'couponUseTime',
       width: 100,
-      render: text => moment(text).format('YYYY-MM-DD HH:mm:ss')
+      render: text => text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : ''
     }
   ]
 
   extActions = [];
 
   onSearch(searchCond) {
-    const { location } = this.props;
+    const { location, id } = this.props;
     const defaultValues = QueryString.parse(location.search);
     const { pageSize } = defaultValues;
     this.setState({
       curCond: {
+        id,
         current: 1,
         pageSize
       },
@@ -88,10 +89,11 @@ class HistoryList extends SearchLayout {
   }
 
   async init() {
-    const { location, fetchCouponHistory } = this.props;
+    const { location, fetchCouponHistory, id } = this.props;
     const defaultValues = QueryString.parse(location.search);
     const { current, pageSize, ...rest } = defaultValues;
     fetchCouponHistory({
+      id,
       pageNum: current || 1,
       pageSize: pageSize || 5,
       ...rest
@@ -99,7 +101,7 @@ class HistoryList extends SearchLayout {
   }
 
   componentDidMount() {
-    const { location } = this.props;
+    const { location, id } = this.props;
     const defaultValues = QueryString.parse(location.search);
     const { current, pageSize, ...rest } = defaultValues;
     this.setState({
@@ -107,7 +109,7 @@ class HistoryList extends SearchLayout {
       columns: this.columns,
       extActions: this.extActions,
       curPageCond: rest,
-      curCond: { current, pageSize }
+      curCond: { id, current, pageSize }
     });
     this.init();
   }
