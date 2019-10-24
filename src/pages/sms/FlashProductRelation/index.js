@@ -13,9 +13,7 @@ class FlashProductRelation extends SearchLayout {
   fields = [];
   extActions = [
     (
-      <div>
         <Button type="primary" className='activitykey' ghost key="activitykey" onClick={() => this.handleAdd()}>添加</Button>
-      </div>
     )
   ];
 

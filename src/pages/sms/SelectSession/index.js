@@ -87,13 +87,13 @@ class SelectSession extends React.Component {
 const store = (state) => {
   const { sms = {} } = state;
   let { flashGoodTimeList = [], loading } = sms;
-  console.log('storeflashGoodTimeList', flashGoodTimeList, loading)
-  if (flashGoodTimeList.list) {
-    flashGoodTimeList = flashGoodTimeList.list.map(item => {
+  if (flashGoodTimeList) {
+    flashGoodTimeList = flashGoodTimeList.map(item => {
       item.key = item.id;
       return item;
     });
   }
+  console.log('storeflashGoodTimeList', flashGoodTimeList, loading)
   return { flashGoodTimeList, loading };
 }
 
