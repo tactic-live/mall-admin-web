@@ -1,88 +1,60 @@
-import RecommendProductModel from '@/models/RecommendProductModel';
+import FlashSessionModel from '@/models/FlashSessionModel';
 import RootActions from '../action';
 
 export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
-  FETCH_HOT_RECOMMEND_PRODUCT_LIST: 'FETCH_HOT_RECOMMEND_PRODUCT_LIST',
-  UPDATE_HOT_RECOMMEND_PRODUCT_STATUS: 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS',
-  DELETE_HOT_RECOMMEND_PRODUCT: 'DELETE_HOT_RECOMMEND_PRODUCT',
-  UPDATE_HOT_RECOMMEND_PRODUCT_SORT: 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT'
+  FETCH_FLASHSESSION_LIST: 'FETCH_FLASHSESSION_LIST',
+  CHEANGE_FLASHSESSION:'CHEANGE_FLASHSESSION'
 }
 
 /**
- * 获取人气推荐列表
+ * 获取时间段
  */
-export async function fetchHotRecommendProductList({ pageNum, pageSize, ...res }) {
-  const payload = await new RecommendProductModel().fetchHotRecommendList({ pageNum, pageSize, ...res });
+export async function fetchFlashSession({ ...res }) {
+  const payload = await new FlashSessionModel().fetchFlashSession({ ...res });
   return {
-    type: ACTION_TYPES.FETCH_HOT_RECOMMEND_PRODUCT_LIST,
+    type: ACTION_TYPES.FETCH_FLASHSESSION_LIST,
     payload
   }
 }
 
 /**
- * 更改人气推荐商品状态
+ * 添加时间段
  */
-export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
-  const updateResult = await new RecommendProductModel().updataHotRecommentStatus({ ids, recommendStatus });
+export async function createFlashSession({ ...res }) {
+  const payload = await new FlashSessionModel().createFlashSession({ ...res });
   return {
-    type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_STATUS,
-    payload: {
-      ids,
-      recommendStatus,
-      updateResult
-    }
+    type: ACTION_TYPES.CHEANGE_FLASHSESSION,
+    payload
   }
 }
+
+
 
 /**
- *  删除人气商品
- * @param {Array} ids
+ * 更新时间段
  */
-export async function deleteHotRecommendProduct(ids) {
-  const deleteResult = await new RecommendProductModel().deleteHotRecommendProduct(ids);
+export async function updateFlashSession({ ...res }) {
+  const payload = await new FlashSessionModel().updateFlashSession({ ...res });
   return {
-    type: ACTION_TYPES.DELETE_HOT_RECOMMEND_PRODUCT,
-    payload: {
-      ids,
-      deleteResult
-    }
+    type: ACTION_TYPES.CHEANGE_FLASHSESSION,
+    payload
   }
 }
-
-/**
- * 更改人气推荐商品排序
- */
-export async function updateHotRecommendProductSort({ sort, id }) {
-  const updateResult = await new RecommendProductModel().updateHotRecommendProductSort({ sort, id })
-  return {
-    type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_SORT,
-    payload: {
-      id,
-      sort,
-      updateResult
-    }
-  }
-}
-
 export function actions(dispatch, ownProps) {
   const { changeLoading } = RootActions.actions(dispatch, ownProps);
   return {
     changeLoading,
-    fetchHotRecommendProductList: async (...args) => {
-      dispatch(await fetchHotRecommendProductList(...args));
+    fetchFlashSession: async (...args) => {
+      dispatch(await fetchFlashSession(...args));
       changeLoading(false);
     },
-    updateHotRecommendStatus: async (...args) => {
-      dispatch(await updateHotRecommendStatus(...args));
+    createFlashSession: async (...args) => {
+      dispatch(await createFlashSession(...args));
       changeLoading(false);
     },
-    deleteHotRecommendProduct: async (...args) => {
-      dispatch(await deleteHotRecommendProduct(...args));
-      changeLoading(false);
-    },
-    updateHotRecommendProductSort: async (...args) => {
-      dispatch(await updateHotRecommendProductSort(...args));
+    updateFlashSession: async (...args) => {
+      dispatch(await updateFlashSession(...args));
       changeLoading(false);
     }
   }
@@ -90,8 +62,4 @@ export function actions(dispatch, ownProps) {
 
 export default {
   ACTION_TYPES,
-  fetchHotRecommendProductList,
-  updateHotRecommendStatus,
-  deleteHotRecommendProduct,
-  updateHotRecommendProductSort
 }

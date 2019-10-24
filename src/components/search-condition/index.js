@@ -222,7 +222,8 @@ class SearchCondition extends React.PureComponent {
 
   render() {
     const { fields, form, defaultValues, className, extActions } = this.props;
-    const conditionActionsElem = fields.length ? (
+    console.log('fields', fields)
+    const conditionActionsElem = (fields && fields.length) ? (
       <div>
         <Button type="default" className="action-item" onClick={this.handleReset}>重置</Button>
         <Button htmlType="submit" type="primary" className="action-item">查询</Button>
@@ -244,7 +245,7 @@ class SearchCondition extends React.PureComponent {
         <Row gutter={24}>{this.getFields(form, fields, defaultValues)}</Row>
         <Row className="action-extAction">
           {
-            fields.length ? (
+            (fields && fields.length) ? (
               <div>
                 {
                   extActions

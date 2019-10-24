@@ -1,34 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import QueryString from 'query-string';
-import { Switch, Button, Popconfirm } from 'antd';
+import { Switch, Button, Popconfirm, Table, message } from 'antd';
 import { SearchLayout } from '@/components/layout';
-import SortModal from '@/components/sort-modal';
 import { actions } from './action';
-
+import ConditionForm from '@/components/search-condition';
 import './index.less';
+import moment from 'moment';
+import EditModal from './editModal'
+import { formatDate } from './date'
+const fields = [];
 
-const fields = [
-  {
-    name: 'productName',
-    label: '商品名称',
-    required: true,
-    placeholder: ''
-  },
-  {
-    name: 'recommendStatus',
-    label: '上架状态',
-    type: 'select',
-    options: [
-      { label: '未推荐', value: '0' },
-      { label: '推荐中', value: '1' }
-    ]
-  }
-];
+class FlashSession extends React.Component {
 
-class FlashSession extends SearchLayout {
-
-  extActions = [];
+  extActions = [
+    (
+      <Button type="primary" className='activitykey' ghost key="addbtn" onClick={() => this.handleAdd()}>添加活动</Button>
+    )
+  ];
 
   columns = [{
     title: '编号',
@@ -36,73 +25,61 @@ class FlashSession extends SearchLayout {
     key: 'id',
     width: 80
   }, {
-    title: '商品名称',
-    dataIndex: 'productName',
+    title: '秒杀时间段名称',
+    dataIndex: 'name',
     key: 'name',
     width: 100
   }, {
-    title: '是否推荐',
-    dataIndex: 'recommendStatus',
-    key: 'recommendStatus',
+    title: '每日开始时间',
+    dataIndex: 'startTime',
+    key: 'startTime',
+    render: (record) => (
+      <div>
+        {this.formateDate(record)}
+      </div>
+    ),
+    width: 100
+  }, {
+    title: '每日结束时间',
+    dataIndex: 'endTime',
+    key: 'endTime',
+    render: (record) => (
+      <div>
+        {this.formateDate(record)}
+      </div>
+    ),
+    width: 100
+  }, {
+    title: '启用',
+    dataIndex: 'status',
+    key: 'status',
     width: 100,
     render: (text, record) => {
-      const { delStatus } = record;
       return (
-        <Switch checked={!!text} disabled={delStatus} onChange={(checked) => {
-          const { updateHotRecommendStatus } = this.props;
-          const status = checked ? 1 : 0;
-          updateHotRecommendStatus({ ids: [record.id], recommendStatus: status })
+        <Switch checked={!!record.status} onChange={(checked) => {
+          // const status = checked ? 1 : 0;
+          // updateHotRecommendStatus({ ids: [record.id], recommendStatus: status })
         }
         } />
       );
     }
   }, {
-    title: '排序',
-    dataIndex: 'sort',
-    key: 'sort',
-    width: 100
-  }, {
-    title: '状态',
-    dataIndex: 'recommendStatus',
-    key: 'status',
-    width: 100,
-    render: text => (text === 0 ? '未推荐' : '推荐中'),
-  }, {
     title: '操作',
     dataIndex: 'actions',
     key: 'actions',
     width: 80,
-    render: (text, record) => {
-      const { id, sort, delStatus } = record;
-      const { sortDatas } = this.state;
-      const { visibleId } = sortDatas;
-      const modalVisible = visibleId === id;
+    render: (text, record, index) => {
       return (
-        <div className="hot-recommend-action-btn">
-          <div className="hot-recommend-sort-btn">
-            <SortModal
-              id={id}
-              sort={sort}
-              visible={modalVisible}
-              loading={this.props.loading}
-              handleOk={this.confirmSort}
-              handleCancel={this.cancelSort}
-            />
-            <Button type="primary" size="small" ghost disabled={delStatus} onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
-          </div>
-
-          <Popconfirm
-            disabled={delStatus}
-            title={`确认要删除该推荐商品吗?`}
-            onConfirm={() => {
-              const { deleteHotRecommendProduct } = this.props;
-              deleteHotRecommendProduct([record.id]);
-            }}
-            okText="删除"
-            cancelText="取消"
-          >
-            <Button type="primary" ghost size="small" disabled={delStatus}>删除</Button>
-          </Popconfirm>
+        <div>
+          <Button type="primary" ghost size="small" onClick={() => this.updateDate(record)}>编辑</Button>
+          <Button type="primary" ghost size="small" >删除</Button>
+          <EditModal
+            {...this.state.modalData}
+            editId={record.id}
+            handleCancel={this.handleCancel}
+            handleOk={this.handleOk}
+            addIndex={index || 0}
+          />
         </div>
       );
     }
@@ -110,13 +87,14 @@ class FlashSession extends SearchLayout {
 
   constructor(props, context) {
     super(props, context);
-    this.state.conditionFields = fields;
-    this.state.extActions = this.extActions;
-    this.state.columns = this.columns;
-    // 排序modal数据
-    this.state.sortDatas = {
-      visibleId: null,
-      sort: 0
+    this.state = {
+      extActions: this.extActions,
+      columns: this.columns,
+      fields: this.fields,
+      modalData: {
+        visible: false,
+        data: []
+      }
     }
   }
 
@@ -124,67 +102,122 @@ class FlashSession extends SearchLayout {
     this.init();
   }
 
+  handleCancel = () => {
+    this.setState({
+      modalData: {
+        visible: false,
+      }
+    })
+    console.log('cancle', this.state)
+  }
+
+  handleOk = async (data, isFrom) => {
+    if (isFrom === 'add') {
+      const { createFlashSession } = this.props;
+      await createFlashSession(data);
+      const { flasesessionChangeRes } = this.props;
+      if (flasesessionChangeRes) {
+        this.setState({
+          modalData: {
+            visible: false,
+          }
+        });
+        message.info('添加成功');
+        this.init();
+      } else {
+        message.info('添加失败');
+      }
+    } else {
+      const { updateFlashSession } = this.props;
+      await updateFlashSession(data);
+      const { flasesessionChangeRes } = this.props;
+      if (flasesessionChangeRes) {
+        this.setState({
+          modalData: {
+            visible: false,
+          }
+        });
+        message.info('修改成功');
+        this.init();
+      } else {
+        message.info('修改失败');
+      }
+    }
+  }
   async init() {
-    const { location, fetchHotRecommendProductList } = this.props;
-    const { search } = location;
-    const params = QueryString.parse(search);
-    const { current = 1, pageSize = 5, productName, recommendStatus } = params;
-    fetchHotRecommendProductList({
-      pageNum: current,
-      pageSize: pageSize,
-      productName,
-      recommendStatus
-    });
+    const { fetchFlashSession } = this.props;
+    await fetchFlashSession();
   }
 
-  /**
- * "设置排序"按钮点击事件
- * @param {Number} id 编号
- * @param {Number} sort 原有排序
- */
-  onSort = (id, sort) => {
+
+  formateDate = (time) => {
+    if (time == null || time === '') {
+      return 'N/A';
+    }
+    let date = new Date(time);
+    return formatDate(date, 'hh:mm')
+  }
+
+
+  handleAdd() {
     this.setState({
-      sortDatas: {
-        visibleId: id,
-        sort
+      modalData: {
+        visible: true,
+        isFrom: 'add',
+        data: {
+          name: null,
+          startTime: null,
+          endTime: null,
+          status: 0
+        }
       }
-    });
+    })
   }
 
-  /**
-   * 确认排序操作
-   */
-  confirmSort = async ({ id, values }) => {
-    const { sort } = values;
-    const { updateHotRecommendProductSort } = this.props;
-    updateHotRecommendProductSort({ sort, id });
-    this.cancelSort();
-  }
-
-  /**
-   * 取消排序操作
-   */
-  cancelSort = () => {
+  updateDate = (data) => {
     this.setState({
-      sortDatas: {
-        visibleId: null,
-        sort: 0
+      modalData: {
+        visible: true,
+        isFrom: 'edit',
+        data
       }
-    });
+    })
   }
+
+  render() {
+    const { columns, extActions, fields } = this.state;
+    const { flashSessionList, loading } = this.props;
+    console.log('flashSessionList', flashSessionList)
+    return (
+      <div>
+        <ConditionForm className="search-layout-condition-form" fields={fields}
+          extActions={extActions}
+        />
+        {
+          flashSessionList.list ? <Table columns={columns}
+            className="search-layout-search-result"
+            dataSource={flashSessionList.list}
+            pagination={false}
+            loading={loading} /> : null
+        }
+
+      </div>
+    )
+  }
+
 }
 
 const store = (state) => {
   const { sms = {} } = state;
-  const { hotRecommendList = {}, loading } = sms;
-  const retVal = { ...hotRecommendList };
-  if (hotRecommendList.list) {
-    retVal.list = hotRecommendList.list.map(item => {
+  const { flashSessionList = {}, loading } = sms;
+  console.log('flashSessionList', flashSessionList)
+  if (flashSessionList.list && flashSessionList.list.length > 0) {
+    flashSessionList.list = flashSessionList.list.map(item => {
       item.key = item.id
       return item;
     });
   }
-  return { _result: retVal, loading };
+  return { flashSessionList, loading };
 }
 
 export default connect(store, actions)(FlashSession);

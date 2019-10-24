@@ -34,7 +34,19 @@ function sms({ match, ...rest }) {
           component={loadable(() => import('./SelectSession'))}
           routeName="秒杀时间段选择"
         />
-
+        <PrivateRoute
+          exact
+          path={`${match.path}/flashProductRelation`}
+          component={loadable(() => import('./FlashProductRelation'))}
+          routeName="秒杀时段商品选择"
+        />
+        <PrivateRoute
+          exact
+          path={`${match.path}/flashSession`}
+          component={loadable(() => import('./FlashSession'))}
+          routeName="秒杀时间段列表"
+        />
+        
         <PrivateRoute exact path={`${match.path}/hot`} component={loadable(() => import('./Hot'))} routeName="人气推荐" />
         <PrivateRoute exact path={`${match.path}/coupon`} component={loadable(() => import('./Coupon'))} routeName="优惠券列表" />
         <PrivateRoute exact path={`${match.path}/couponDetail`} component={loadable(() => import('./CouponDetail'))} routeName="优惠券详情" />

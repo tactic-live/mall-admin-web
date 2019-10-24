@@ -22,7 +22,14 @@ export const INIT_STATE = {
   couponDeleteNum: 0,
   couponHistory: {},
   advertiseList: {},
-  advertiseDetail: {}
+  advertiseDetail: {},
+  flashProductRelation: {},
+  flashProductRelationChangeResult: false,
+  flashSessionList: {
+    total: 0,
+    list: []
+  },
+  flasesessionChangeRes: 0
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -286,6 +293,23 @@ function reducer(state = INIT_STATE, action) {
     case 'FETCH_FLASH_TIME_LIST':
       result.flashGoodTimeList = payload;
       break;
+    case 'FETCH_FLASH_PRODUCTION_RELATION':
+      console.log('FETCH_FLASH_PRODUCTION_RELATION', payload)
+      result.flashProductRelation = payload;
+      break;
+    case 'UPDATE_FLASH_PRODUCTION_RELATION':
+      result.flashProductRelationChangeResult = payload;
+      break;
+    case 'DELECT_FLASH_PRODUCTION_RELATION':
+      result.flashProductRelationChangeResult = payload;
+      break;
+    case 'FETCH_FLASHSESSION_LIST':
+      result.flashSessionList.list = payload;
+      break;
+    case 'CHEANGE_FLASHSESSION':
+      result.flasesessionChangeRes = payload;
+      break;
+
     default:
   }
   return result;
