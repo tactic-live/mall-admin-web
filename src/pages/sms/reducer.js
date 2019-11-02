@@ -29,7 +29,10 @@ export const INIT_STATE = {
     total: 0,
     list: []
   },
-  flasesessionChangeRes: 0
+  flasesessionChangeRes: 0,
+  flashProductionList:{
+    ...defaultPageable
+  }
 }
 
 function reducer(state = INIT_STATE, action) {
@@ -309,7 +312,10 @@ function reducer(state = INIT_STATE, action) {
     case 'CHEANGE_FLASHSESSION':
       result.flasesessionChangeRes = payload;
       break;
-
+      case 'SHOW_FLASH_PRODUCTION_LIST':
+        result.flashProductionList = payload;
+        break;
+      
     default:
   }
   return result;

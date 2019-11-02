@@ -13,7 +13,7 @@ class FlashProductRelation extends SearchLayout {
   fields = [];
   extActions = [
     (
-        <Button type="primary" className='activitykey' ghost key="activitykey" onClick={() => this.handleAdd()}>添加</Button>
+      <Button type="primary" className='activitykey' ghost key="activitykey" onClick={() => this.handleAdd()}>添加</Button>
     )
   ];
 
@@ -90,6 +90,8 @@ class FlashProductRelation extends SearchLayout {
     this.state.conditionFields = this.fields;
     this.state.extActions = this.extActions;
     this.state.columns = this.columns;
+    this.state.flashPromotionId = '';
+    this.state.flashPromotionSessionId = '';
     // 排序modal数据
     this.state.modalData = {
       visible: false
@@ -108,6 +110,12 @@ class FlashProductRelation extends SearchLayout {
     })
   }
 
+  handleAdd = () => {
+    const { history } = this.props;
+    const { flashPromotionId, flashPromotionSessionId } = this.state;
+    history.push(`/sms/AddFlashProductRelation?flashPromotionId=${flashPromotionId}&flashPromotionSessionId=${flashPromotionSessionId}`)
+  }
+
   handleOk = async (data) => {
     const { updateFlashProductionRelation, } = this.props;
     await updateFlashProductionRelation({
@@ -115,7 +123,7 @@ class FlashProductRelation extends SearchLayout {
     });
     const { flashProductRelationChangeResult } = this.props;
     console.log('flashProductRelationChangeResult', flashProductRelationChangeResult)
-    if (Number(flashProductRelationChangeResult) == 1) {
+    if (Number(flashProductRelationChangeResult) === 1) {
       message.info('修改成功')
     } else {
       message.info('修改失败');
@@ -173,6 +181,10 @@ class FlashProductRelation extends SearchLayout {
     const { search } = location;
     const params = QueryString.parse(search);
     const { current = 1, pageSize = 5, flashPromotionId, flashPromotionSessionId } = params;
+    this.setState({
+      flashPromotionId,
+      flashPromotionSessionId
+    })
     fetchFlashProductionRelationList({
       pageNum: current,
       pageSize: pageSize,
