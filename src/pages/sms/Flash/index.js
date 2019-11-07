@@ -204,6 +204,8 @@ class Flash extends SearchLayout {
 
   // 添加秒杀时段
   handleShowSessionList = () => {
+    const { history } = this.props;
+    history.push(`/sms/flashSession`);
 
   }
   // 设置商品

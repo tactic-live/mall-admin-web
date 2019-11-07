@@ -10,8 +10,8 @@ import ProductionInfo from './productionInfo'
 const { Step } = Steps;
 
 let sourceData = {};
+let selectedRowKeys = [];
 class AddFlashProductRelation extends React.Component {
-
 
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ class AddFlashProductRelation extends React.Component {
       current: 0,
       selectList: [],
       flashPromotionId: '',
-      flashPromotionSessionId: ''
+      flashPromotionSessionId: '',
     };
   }
 
@@ -29,7 +29,9 @@ class AddFlashProductRelation extends React.Component {
       content: () => {
         return (
           <ShowProductions
-            getSelectData={this.getSelectData} />
+            getSelectData={this.getSelectData}
+            selectedRowData={selectedRowKeys}
+          />
         )
       },
     },
@@ -88,7 +90,8 @@ class AddFlashProductRelation extends React.Component {
 
   getSelectData(data) {
     sourceData[data.pageNum] = data.selectedRows;
-    console.log('sourceData', data.pageNum, sourceData)
+    selectedRowKeys = data.selectedRowKeys;
+    console.log('sourceData', data.pageNum, sourceData, selectedRowKeys)
   }
 
 

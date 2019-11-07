@@ -57,8 +57,8 @@ class ShowProductions extends React.PureComponent {
       conditionFields: fields,
       extActions,
       curCond: '',
-      selectedRowKeys: [],
-      pageNum: 1
+      pageNum: 1,
+      selectedRowData: []
     }
   }
   rowSelection = {
@@ -70,18 +70,30 @@ class ShowProductions extends React.PureComponent {
       })
       getSelectData({
         pageNum: this.state.pageNum,
-        selectedRows
+        selectedRows,
+        selectedRowKeys
       });
+    },
+    getCheckboxProps: record => {
+      const { selectedRowData } = this.props;
+      console.log('getSelectData',selectedRowData)
+      for (let i = 0; i < selectedRowData.length; i++) {
+        if (record.id === selectedRowData[i]) {
+          return ({ checked: true })
+        }
+      }
     },
 
   };
 
 
   async componentDidMount() {
-    const { fetchProductList } = this.props;
+    const { fetchProductList, selectedRowData } = this.props;
     await fetchProductList({
-      keyword: ''
+      keyword: '',
+      selectedRowData
     });
+    console.log('selectedRowData', selectedRowData)
   }
 
   onChangePage = async (page) => {
