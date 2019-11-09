@@ -18,9 +18,12 @@ class CouponDetail extends React.Component {
     const { couponDetail, match } = this.props;
     const { id } = match.params || {};
     const {
-      name, type, useType, minPoint, amount, useStatus, startTime, endTime, publishCount, receiveCount, useCount
+      name, type, useType, minPoint, amount, startTime, endTime, publishCount, receiveCount, useCount
     } = couponDetail || {};
     const time = `${moment(startTime).format('YYYY-MM-DD')}至${moment(endTime).format('YYYY-MM-DD')}`;
+    const now = new Date().getTime();
+    const end = moment(endTime).valueOf();
+    const canUse = now <= end ? '有效' : '已过期';
     return (
       <React.Fragment>
         <div className="coupon-detail-info">
@@ -29,7 +32,7 @@ class CouponDetail extends React.Component {
           <div className="cdi-block">可使用商品：{CommonConsts.couponUseType[useType]}</div>
           <div className="cdi-block">使用门槛：{minPoint || '无门槛'}</div>
           <div className="cdi-block">面值：{amount}</div>
-          <div className="cdi-block">状态：{CommonConsts.couponUseStatus[useStatus]}</div>
+          <div className="cdi-block">状态：{canUse}</div>
           <div className="cdi-block">有效期：{time}</div>
           <div className="cdi-block">总发行量：{publishCount}</div>
           <div className="cdi-block">已领取：{receiveCount}</div>
