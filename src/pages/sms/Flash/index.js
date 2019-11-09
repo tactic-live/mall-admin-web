@@ -40,7 +40,7 @@ class Flash extends SearchLayout {
 
   extActions = [
     (
-      <div>
+      <div key="flashAction">
         <Button type="primary" ghost key="timekey" onClick={() => this.handleShowSessionList()}>秒杀时间段列表</Button>
         <Button type="primary" className='activitykey' ghost key="activitykey" onClick={() => this.handleAdd()}>添加活动</Button>
       </div>
@@ -204,6 +204,8 @@ class Flash extends SearchLayout {
 
   // 添加秒杀时段
   handleShowSessionList = () => {
+    const { history } = this.props;
+    history.push(`/sms/flashSession`);
 
   }
   // 设置商品

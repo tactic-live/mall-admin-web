@@ -38,7 +38,10 @@ class RecommendProductModel extends AbstractModel {
   async updateHotRecommendProductSort({ sort, id }) {
     const result = await super.patch('/api/home/recommendProduct/sort', { sort, id });
     return result.data;
+
   }
+
+
 
 }
 

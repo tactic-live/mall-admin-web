@@ -1,97 +1,73 @@
-import RecommendProductModel from '@/models/RecommendProductModel';
+import FlashSessionModel from '@/models/FlashSessionModel';
 import RootActions from '../action';
 
 export const ACTION_TYPES = {
   ...RootActions.ACTION_TYPES,
-  FETCH_HOT_RECOMMEND_PRODUCT_LIST: 'FETCH_HOT_RECOMMEND_PRODUCT_LIST',
-  UPDATE_HOT_RECOMMEND_PRODUCT_STATUS: 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS',
-  DELETE_HOT_RECOMMEND_PRODUCT: 'DELETE_HOT_RECOMMEND_PRODUCT',
-  UPDATE_HOT_RECOMMEND_PRODUCT_SORT: 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT'
+  FETCH_FLASH_PRODUCTION_RELATION: 'FETCH_FLASH_PRODUCTION_RELATION',
+  UPDATE_FLASH_PRODUCTION_RELATION: 'UPDATE_FLASH_PRODUCTION_RELATION',
+  DELECT_FLASH_PRODUCTION_RELATION: 'DELECT_FLASH_PRODUCTION_RELATION',
 }
 
 /**
- * 获取人气推荐列表
+ * 获取秒杀商品列表
  */
-export async function fetchHotRecommendProductList({ pageNum, pageSize, ...res }) {
-  const payload = await new RecommendProductModel().fetchHotRecommendList({ pageNum, pageSize, ...res });
+export async function fetchFlashProductionRelationList({ pageNum, pageSize, ...res }) {
+  const payload = await new FlashSessionModel().fetchFlashProductionRelation({ pageNum, pageSize, ...res });
+  console.log('fetchFlashProductionRelationList', payload)
   return {
-    type: ACTION_TYPES.FETCH_HOT_RECOMMEND_PRODUCT_LIST,
+    type: ACTION_TYPES.FETCH_FLASH_PRODUCTION_RELATION,
     payload
   }
 }
 
-/**
- * 更改人气推荐商品状态
- */
-export async function updateHotRecommendStatus({ ids = [], recommendStatus }) {
-  const updateResult = await new RecommendProductModel().updataHotRecommentStatus({ ids, recommendStatus });
+
+// 更新秒杀商品
+export async function updateFlashProductionRelation({ ...data }) {
+  const payload = await new FlashSessionModel().updateFlashProductionRelation({ ...data });
+  console.log('updateFlashProductionRelation', {
+    type: ACTION_TYPES.UPDATE_FLASH_PRODUCTION_RELATION,
+    payload
+  })
   return {
-    type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_STATUS,
-    payload: {
-      ids,
-      recommendStatus,
-      updateResult
-    }
+    type: ACTION_TYPES.UPDATE_FLASH_PRODUCTION_RELATION,
+    payload
   }
 }
 
-/**
- *  删除人气商品
- * @param {Array} ids
- */
-export async function deleteHotRecommendProduct(ids) {
-  const deleteResult = await new RecommendProductModel().deleteHotRecommendProduct(ids);
+
+// 删除秒杀商品
+export async function delectFlashProductionRelation(id) {
+  console
+  const payload = await new FlashSessionModel().delectFlashProductionRelation(id);
   return {
-    type: ACTION_TYPES.DELETE_HOT_RECOMMEND_PRODUCT,
-    payload: {
-      ids,
-      deleteResult
-    }
+    type: ACTION_TYPES.DELECT_FLASH_PRODUCTION_RELATION,
+    payload
   }
 }
 
-/**
- * 更改人气推荐商品排序
- */
-export async function updateHotRecommendProductSort({ sort, id }) {
-  const updateResult = await new RecommendProductModel().updateHotRecommendProductSort({ sort, id })
-  return {
-    type: ACTION_TYPES.UPDATE_HOT_RECOMMEND_PRODUCT_SORT,
-    payload: {
-      id,
-      sort,
-      updateResult
-    }
-  }
-}
 
 export function actions(dispatch, ownProps) {
   const { changeLoading } = RootActions.actions(dispatch, ownProps);
   return {
     changeLoading,
-    fetchHotRecommendProductList: async (...args) => {
-      dispatch(await fetchHotRecommendProductList(...args));
+    fetchFlashProductionRelationList: async (...args) => {
+      dispatch(await fetchFlashProductionRelationList(...args));
       changeLoading(false);
     },
-    updateHotRecommendStatus: async (...args) => {
-      dispatch(await updateHotRecommendStatus(...args));
+    updateFlashProductionRelation: async (...args) => {
+      dispatch(await updateFlashProductionRelation(...args));
       changeLoading(false);
     },
-    deleteHotRecommendProduct: async (...args) => {
-      dispatch(await deleteHotRecommendProduct(...args));
+    delectFlashProductionRelation: async (...args) => {
+      dispatch(await delectFlashProductionRelation(...args));
       changeLoading(false);
     },
-    updateHotRecommendProductSort: async (...args) => {
-      dispatch(await updateHotRecommendProductSort(...args));
-      changeLoading(false);
-    }
   }
 }
 
 export default {
   ACTION_TYPES,
-  fetchHotRecommendProductList,
-  updateHotRecommendStatus,
-  deleteHotRecommendProduct,
-  updateHotRecommendProductSort
+  fetchFlashProductionRelationList,
+  updateFlashProductionRelation,
+  delectFlashProductionRelation
 }

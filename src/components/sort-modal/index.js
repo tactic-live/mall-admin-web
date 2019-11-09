@@ -50,7 +50,7 @@ class SortModal extends React.PureComponent {
           <Form.Item label="排序">
             {getFieldDecorator('sort', {
               initialValue: sort
-            })(<InputNumber key={`sort_${id}`} allowClear />)}
+            })(<InputNumber key={`sort_${id}`} allowClear min={0} />)}
           </Form.Item>
         </Form>
       </Modal>

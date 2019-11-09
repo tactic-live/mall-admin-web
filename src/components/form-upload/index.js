@@ -4,6 +4,8 @@ import OssModel from '@/models/OssModel';
 import COS from 'cos-js-sdk-v5';
 import BMF from 'browser-md5-file';
 
+require('./style.less');
+
 class FormUpload extends React.Component {
 
   state = {
@@ -50,17 +52,13 @@ class FormUpload extends React.Component {
           const url = `https://lg-jaj9ub0g-1254151762.cos.ap-shanghai.myqcloud.com/${Key}`;
           resolve(url);
         });
-      },
-        progress => {
-
-        });
+      }, progress => { });
     });
   }
 
   beforeUpload = (file, fileList) => {
-    const { beforeUpload, onChange, fileList: propFileList } = this.props;
+    const { beforeUpload, onChange, fileList: propFileList = [] } = this.props;
     if (!beforeUpload || beforeUpload(file)) {
-      console.log('beforeUpload', file, fileList)
       this.uploadToOss(file).then((url) => {
         file.url = url;
         onChange && onChange({ file, fileList: propFileList.concat(fileList) });
@@ -71,11 +69,8 @@ class FormUpload extends React.Component {
 
   render() {
     const { onChange, beforeUpload, vaule, fileList = [],
+      multiple = true,
       listType: propListType, maxLength = 10, ...rest } = this.props;
-    // if (fileList.length === 0) {
-    //   fileList.push(...defaultFileList)
-    // }
-    console.log('FormUpload render props', this.props.defaultFileList, fileList, this.props);
     const Buttons = {
       'picture-card': (
         <div>
@@ -109,7 +104,7 @@ class FormUpload extends React.Component {
           className="form-upload-item upload-file"
           beforeUpload={this.beforeUpload}
           accept=".jpg,.jpeg,.png"
-          multiple={true}
+          multiple={multiple}
           listType={listType}
           onChange={onChange}
           fileList={fileList}

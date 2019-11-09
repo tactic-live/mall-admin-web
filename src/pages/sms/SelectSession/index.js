@@ -40,7 +40,7 @@ class SelectSession extends React.Component {
     render: (text, record) => {
       return (
         <div className="hot-recommend-action-btn">
-          <Button type="primary" ghost size="small" >商品列表</Button>
+          <Button type="primary" ghost size="small" onClick={() => this.gotoGoodList(record)} >商品列表</Button>
         </div>
       );
     }
@@ -48,6 +48,16 @@ class SelectSession extends React.Component {
 
   componentDidMount() {
     this.init();
+  }
+
+
+  gotoGoodList(record) {
+    console.log('record', record);
+    const { location, history } = this.props;
+    const { search } = location;
+    const params = QueryString.parse(search);
+    const { flashPromotionId } = params;
+    history.push(`/sms/flashProductRelation?flashPromotionId=${flashPromotionId}&flashPromotionSessionId=${record.id}`);
   }
 
   async init() {
@@ -77,13 +87,13 @@ class SelectSession extends React.Component {
 const store = (state) => {
   const { sms = {} } = state;
   let { flashGoodTimeList = [], loading } = sms;
-  console.log('storeflashGoodTimeList', flashGoodTimeList , loading)
   if (flashGoodTimeList) {
     flashGoodTimeList = flashGoodTimeList.map(item => {
       item.key = item.id;
       return item;
     });
   }
+  console.log('storeflashGoodTimeList', flashGoodTimeList, loading)
   return { flashGoodTimeList, loading };
 }
 
