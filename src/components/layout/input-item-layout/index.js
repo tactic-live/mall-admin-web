@@ -16,7 +16,6 @@ function FormItemLayout(props) {
   });
   const { formItemLayout = formItemLayoutDefault } = props;
 
-  console.log("formItemLayout", formItemLayout, props)
   return (
     <div>
       {

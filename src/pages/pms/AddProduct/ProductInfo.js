@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Select, InputNumber, Button } from 'antd';
+import { Form, Input, Select, InputNumber, Button, Cascader } from 'antd';
 import InputNumberPlus from '@/components/input-number-plus';
 import FormLayout from '@/components/layout/form-layout';
 
@@ -12,8 +12,8 @@ const formTailLayout = {
 
 
 function ProductInfo(props) {
-  console.log('ProductInfo props', props)
-  const { productInfo,
+  const {
+    productInfo,
     fetchProductCategoryWithChildren,
     fetchBrandList,
     productCategorySelectList = [],
@@ -27,30 +27,26 @@ function ProductInfo(props) {
     fetchBrandList(1, 100);
     return () => {
     };
-  }, [])
+  }, []);
 
+
+  // 下一步
   const submitForm = (e) => {
     e.preventDefault();
     const { form, data, productInfo, nextStep } = props;
     // const { current, tmpDatas } = this.state;
     // const currentStepComp = stepFormList[current];
     form.validateFieldsAndScroll((err, values) => {
-      console.log('nextStep values', values)
       if (err) {
         return;
       }
-      // const { memberPriceList } = Object.assign({}, productInfo, data);
-      // console.log('nextStep memberPriceList', productInfo)
-      // const result = {
-      //   ...values,
-      //   memberPriceList: [...memberPriceList],
-      // };
-      // // 去除会员价格多于部分
-      // Object.keys(values).filter(key => /^memberPrice_/.test(key)).forEach((key, index) => {
-      //   result.memberPriceList[index].memberPrice = (values[key]);
-      //   delete result[key];
-      // });
-      nextStep && nextStep(values);
+      let result = { ...values };
+      const { categoryList } = result;
+      const category = categoryList.pop();
+      // delete result.categoryList;
+      result.productCategoryId = category;
+      console.log('nextStep, result', result);
+      nextStep && nextStep(result);
     })
 
   }
@@ -61,7 +57,7 @@ function ProductInfo(props) {
 
   const fields = [
     {
-      name: 'type',
+      name: 'categoryList',
       label: '商品分类',
       rules: [
         {
@@ -70,11 +66,29 @@ function ProductInfo(props) {
         }
       ],
       render: (text) => {
+        const options = [];
+        productCategorySelectList.forEach((category) => {
+          const { id, name, children } = category;
+          const categoryOption = {
+            value: id,
+            label: name,
+            children: []
+          };
+          children.forEach((child) => {
+            const { id: childId, name: childName } = child;
+            categoryOption.children.push({
+              value: childId,
+              label: childName
+            });
+          });
+          options.push(categoryOption);
+        });
         return (
-          <Select placeholder="请选择">
-            {productCategorySelectList.map(
-              productCategoryItem => <Option value={productCategoryItem.id} key={productCategoryItem.id}>{productCategoryItem.name}</Option>)}
-          </Select>
+          // <Select placeholder="请选择">
+          //   {productCategorySelectList.map(
+          //     productCategoryItem => <Option value={productCategoryItem.id} key={productCategoryItem.id}>{productCategoryItem.name}</Option>)}
+          // </Select>
+          <Cascader options={options} placeholder="请选择" />
         );
       }
     },

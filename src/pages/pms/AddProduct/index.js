@@ -16,7 +16,7 @@ class AddProduct extends React.PureComponent {
   constructor(props, ctx) {
     super(props, ctx);
     this.state = {
-      current: 2,
+      current: 0,
       steps: 4,
       tmpDatas: {},
       currentFieldsData: {}
@@ -75,7 +75,7 @@ class AddProduct extends React.PureComponent {
     if (current < 3) {
       this.setState({
         current: current + 1
-      })
+      });
     }
   }
 
@@ -83,26 +83,39 @@ class AddProduct extends React.PureComponent {
 
   }
 
+  onSubmit = (values) => {
+    const { current, tmpDatas } = this.state;
+    tmpDatas[current] = values;
+    const formData = {};
+    Object.values(tmpDatas).forEach((datas) => {
+      console.log('tmpDatas.forEach', datas);
+      Object.assign(formData, { ...datas });
+    });
+
+    console.log('index, onSubmit', tmpDatas, formData);
+  }
+
   render() {
     const { productInfo } = this.props;
     const { current, currentFieldsData } = this.state;
+    console.log('currentFieldsData', currentFieldsData);
     const StepComp = stepFormList[current];
-    const buttons = [];
-    if (current === 0) {
-      buttons.push(<Button type="primary" onClick={this.nextStep} key="btnNext">下一步</Button>);
-    } else if (current >= 3) {
-      buttons.push(<Button type="primary" onClick={this.prevStep} key="btnPrev">上一步</Button>)
-      buttons.push(<Button type="primary" onClick={this.submitForm} key="btnSubmit">提交</Button>)
-    } else {
-      buttons.push(<Button type="primary" onClick={this.prevStep} key="btnPrev">上一步</Button>)
-      buttons.push(<Button type="primary" onClick={this.nextStep} key="btnNext">下一步</Button>);
-    }
+    // const buttons = [];
+    // if (current === 0) {
+    //   buttons.push(<Button type="primary" onClick={this.nextStep} key="btnNext">下一步</Button>);
+    // } else if (current >= 3) {
+    //   buttons.push(<Button type="primary" onClick={this.prevStep} key="btnPrev">上一步</Button>)
+    //   buttons.push(<Button type="primary" onClick={this.submitForm} key="btnSubmit">提交</Button>)
+    // } else {
+    //   buttons.push(<Button type="primary" onClick={this.prevStep} key="btnPrev">上一步</Button>)
+    //   buttons.push(<Button type="primary" onClick={this.nextStep} key="btnNext">下一步</Button>);
+    // }
 
     return (
       <div className="add-product">
         <Steps current={current} />
         <StepComp {...this.props}
-          data={{...productInfo, ...currentFieldsData}}
+          data={{ ...productInfo, ...currentFieldsData }}
           // actions={buttons}
           onSubmit={this.onSubmit}
           nextStep={this.nextStep} prevStep={this.prevStep} />
@@ -111,8 +124,20 @@ class AddProduct extends React.PureComponent {
   }
 }
 const store = (state) => {
-  const { productInfo, productCategorySelectList, brandList, productAttributeCategoryList } = state.pms;
-  return { productInfo, productCategorySelectList, brandList, productAttributeCategoryList }
+  const {
+    productInfo,
+    productCategorySelectList,
+    brandList,
+    productAttributeCategoryList,
+    subjectList
+  } = state.pms;
+  return {
+    productInfo,
+    productCategorySelectList,
+    brandList,
+    productAttributeCategoryList,
+    subjectList
+  };
 }
 const connAddProduct = connect(store, actions)(AddProduct);
 // const WrappedAddProduct = Form.create({ name: 'add.product' })(connAddProduct)

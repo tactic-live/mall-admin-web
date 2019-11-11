@@ -8,7 +8,6 @@ import ProductFullReductionList from './ProductFullReductionList';
 const { TabPane } = Tabs;
 
 const PromotionType = React.forwardRef((props, ref) => {
-  console.log('PromotionType props', props);
   const { form, data } = props;
   const { getFieldDecorator } = form;
   return (
