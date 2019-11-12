@@ -87,9 +87,9 @@ class AddAdvertise extends React.PureComponent {
         const { picList } = this.state;
         return (
           <FormUpload
-            listType="picture-card"
             fileList={picList}
-            maxLength={1}
+            multiple={false}
+            maxLength="1"
             onChange={({ file, fileList }) => {
               this.setState({ picList: fileList });
             }}
