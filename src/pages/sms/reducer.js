@@ -30,7 +30,7 @@ export const INIT_STATE = {
     list: []
   },
   flasesessionChangeRes: 0,
-  flashProductionList:{
+  flashProductionList: {
     ...defaultPageable
   }
 }
@@ -138,7 +138,10 @@ function reducer(state = INIT_STATE, action) {
         result.hotRecommendList.list = result.hotRecommendList.list.map(recommendItem => {
           const idIndex = ids.findIndex(idItem => recommendItem.id === idItem);
           if (idIndex > -1) {
-            recommendItem.delStatus = true;
+            // recommendItem.delStatus = true;
+            recommendItem.id = null;
+            recommendItem.recommendStatus = null;
+            recommendItem.sort = null;
           }
           return recommendItem;
         });
@@ -153,6 +156,22 @@ function reducer(state = INIT_STATE, action) {
           }
           return recommendItem;
         });
+      }
+      break;
+    case 'ADD_HOT_RECOMMEDN_PRODUCT':
+      if (payload.length) {
+        const newList = [];
+        result.hotRecommendList.list.forEach((recommend) => {
+          let newRecommend = recommend;
+          for (let i = 0; i < payload.length; i += 1) {
+            if (payload[i].productId === recommend.productId) {
+              newRecommend = Object.assign(newRecommend, payload[i]);
+              break;
+            }
+          }
+          newList.push(newRecommend);
+        });
+        result.hotRecommendList.list = newList;
       }
       break;
     case 'FETCH_COUPON_LIST':
@@ -312,10 +331,10 @@ function reducer(state = INIT_STATE, action) {
     case 'CHEANGE_FLASHSESSION':
       result.flasesessionChangeRes = payload;
       break;
-      case 'SHOW_FLASH_PRODUCTION_LIST':
-        result.flashProductionList = payload;
-        break;
-      
+    case 'SHOW_FLASH_PRODUCTION_LIST':
+      result.flashProductionList = payload;
+      break;
+
     default:
   }
   return result;

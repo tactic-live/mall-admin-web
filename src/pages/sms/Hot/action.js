@@ -6,7 +6,8 @@ export const ACTION_TYPES = {
   FETCH_HOT_RECOMMEND_PRODUCT_LIST: 'FETCH_HOT_RECOMMEND_PRODUCT_LIST',
   UPDATE_HOT_RECOMMEND_PRODUCT_STATUS: 'UPDATE_HOT_RECOMMEND_PRODUCT_STATUS',
   DELETE_HOT_RECOMMEND_PRODUCT: 'DELETE_HOT_RECOMMEND_PRODUCT',
-  UPDATE_HOT_RECOMMEND_PRODUCT_SORT: 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT'
+  UPDATE_HOT_RECOMMEND_PRODUCT_SORT: 'UPDATE_HOT_RECOMMEND_PRODUCT_SORT',
+  ADD_HOT_RECOMMEDN_PRODUCT: 'ADD_HOT_RECOMMEDN_PRODUCT'
 }
 
 /**
@@ -65,6 +66,14 @@ export async function updateHotRecommendProductSort({ sort, id }) {
   }
 }
 
+export async function addHotRecommendProduct(productList) {
+  const addResult = await new RecommendProductModel().addHotRecommendProduct(productList);
+  return {
+    type: ACTION_TYPES.ADD_HOT_RECOMMEDN_PRODUCT,
+    payload: addResult
+  }
+}
+
 export function actions(dispatch, ownProps) {
   const { changeLoading } = RootActions.actions(dispatch, ownProps);
   return {
@@ -84,7 +93,11 @@ export function actions(dispatch, ownProps) {
     updateHotRecommendProductSort: async (...args) => {
       dispatch(await updateHotRecommendProductSort(...args));
       changeLoading(false);
-    }
+    },
+    addHotRecommendProduct: async (...args) => {
+      dispatch(await addHotRecommendProduct(...args));
+      changeLoading(false);
+    },
   }
 }
 
@@ -93,5 +106,6 @@ export default {
   fetchHotRecommendProductList,
   updateHotRecommendStatus,
   deleteHotRecommendProduct,
-  updateHotRecommendProductSort
+  updateHotRecommendProductSort,
+  addHotRecommendProduct
 }
