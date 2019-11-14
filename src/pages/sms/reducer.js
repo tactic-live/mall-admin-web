@@ -18,6 +18,7 @@ export const INIT_STATE = {
   couponList: {},
   couponDetail: {},
   couponAddNum: 0,
+  couponProductList: [],
   couponUpdateNum: 0,
   couponDeleteNum: 0,
   couponHistory: {},
@@ -163,6 +164,9 @@ function reducer(state = INIT_STATE, action) {
       break;
     case 'ADD_COUPON':
       result.couponAddNum = payload;
+      break;
+    case 'COUPON_GET_PRODUCT_LIST':
+      result.couponProductList = payload;
       break;
     case 'UPDATE_COUPON':
       result.couponUpdateNum = payload;

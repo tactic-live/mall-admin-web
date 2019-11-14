@@ -4,14 +4,24 @@ import RootActions from '../action';
 export const ACTION_TYPES = {
   FETCH_COUPON_DETAIL: 'FETCH_COUPON_DETAIL',
   COUPON_ADD: 'COUPON_ADD',
+  COUPON_GET_PRODUCT_LIST: 'COUPON_GET_PRODUCT_LIST',
   COUPON_UPDATE: 'COUPON_UPDATE',
 };
 
 // 添加优惠券
-export async function addCoupon(params) {
+export async function createCoupon(params) {
   const payload = await new CouponModel().addCoupon(params);
   return {
     type: ACTION_TYPES.COUPON_ADD,
+    payload
+  }
+}
+
+// 产品列表
+export async function getCouponProductList(keyword) {
+  const payload = await new CouponModel().fetchProductList(keyword);
+  return {
+    type: ACTION_TYPES.COUPON_GET_PRODUCT_LIST,
     payload
   }
 }
@@ -42,8 +52,12 @@ export function actions(dispatch, ownProps) {
       dispatch(await fetchCouponDetail(...args));
       changeLoading(false);
     },
-    addCoupon: async (...args) => {
-      dispatch(await addCoupon(...args));
+    createCoupon: async (...args) => {
+      dispatch(await createCoupon(...args));
+      changeLoading(false);
+    },
+    getCouponProductList: async (...args) => {
+      dispatch(await getCouponProductList(...args));
       changeLoading(false);
     },
     updateCoupon: async (...args) => {
@@ -56,6 +70,6 @@ export function actions(dispatch, ownProps) {
 export default {
   ACTION_TYPES,
   fetchCouponDetail,
-  addCoupon,
+  createCoupon,
   updateCoupon
 }

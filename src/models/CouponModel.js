@@ -73,6 +73,15 @@ class CouponModel extends AbstractModel {
     return result.data;
   };
 
+  /**
+   * 指定商品的列表
+   * @param {string} keyword 
+   */
+  async fetchProductList(keyword) {
+    const result = await super.get('/api/product/simpleList', { keyword });
+    return result.data;
+  }
+
 }
 
 export default CouponModel;
