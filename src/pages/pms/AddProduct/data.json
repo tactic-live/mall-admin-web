@@ -1,0 +1,113 @@
+{
+  "albumPics": "",
+  "brandId": 2,
+  "brandName": "三星",
+  "deleteStatus": 0,
+  "description": "商品介绍",
+  "detailDesc": "描述",
+  "detailHtml": "",
+  "detailMobileHtml": "",
+  "detailTitle": "标题",
+  "feightTemplateId": 0,
+  "flashPromotionCount": 0,
+  "flashPromotionId": 0,
+  "flashPromotionPrice": 0,
+  "flashPromotionSort": 0,
+  "giftPoint": "100",
+  "giftGrowth": "50",
+  "keywords": "关键字",
+  "lowStock": 0,
+  "name": "商品名称",
+  "newStatus": 1,
+  "note": "备注",
+  "originalPrice": "20",
+  "pic": "",
+  "memberPriceList": [
+    {
+      "memberLevelId": 1,
+      "memberLevelName": "黄金会员"
+    },
+    {
+      "memberLevelId": 2,
+      "memberLevelName": "白金会员"
+    },
+    {
+      "memberLevelId": 3,
+      "memberLevelName": "钻石会员"
+    }
+  ],
+  "productFullReductionList": [
+    {
+      "fullPrice": 0,
+      "reducePrice": 0
+    }
+  ],
+  "productLadderList": [
+    {
+      "count": 0,
+      "discount": 0,
+      "price": 0
+    }
+  ],
+  "previewStatus": 1,
+  "price": "10",
+  "productAttributeCategoryId": 1,
+  "productAttributeValueList": [
+    {
+      "productAttributeId": 24,
+      "value": null
+    },
+    {
+      "productAttributeId": 25,
+      "value": null
+    },
+    {
+      "productAttributeId": 37,
+      "value": null
+    },
+    {
+      "productAttributeId": 38,
+      "value": null
+    },
+    {
+      "productAttributeId": 39,
+      "value": null
+    }
+  ],
+  "skuStockList": [],
+  "subjectProductRelationList": [
+    {
+      "subjectId": 1
+    },
+    {
+      "subjectId": 2
+    }
+  ],
+  "prefrenceAreaProductRelationList": [
+    {
+      "prefrenceAreaId": 1
+    },
+    {
+      "prefrenceAreaId": 4
+    }
+  ],
+  "productCategoryId": 31,
+  "productCategoryName": "",
+  "productSn": "货号111",
+  "promotionEndTime": "",
+  "promotionPerLimit": 0,
+  "promotionPrice": null,
+  "promotionStartTime": "",
+  "promotionType": 0,
+  "publishStatus": 1,
+  "recommandStatus": 1,
+  "sale": 0,
+  "serviceIds": "1,2,3",
+  "sort": "50",
+  "stock": "100",
+  "subTitle": "副标题",
+  "unit": "元/件",
+  "usePointLimit": "20",
+  "verifyStatus": 0,
+  "weight": "500"
+}

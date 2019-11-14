@@ -19,8 +19,9 @@ class PromotionInfo extends React.PureComponent {
   onLoad = () => {
     // setTimeout(()=>{
     const { form } = this.props;
+    console.log('PromotionInfo, onload form', form)
     const step2Data = {
-      promotionType: "1",
+      promotionType: "2",
       promotionStartTime: moment()
     }
 
@@ -42,10 +43,10 @@ class PromotionInfo extends React.PureComponent {
       render: (text) => <InputNumber step={1} min={0} className="giftGrowth" />
     },
     {
-      name: 'promotionPerLimit',
+      name: 'usePointLimit',
       label: '积分购买限制',
       rules: [],
-      render: (text) => <InputNumber step={1} min={0} className="promotionPerLimit" />
+      render: (text) => <InputNumber step={1} min={0} className="usePointLimit" />
     },
     {
       name: 'previewStatus',
@@ -66,7 +67,13 @@ class PromotionInfo extends React.PureComponent {
       component: Switch
     },
     {
-      name: 'serviceIds',
+      name: 'newStatus',
+      label: '新品推荐',
+      valuePropName: 'checked',
+      component: Switch
+    },
+    {
+      name: 'serviceList',
       label: '服务保证',
       render: () => {
         return (
@@ -102,7 +109,9 @@ class PromotionInfo extends React.PureComponent {
       label: '选择优惠方式',
       span: 14,
       valuePropName: 'activeKey',
-      render: () => <PromotionType {...props} />
+      render: () => {
+        return <PromotionType {...props} />;
+      }
     },
   ]
 
@@ -117,17 +126,21 @@ class PromotionInfo extends React.PureComponent {
       if (err) {
         return;
       }
+
+
       const { memberPriceList } = Object.assign({}, productInfo, data);
       console.log('nextStep memberPriceList', productInfo)
       const result = {
         ...values,
         memberPriceList: [...memberPriceList],
       };
+      result.serviceIds = result.serviceList.join(',');
       // 去除会员价格多于部分
       Object.keys(values).filter(key => /^memberPrice_/.test(key)).forEach((key, index) => {
         result.memberPriceList[index].memberPrice = (values[key]);
         delete result[key];
       });
+      console.log('before next step', result);
       nextStep && nextStep(result);
     })
   }

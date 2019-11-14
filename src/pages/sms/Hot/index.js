@@ -20,6 +20,7 @@ const fields = [
     label: '上架状态',
     type: 'select',
     options: [
+      { label: '全部', value: null },
       { label: '未推荐', value: '0' },
       { label: '推荐中', value: '1' }
     ]
@@ -32,7 +33,7 @@ class HotRecommend extends SearchLayout {
 
   columns = [{
     title: '编号',
-    dataIndex: 'id',
+    dataIndex: 'productId',
     key: 'id',
     width: 80
   }, {
@@ -40,18 +41,25 @@ class HotRecommend extends SearchLayout {
     dataIndex: 'productName',
     key: 'name',
     width: 100
-  }, {
+  },
+   {
     title: '是否推荐',
     dataIndex: 'recommendStatus',
-    key: 'recommendStatus',
+    key: 'recommend',
     width: 100,
     render: (text, record) => {
-      const { delStatus } = record;
       return (
-        <Switch checked={!!text} disabled={delStatus} onChange={(checked) => {
-          const { updateHotRecommendStatus } = this.props;
+        <Switch checked={!!text} onChange={(checked) => {
+          const { updateHotRecommendStatus, addHotRecommendProduct } = this.props;
           const status = checked ? 1 : 0;
-          updateHotRecommendStatus({ ids: [record.id], recommendStatus: status })
+          if (text != null) { //在推荐表中
+            updateHotRecommendStatus({ ids: [record.id], recommendStatus: status })
+          } else { //不在推荐表中
+            addHotRecommendProduct([{
+              productId: record.productId,
+              productName: record.productName
+            }]);
+          }
         }
         } />
       );
@@ -66,45 +74,48 @@ class HotRecommend extends SearchLayout {
     dataIndex: 'recommendStatus',
     key: 'status',
     width: 100,
-    render: text => (text === 0 ? '未推荐' : '推荐中'),
+    render: text => ((!text || text === 0) ? '未推荐' : '推荐中'),
   }, {
     title: '操作',
-    dataIndex: 'actions',
+    dataIndex: 'id',
     key: 'actions',
     width: 80,
     render: (text, record) => {
-      const { id, sort, delStatus } = record;
+      const { id, sort } = record;
       const { sortDatas } = this.state;
       const { visibleId } = sortDatas;
-      const modalVisible = visibleId === id;
-      return (
-        <div className="hot-recommend-action-btn">
-          <div className="hot-recommend-sort-btn">
-            <SortModal
-              id={id}
-              sort={sort}
-              visible={modalVisible}
-              loading={this.props.loading}
-              handleOk={this.confirmSort}
-              handleCancel={this.cancelSort}
-            />
-            <Button type="primary" size="small" ghost disabled={delStatus} onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
-          </div>
+      const modalVisible = id && visibleId === id;
+      let actionElem = null;
+      if (text) { //在推荐表中的数据展示操作按钮，在商品表不在推荐表中的不展示
+        actionElem = (
+          <div className="hot-recommend-action-btn">
+            <div className="hot-recommend-sort-btn">
+              <SortModal
+                id={id}
+                sort={sort}
+                visible={modalVisible}
+                loading={this.props.loading}
+                handleOk={this.confirmSort}
+                handleCancel={this.cancelSort}
+              />
+              <Button type="primary" size="small" ghost onClick={() => { this.onSort(id, sort); }}>设置排序</Button>
+            </div>
 
-          <Popconfirm
-            disabled={delStatus}
-            title={`确认要删除该推荐商品吗?`}
-            onConfirm={() => {
-              const { deleteHotRecommendProduct } = this.props;
-              deleteHotRecommendProduct([record.id]);
-            }}
-            okText="删除"
-            cancelText="取消"
-          >
-            <Button type="primary" ghost size="small" disabled={delStatus}>删除</Button>
-          </Popconfirm>
-        </div>
-      );
+            <Popconfirm
+              title={`确认要删除该推荐商品吗?`}
+              onConfirm={() => {
+                const { deleteHotRecommendProduct } = this.props;
+                deleteHotRecommendProduct([record.id]);
+              }}
+              okText="删除"
+              cancelText="取消"
+            >
+              <Button type="primary" ghost size="small">删除</Button>
+            </Popconfirm>
+          </div>
+        );
+      }
+      return actionElem;
     }
   }];
 
@@ -180,7 +191,7 @@ const store = (state) => {
   const retVal = { ...hotRecommendList };
   if (hotRecommendList.list) {
     retVal.list = hotRecommendList.list.map(item => {
-      item.key = item.id
+      item.key = item.productId
       return item;
     });
   }
