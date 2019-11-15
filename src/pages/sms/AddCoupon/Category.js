@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actions } from './action';
-import { AutoComplete, Input, Button, Table } from 'antd';
+import { Cascader, Button, Table } from 'antd';
 
-class Product extends React.PureComponent {
+class Category extends React.PureComponent {
   constructor(props) {
     super(props);
     const { initVal = [] } = props;
@@ -15,24 +15,23 @@ class Product extends React.PureComponent {
 
   selectedRecord = {};
   columns = [{
-    title: '商品名称',
-    dataIndex: 'productName',
+    title: '分类名称',
+    dataIndex: 'productCategoryName',
     align: 'center',
-  }, {
-    title: '货号',
-    dataIndex: 'productSn',
-    align: 'center',
-    render: (text) => `NO.${text}`
+    render: (text, record) => {
+      const { productCategoryName, parentCategoryName } = record;
+      let result = productCategoryName;
+      if (parentCategoryName) {
+        result = `${parentCategoryName} > ${productCategoryName}`;
+      }
+      return result;
+    }
   }, {
     title: '操作',
     dataIndex: 'id',
     align: 'center',
     render: (text) => <Button type="danger" onClick={() => this.onDelete(text)}>删除</Button>
   }];
-
-  componentDidMount() {
-    this.handleSearch();
-  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.initVal.length !== this.props.initVal.length) {
@@ -52,7 +51,7 @@ class Product extends React.PureComponent {
       this.setState({
         tableData: result
       });
-      this.props.relateProduct(result);
+      this.props.relateCategory(result);
     }
   }
 
@@ -67,36 +66,33 @@ class Product extends React.PureComponent {
     });
     this.selectedIds.splice(this.selectedIds.indexOf(id), 1);
     this.setState({ tableData: newData });
-    this.props.relateProduct(newData);
+    this.props.relateCategory(newData);
   }
 
-  // 选择
-  onSelect = (value) => {
-    const { list } = this.props;
-    const temp = list.filter(item => item.id == value);
-    this.selectedRecord = temp && temp[0] ? temp[0] : null;
-  }
-
-  handleSearch = async (value) => {
-    const { getCouponProductList } = this.props;
-    await getCouponProductList(value);
+  // 联动
+  onChange = (val, selectedOptions) => {
+    const last = selectedOptions[selectedOptions.length - 1];
+    if (last) {
+      this.selectedRecord = last;
+    } else {
+      this.selectedRecord = null;
+    }
   }
 
   render() {
     const { tableData = [] }= this.state;
     const { list } = this.props;
+    
     return (
-      <div className="coupon-products">
-        <AutoComplete
-          dataSource={list}
-          onSelect={this.onSelect}
-          onSearch={this.handleSearch}
-        >
-          <Input
-            placeholder="商品名称/商品货号"
-          />
-        </AutoComplete>
-        <Button onClick={this.onAdd}>添加</Button>
+      <div className="coupon-categories">
+        <Cascader
+          placeholder="请选择类目"
+          options={list}
+          onChange={this.onChange}
+          fieldNames={{label: 'productCategoryName', value: 'id', children: 'children'}}
+          showSearch
+        />
+        <Button onClick={this.onAdd} >添加</Button>
         <Table
           columns={this.columns}
           dataSource={tableData}
@@ -108,9 +104,26 @@ class Product extends React.PureComponent {
   }
 }
 const store = (state) => {
-  const { couponProductList , loading } = state.sms;
-  const list = couponProductList.map(({id, name, productSn}) => ({value: id, text: name, productName: name, productSn, id}));
+  const { couponCategoryList , loading } = state.sms;
+  const list = couponCategoryList.map(({id, name, parentId, children}) => {
+    const childList = children && children.length ? children.map((item) => {
+      const child = {
+        id: item.id,
+        productCategoryName: item.name,
+        parentCategoryName: name,
+        parentId: id
+      };
+      return child;
+    }) : null;
+    const tempObj = {
+      id,
+      productCategoryName: name,
+      children: childList,
+      parentId: 0
+    }
+    return tempObj;
+  });
   return { list , loading };
 }
 
-export default connect(store, actions)(Product);
+export default connect(store, actions)(Category);

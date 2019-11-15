@@ -1,14 +1,17 @@
 import 'braft-editor/dist/index.css';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Radio } from 'antd';
 import CommonConsts from '@/consts/CommonConsts';
-import { actions } from './action';
 import Product from './Product';
-
+import Category from './Category';
 
 class UseTypeComp extends Component {
   state = {};
+
+  componentDidMount() {
+    const { getCouponCategoryList } = this.props;
+    getCouponCategoryList();
+  }
 
   onChange = (e, field, type) => {
     let val = e;
@@ -18,50 +21,70 @@ class UseTypeComp extends Component {
     this.setState({[field]: val});
   }
 
-  relateProduct = (list) => {
+  // 设置可使用的商品或类目
+  relate = (list, field, setNullField) => {
     this.props.form.setFieldsValue({
-      productRelationList: list || []
+      [field]: list || [],
+      [setNullField]: []
     });
   }
 
   render() {
-    const { useType } = this.state;
-    const { form } = this.props;
+    const { useType1 } = this.state;
+    const { form, data, match } = this.props;
+    const { params } = match || {};
+    const { id } = params || {};
+    let initUseType = useType1;
+    if (id && [0, 1, 2].indexOf(Number(useType1)) === -1) {
+      initUseType = data.useType;
+    };
     const { getFieldDecorator } = form;
     const { couponUseType } = CommonConsts;
-    // productCategoryRelationList   productRelationList
+    const { productRelationList = [], productCategoryRelationList = [] } = data;
     const productElem = (
       <div>
         {getFieldDecorator('productRelationList', {
-          required: true
+          rules: {
+            required: true
+          }
         })(
-          <Product initVal={[]} relateProduct={e => this.relateProduct(e)} />
+          <Product
+            initVal={productRelationList}
+            relateProduct={e => this.relate(e, 'productRelationList', 'productCategoryRelationList')}
+          />
         )}
       </div>
     );
     const categoryElem = (
       <div>
         {getFieldDecorator('productCategoryRelationList', {
-          required: true
+          rules: {
+            required: true
+          }
         })(
-          <Product />
+          <Category
+            initVal={productCategoryRelationList}
+            relateCategory={e => this.relate(e, 'productCategoryRelationList', 'productRelationList')}
+          />
         )}
       </div>
     );
 
     let extraElem = null;
-    if (Number(useType) === 1) {
+    if (Number(initUseType) === 1) {
       extraElem = categoryElem;
-    } else if (Number(useType) === 2) {
+    } else if (Number(initUseType) === 2) {
       extraElem = productElem;
     }
 
     return (
       <div>
         {getFieldDecorator('useType', {
-          required: true
+          rules: {
+            required: true
+          }
         })(
-          <Radio.Group onChange={e => this.onChange(e, 'useType', 1)} >
+          <Radio.Group onChange={e => this.onChange(e, 'useType1', 1)} >
             {Object.keys(couponUseType).map(val =>
               <Radio.Button value={val} key={val}>{couponUseType[val]}</Radio.Button>)
             }

@@ -5,6 +5,7 @@ export const ACTION_TYPES = {
   FETCH_COUPON_DETAIL: 'FETCH_COUPON_DETAIL',
   COUPON_ADD: 'COUPON_ADD',
   COUPON_GET_PRODUCT_LIST: 'COUPON_GET_PRODUCT_LIST',
+  COUPON_GET_CATEGORY_LIST: 'COUPON_GET_CATEGORY_LIST',
   COUPON_UPDATE: 'COUPON_UPDATE',
 };
 
@@ -26,6 +27,15 @@ export async function getCouponProductList(keyword) {
   }
 }
 
+// 类目列表
+export async function getCouponCategoryList() {
+  const payload = await new CouponModel().fetchCategoryListWithChildren();
+  return {
+    type: ACTION_TYPES.COUPON_GET_CATEGORY_LIST,
+    payload
+  }
+}
+
 // 更新优惠券
 export async function updateCoupon(id, params) {
   const payload = await new CouponModel().updateCoupon(id, params);
@@ -36,7 +46,7 @@ export async function updateCoupon(id, params) {
 }
 
 // 优惠券详情
-export async function fetchCouponDetail(id) {
+export async function getCouponDetail(id) {
   const payload = await new CouponModel().fetchCouponDetail(id);
   return {
     type: ACTION_TYPES.FETCH_COUPON_DETAIL,
@@ -48,8 +58,8 @@ export function actions(dispatch, ownProps) {
   const { changeLoading } = RootActions.actions(dispatch, ownProps);
   return {
     changeLoading,
-    fetchCouponDetail: async (...args) => {
-      dispatch(await fetchCouponDetail(...args));
+    getCouponDetail: async (...args) => {
+      dispatch(await getCouponDetail(...args));
       changeLoading(false);
     },
     createCoupon: async (...args) => {
@@ -58,6 +68,10 @@ export function actions(dispatch, ownProps) {
     },
     getCouponProductList: async (...args) => {
       dispatch(await getCouponProductList(...args));
+      changeLoading(false);
+    },
+    getCouponCategoryList: async () => {
+      dispatch(await getCouponCategoryList());
       changeLoading(false);
     },
     updateCoupon: async (...args) => {
@@ -69,7 +83,9 @@ export function actions(dispatch, ownProps) {
 
 export default {
   ACTION_TYPES,
-  fetchCouponDetail,
+  getCouponDetail,
   createCoupon,
+  getCouponProductList,
+  getCouponCategoryList,
   updateCoupon
 }

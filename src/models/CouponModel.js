@@ -74,11 +74,19 @@ class CouponModel extends AbstractModel {
   };
 
   /**
-   * 指定商品的列表
+   * 添加/编辑优惠券页面--指定商品的列表
    * @param {string} keyword 
    */
   async fetchProductList(keyword) {
     const result = await super.get('/api/product/simpleList', { keyword });
+    return result.data;
+  }
+
+  /**
+   * 添加/编辑优惠券页面--指定类目的列表
+   */
+  async fetchCategoryListWithChildren() {
+    const result = await super.get('/api/productCategory/list/withChildren');
     return result.data;
   }
 
