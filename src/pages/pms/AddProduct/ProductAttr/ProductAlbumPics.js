@@ -6,21 +6,23 @@ import { uniqueId } from 'lodash';
 const ProductAlbumPics = (props, ref) => {
   const { pic, albumPics } = props.data;
   const { getFieldDecorator } = props.form;
-  const productAlbumPicsDefaultFileList = [];
+  const albumPicList = [];
   if (pic) {
-    productAlbumPicsDefaultFileList.push({
-      uid: uniqueId('pic_'),
-      name: (pic || '').split('/').pop(),
+    const name = (pic || '').split('/').pop();
+    albumPicList.push({
+      uid: `${name}_0`,
+      name,
       status: 'done',
       url: pic,
       thumbUrl: pic
     })
   }
   if (albumPics) {
-    albumPics.split(',').forEach((albumPicUrl) => {
-      productAlbumPicsDefaultFileList.push({
-        uid: uniqueId('albumPics_'),
-        name: (albumPicUrl || '').split('/').pop(),
+    albumPics.split(',').forEach((albumPicUrl, index) => {
+      const name = (albumPicUrl || '').split('/').pop();
+      albumPicList.push({
+        uid: `${name}_${index + 1}`,
+        name: name,
         status: 'done',
         url: albumPicUrl,
         thumbUrl: albumPicUrl
@@ -34,17 +36,17 @@ const ProductAlbumPics = (props, ref) => {
     }
     return e && e.fileList;
   };
-  console.log('productAlbumPicsDefaultFileList', productAlbumPicsDefaultFileList)
   return (
     <div>
       {
-        getFieldDecorator('productAlbumPicsDefaultFileList', {
-          initialValue: productAlbumPicsDefaultFileList,
+        getFieldDecorator('albumPicList', {
+          initialValue: albumPicList,
           valuePropName: 'fileList',
           getValueFromEvent: normFile
         })(<FormUpload
           listType="picture-card"
           ref={ref}
+          maxLength={5}
         />)
       }
     </div>

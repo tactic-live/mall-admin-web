@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator', 'media']
 
 const DetailHtml = (props, ref) => {
-  console.log('DetailHtml props', props);
+  // console.log('DetailHtml props', props);
   const { detailHtml, detailMobileHtml } = props.data;
   const { getFieldDecorator } = props.form;
   return (

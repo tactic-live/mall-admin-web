@@ -1,21 +1,27 @@
 import React from 'react';
-import { Upload, Button, Icon, message } from 'antd';
-import OssModel from '@/models/OssModel';
 import COS from 'cos-js-sdk-v5';
 import BMF from 'browser-md5-file';
+import { Upload, Button, Icon, message } from 'antd';
+
+import OssModel from '@/models/OssModel';
 
 require('./style.less');
 
-class FormUpload extends React.Component {
+class FormUpload extends React.PureComponent {
 
   state = {
     defaultFileList: null,
-    break: 0
+    // TEST
+    // loading: false
   }
 
   uploadToOss = (file) => {
     return new Promise((resolve, reject) => {
       const bmf = new BMF();
+      // this.setState({
+      //   loading: true
+      // });
+      this.message = message.loading('上传中...', 0);
       bmf.md5(file, (err, md5) => {
         const { name } = file;
         const ext = name.split('.').pop();
@@ -29,7 +35,6 @@ class FormUpload extends React.Component {
           async getAuthorization(options, callback) {
             const secretInfo = await new OssModel().fetchTempSecretInfo();
             const credentials = secretInfo.credentials;
-            console.log('secretInfo', secretInfo);
             callback({
               TmpSecretId: credentials.tmpSecretId,
               TmpSecretKey: credentials.tmpSecretKey,
@@ -61,19 +66,28 @@ class FormUpload extends React.Component {
     if (!beforeUpload || beforeUpload(file)) {
       this.uploadToOss(file).then((url) => {
         file.url = url;
+        // this.setState({ loading: false });
+        message.destroy();
         onChange && onChange({ file, fileList: propFileList.concat(fileList) });
+      }).catch(() => {
+        // this.setState({ loading: false });
+        message.destroy();
       });
     }
     return false;
   }
 
   render() {
-    const { onChange, beforeUpload, vaule, fileList = [],
+    const {
+      onChange, beforeUpload, vaule, fileList = [],
       multiple = true,
-      listType: propListType, maxLength = 10, ...rest } = this.props;
+      listType: propListType, maxLength = 10, ...rest
+    } = this.props;
+    // const { loading } = this.state;
     const Buttons = {
       'picture-card': (
         <div>
+          {/* <Icon type={loading ? 'loading' : 'plus'} /> */}
           <Icon type="plus" />
           <div className="ant-upload-text">Upload</div>
         </div>
@@ -92,6 +106,7 @@ class FormUpload extends React.Component {
       case 'picture':
       default:
     }
+
     // 上传按钮
     let UploadButton = Buttons[listType];
     if (maxLength <= fileList.length) {
@@ -113,7 +128,6 @@ class FormUpload extends React.Component {
         >
           {UploadButton}
         </Upload>
-        {}
         <div className="form-upload-item description" >
           只能上传jpg / png文件，且不超过10MB
         </div>

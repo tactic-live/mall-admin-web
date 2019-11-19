@@ -47,25 +47,7 @@ class AddProduct extends React.PureComponent {
     return currentFieldsData;
   }
 
-  componentDidMount() {
-    const { form, fetchProductCategoryWithChildren, fetchBrandList } = this.props;
-    const data = {
-      brandId: 4,
-      description: undefined,
-      name: "eee",
-      originalPrice: 0,
-      price: 0,
-      productSn: undefined,
-      sort: 0,
-      stock: 0,
-      subTitle: "eee",
-      type: 1,
-      unit: undefined,
-      weight: 0,
-    }
-    return;
-    // form.setFieldsValue(step2Data);
-  }
+  componentDidMount() { }
 
   nextStep = (values) => {
     const { current, tmpDatas } = this.state;
@@ -79,20 +61,40 @@ class AddProduct extends React.PureComponent {
     }
   }
 
-  onChange = (e) => {
-
-  }
-
-  onSubmit = (values) => {
+  onSubmit = async (values) => {
     const { current, tmpDatas } = this.state;
     tmpDatas[current] = values;
     const formData = {};
     Object.values(tmpDatas).forEach((datas) => {
-      console.log('tmpDatas.forEach', datas);
       Object.assign(formData, { ...datas });
     });
 
+    // 更改传参
+    // 分类
+    const productCategory = formData.productCategoryId.pop();
+    [formData.productCategoryId, formData.productCategoryName] = productCategory.split('@');
+    // 品牌
+    const brand = formData.brandId;
+    [formData.brandId, formData.brandName] = brand.split('@');
+    // 2-预告商品
+    formData.previewStatus = formData.previewStatus ? '1' : '0';
+    // 3-商品上架
+    formData.publishStatus = formData.publishStatus ? '1' : '0';
+    // 4-商品推荐
+    formData.recommandStatus = formData.recommandStatus ? '1' : '0';
+    // 5-新品推荐
+    formData.newStatus = formData.newStatus ? '1' : '0';
+    // 6-服务保证
+    formData.serviceIds = (formData.serviceIds).join(',');
+
+    // 删除不必要的参数
+    delete formData.detailBothHtml;
+    delete formData.productAlbumPics;
+
     console.log('index, onSubmit', tmpDatas, formData);
+
+    const res = await this.props.addProduct(formData);
+    console.log('index, submit res', res);
   }
 
   render() {

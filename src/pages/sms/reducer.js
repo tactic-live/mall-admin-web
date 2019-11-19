@@ -38,7 +38,6 @@ export const INIT_STATE = {
 function reducer(state = INIT_STATE, action) {
   const { type, payload } = action;
   let result = { ...state };
-  console.log('payload', payload)
   switch (type) {
     case 'LOADING':
       result.loading = payload;

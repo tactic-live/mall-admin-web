@@ -67,13 +67,12 @@ class ProductRelation extends React.PureComponent {
 
     // console.log('beforeSubmit', current, tmpDatas);
     form.validateFieldsAndScroll((err, values) => {
-      console.log('onSubmit', values);
       if (err) {
         return;
       }
 
       const subjects = [];
-      const { subjectProductRelationList } = values;
+      const { subjectProductRelationList = [] } = values;
       subjectProductRelationList.forEach((subject) => {
         subjects.push({ subjectId: subject });
       });

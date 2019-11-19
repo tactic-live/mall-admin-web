@@ -33,20 +33,13 @@ function ProductInfo(props) {
   // 下一步
   const submitForm = (e) => {
     e.preventDefault();
-    const { form, data, productInfo, nextStep } = props;
-    // const { current, tmpDatas } = this.state;
-    // const currentStepComp = stepFormList[current];
+    const { form, nextStep } = props;
     form.validateFieldsAndScroll((err, values) => {
       if (err) {
         return;
       }
-      let result = { ...values };
-      const { categoryList } = result;
-      const category = categoryList.pop();
-      // delete result.categoryList;
-      result.productCategoryId = category;
-      console.log('nextStep, result', result);
-      nextStep && nextStep(result);
+      console.log('next step', values);
+      nextStep && nextStep(values);
     })
 
   }
@@ -57,7 +50,7 @@ function ProductInfo(props) {
 
   const fields = [
     {
-      name: 'categoryList',
+      name: 'productCategoryId',
       label: '商品分类',
       rules: [
         {
@@ -70,14 +63,14 @@ function ProductInfo(props) {
         productCategorySelectList.forEach((category) => {
           const { id, name, children } = category;
           const categoryOption = {
-            value: id,
+            value: `${id}@${name}`,
             label: name,
             children: []
           };
           children.forEach((child) => {
             const { id: childId, name: childName } = child;
             categoryOption.children.push({
-              value: childId,
+              value: `${childId}@${childName}`,
               label: childName
             });
           });
@@ -129,7 +122,11 @@ function ProductInfo(props) {
       render: () => {
         return (
           <Select placeholder="请选择">
-            {brandList.list.map((brandInfo) => <Option value={brandInfo.id} key={brandInfo.id}>{brandInfo.name}</Option>)}
+            {
+              brandList.list.map((brandInfo) =>
+                <Option value={`${brandInfo.id}@${brandInfo.name}`} key={brandInfo.id}>{brandInfo.name}</Option>
+              )
+            }
           </Select>
         )
       }
@@ -184,7 +181,7 @@ function ProductInfo(props) {
   ];
 
   return (
-    <FormLayout {...formTailLayout} defaultValues={data} fields={fields} data {...rest}
+    <FormLayout {...formTailLayout} defaultValues={data} fields={fields} {...rest}
       actions={actions} onSubmit={submitForm} />
   )
 }

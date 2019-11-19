@@ -73,7 +73,7 @@ class PromotionInfo extends React.PureComponent {
       component: Switch
     },
     {
-      name: 'serviceList',
+      name: 'serviceIds',
       label: '服务保证',
       render: () => {
         return (
@@ -134,7 +134,7 @@ class PromotionInfo extends React.PureComponent {
         ...values,
         memberPriceList: [...memberPriceList],
       };
-      result.serviceIds = result.serviceList.join(',');
+      // result.serviceIds = result.serviceList.join(',');
       // 去除会员价格多于部分
       Object.keys(values).filter(key => /^memberPrice_/.test(key)).forEach((key, index) => {
         result.memberPriceList[index].memberPrice = (values[key]);
@@ -171,5 +171,10 @@ class PromotionInfo extends React.PureComponent {
   }
 }
 
-const WrappedPromotionInfo = Form.create({ name: 'add.product.promotionInfo' })(PromotionInfo)
+const WrappedPromotionInfo = Form.create({
+  name: 'add.product.promotionInfo',
+  // onFieldsChange(props, changedFields, allFields) {
+  //   console.log('form-onFieldsChange', props, changedFields, allFields);
+  // }
+})(PromotionInfo)
 export default WrappedPromotionInfo;

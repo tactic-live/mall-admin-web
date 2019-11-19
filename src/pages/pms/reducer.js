@@ -4,52 +4,107 @@ const defaultPageable = { total: 0, current: 1, pageSize: 10, list: [] };
 
 export const INIT_STATE = {
   productInfo: {
+    // 分类
+    productCategoryId: [],
+    // 商品介绍
+    description: '',
+    // 商品货号
+    productSn: '',
+    // 商品售价
+    price: 0,
+    // 市场价
+    originalPrice: 0,
+    // 库存
+    stock: 0,
+    // 计量单位
+    unit: '',
+    // 重量
+    weight: 0,
+    // 排序
+    sort: 0,
+
+    // 赠送积分
+    giftPoint: 0,
+    // 赠送成长值
+    giftGrowth: 0,
+    // 积分购买限制
+    usePointLimit: 0,
+    // 预告商品
+    previewStatus: false,
+    // 商品上架
+    publishStatus: false,
+    // 商品推荐
+    recommandStatus: false,
+    // 新品推荐
+    newStatus: false,
+    // 服务保证
+    serviceIds: [],
+    // 详细页标题
+    detailTitle: '',
+    // 详细页描述
+    detailDesc: '',
+    // 商品关键字
+    keywords: '',
+    // 商品备注
+    note: '',
+
+    // 属性类型
+    productAttributeCategoryId: 0,
+    // 商品主图
+    pic: '',
+    // 商品相册图
+    albumPics: '',
+
+    // 活动限购数量
+    promotionPerLimit: 0,
+
     promotionType: '0',
+    // 阶梯价格
     productLadderList: [
       {
-        id: 69,
-        productId: 26,
+        // id: 69,
+        // productId: 26,
         count: 0,
         discount: 0.00,
         price: 0.00
       }
     ],
+    // 满减价格
     productFullReductionList: [
       {
-        id: 64,
-        productId: 26,
+        // id: 64,
+        // productId: 26,
         fullPrice: 0.00,
         reducePrice: 0.00
       }
     ],
     promotionStartTime: moment(),
     promotionEndTime: moment(),
-    promotionPrice: 100,
+    promotionPrice: 0,
+    // 会员价格
     memberPriceList: [
       {
-        "id": 204,
-        "productId": 26,
+        // "id": 204,
+        // "productId": 26,
         "memberLevelId": 1,
-        "memberPrice": 111.00,
+        "memberPrice": 0,
         "memberLevelName": "黄金会员"
       },
       {
-        "id": 205,
-        "productId": 26,
+        // "id": 205,
+        // "productId": 26,
         "memberLevelId": 2,
-        "memberPrice": 222.00,
+        "memberPrice": 0,
         "memberLevelName": "白金会员"
       },
       {
-        "id": 206,
-        "productId": 26,
+        // "id": 206,
+        // "productId": 26,
         "memberLevelId": 3,
-        "memberPrice": 333.00,
+        "memberPrice": 0,
         "memberLevelName": "钻石会员"
       }
-    ],
-    pic: '',
-    albumPics: "",
+    ]
   },
   productListInfo: {},
   productAttrInfo: {},
