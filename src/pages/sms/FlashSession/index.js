@@ -187,7 +187,7 @@ class FlashSession extends React.Component {
   render() {
     const { columns, extActions, fields } = this.state;
     const { flashSessionList, loading } = this.props;
-    console.log('flashSessionList', flashSessionList)
+    console.log('flashSessionList---', flashSessionList)
     return (
       <div>
         <ConditionForm className="search-layout-condition-form" fields={fields}

@@ -38,11 +38,15 @@ class RecommendProductModel extends AbstractModel {
   async updateHotRecommendProductSort({ sort, id }) {
     const result = await super.patch('/api/home/recommendProduct/sort', { sort, id });
     return result.data;
-
   }
 
-
-
+  /**
+   * 新增人气推荐商品
+   */
+  async addHotRecommendProduct(productList) {
+    const result = await super.post('/api/home/recommendProduct', productList);
+    return result.data;
+  }
 }
 
 export default RecommendProductModel;
