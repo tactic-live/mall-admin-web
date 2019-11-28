@@ -212,7 +212,7 @@ function AddCoupon(props) {
 
 const store = (state) => {
   const { couponDetail, loading } = state.sms;
-  return { data: couponDetail, loading };
+  return { data: couponDetail || {}, loading };
 }
 
 const connAddCoupon = connect(store, actions)(AddCoupon);
